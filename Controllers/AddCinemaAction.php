@@ -1,10 +1,16 @@
 <?php
-
     namespace Controllers;
+
+
+    require_once("../Config/Config.php");
+    require_once("../Config/Autoload.php");
 
     use Repositories\ICinemaRepository as ICinemaRepository;
     use Repositories\CinemaRepository as CinemaRepository;
     use Models\Cinema as Cinema;
+    use Config\Autoload as Autoload;
+
+    Autoload::Start();
 
     if($_POST){
         $cinemaName="";
@@ -24,14 +30,17 @@
             $ticketPrice=$_POST["ticketPrice"];
         }
 
-        $cinema=new Cinema($cinemaName,$adress,$totalCap,$ticketPrice);
+        $newCinema=new Cinema($cinemaName,$adress,$totalCap,$ticketPrice);
         $repo=new CinemaRepository();
-        $repo->Add($cinema);
+        $repo->Add($newCinema);
+        /*$newCinema=new Cinema($cinemaName,$adress,$totalCap,$ticketPrice);
+        $repo->Add($newCinema);*/
+
         echo "<script> alert('Cinema added');";
     }else{
         echo "<script> alert('Cinema error');";  
     }
-    echo "window.location = '../cinema-add.php'; </script>";
+    echo "window.location = '../index.php'; </script>";
 
 
 ?>

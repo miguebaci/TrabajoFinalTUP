@@ -41,27 +41,23 @@
 
             $jsonContent = json_encode($arrayToEncode, JSON_PRETTY_PRINT);
             
-            file_put_contents('Data/cinemas.json', $jsonContent);
+            file_put_contents('../Data/cinemas.json', $jsonContent);
         }
 
         private function RetrieveData()
         {
             $this->cinemaList = array();
 
-            if(file_exists('Data/cinemas.json'))
+            if(file_exists('../Data/cinemas.json'))
             {
-                $jsonContent = file_get_contents('Data/cinemas.json');
+                $jsonContent = file_get_contents('../Data/cinemas.json');
 
                 $arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();
 
                 foreach($arrayToDecode as $valuesArray)
                 {
-                    $cinema = new Cinema();
+                    $cinema = new Cinema($valuesArray["cinemaName"],$valuesArray["adress"],$valuesArray["totalCap"],$valuesArray["ticketPrice"]);
                     $cinema->setIdCine($valuesArray["idCine"]);
-                    $cinema->setCinemaName($valuesArray["cinemaName"]);
-                    $cinema->setAdress($valuesArray["adress"]);
-                    $cinema->setTotalCap($valuesArray["totalCap"]);
-                    $cinema->setTicketPrice($valuesArray["ticketPrice"]);
 
                     array_push($this->cinemaList, $cinema);
                 }

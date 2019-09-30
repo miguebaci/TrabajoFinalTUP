@@ -1,0 +1,65 @@
+[
+    {
+        "idCine": 1,
+        "cinemaName": "Micho",
+        "adress": "Adress",
+        "totalCap": "3",
+        "ticketPrice": "5"
+    },
+    {
+        "idCine": 1,
+        "cinemaName": "Carlos",
+        "adress": "Direccion",
+        "totalCap": "3",
+        "ticketPrice": "5"
+    },
+    {
+        "idCine": 1,
+        "cinemaName": "Carlos",
+        "adress": "Direccion",
+        "totalCap": "4",
+        "ticketPrice": "5"
+    },
+    {
+        "idCine": 1,
+        "cinemaName": "Norma",
+        "adress": "afdjkadlfj",
+        "totalCap": "2",
+        "ticketPrice": ""
+    },
+    {
+        "idCine": 1,
+        "cinemaName": "Test",
+        "adress": "Test",
+        "totalCap": "12",
+        "ticketPrice": "23"
+    },
+    {
+        "idCine": 6,
+        "cinemaName": "Test",
+        "adress": "Test",
+        "totalCap": "12",
+        "ticketPrice": "23"
+    },
+    {
+        "idCine": 12,
+        "cinemaName": "Test",
+        "adress": "Test",
+        "totalCap": "12",
+        "ticketPrice": "23"
+    },
+    {
+        "idCine": 19,
+        "cinemaName": "Test",
+        "adress": "Test",
+        "totalCap": "12",
+        "ticketPrice": "23"
+    },
+    {
+        "idCine": 1,
+        "cinemaName": "Test2",
+        "adress": "Test2",
+        "totalCap": "123",
+        "ticketPrice": "123"
+    }
+]

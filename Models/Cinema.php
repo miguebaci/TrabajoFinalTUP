@@ -12,8 +12,8 @@
         private $adress;
         private $ticketPrice;
 
-        public function __contruct($cinemaName, $adress, $totalCap, $ticketPrice){
-            $this->idCine = IncrementId();
+        public function __construct($cinemaName, $adress, $totalCap, $ticketPrice){
+            $this->idCine = self::IncrementId();
             $this->cinemaName = $cinemaName;
             $this->totalCap = $totalCap;
             $this->adress = $adress;
@@ -25,14 +25,14 @@
             return $this->idCine;
         }
 
-        private function setIdCine($idCine)
+        public function setIdCine($idCine)
         {
             $this->idCine = $idCine;
         }
 
         private static function IncrementId(){
             self::$autoIncrement++;
-            return $autoIncrement;
+            return self::$autoIncrement;
         }
 
         public function getCinemaName()
