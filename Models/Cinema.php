@@ -25,6 +25,11 @@
             return $this->idCine;
         }
 
+        private function setIdCine($idCine)
+        {
+            $this->idCine = $idCine;
+        }
+
         private static function IncrementId(){
             self::$autoIncrement++;
             return $autoIncrement;
@@ -45,7 +50,7 @@
             return $this->adress;
         }
 
-        public function setadress($adress)
+        public function setAdress($adress)
         {
             $this->adress = $adress;
         }
