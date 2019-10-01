@@ -1,5 +1,5 @@
 <?php
-    namespace Controllers;
+    namespace Views;
 
     
     require_once("../Config/Config.php");
