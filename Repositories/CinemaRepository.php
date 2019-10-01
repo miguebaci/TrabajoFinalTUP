@@ -30,7 +30,7 @@
 
             foreach($this->cinemaList as $cinema)
             {
-                $valuesArray["idCine"] = $cinema->getIdCine();
+                //$valuesArray["idCine"] = $cinema->getIdCine();
                 $valuesArray["cinemaName"] = $cinema->getCinemaName();
                 $valuesArray["adress"] = $cinema->getAdress();
                 $valuesArray["totalCap"] = $cinema->getTotalCap();
@@ -57,7 +57,7 @@
                 foreach($arrayToDecode as $valuesArray)
                 {
                     $cinema = new Cinema($valuesArray["cinemaName"],$valuesArray["adress"],$valuesArray["totalCap"],$valuesArray["ticketPrice"]);
-                    $cinema->setIdCine($valuesArray["idCine"]);
+                    //$cinema->setIdCine($valuesArray["idCine"]);
 
                     array_push($this->cinemaList, $cinema);
                 }
