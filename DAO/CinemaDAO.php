@@ -24,6 +24,58 @@
             return $this->cinemaList;
         }
 
+        public function Delete($cinemaName)
+        {
+            $this->retrieveData();
+		    $newList = array();
+            foreach ($this->cinemaList as $cinema) 
+            {
+                if($cinema->getCinemaName() != $cinemaName)
+                {
+				array_push($newList, $cinema);
+			    }
+		    }  
+
+		    $this->cinemaList = $newList;
+		    $this->SaveData();
+        }
+
+        public function Update(Cinema $updatedCinema, $cinemaName)
+        {
+            $this->retrieveData();
+		    $newList = array();
+            foreach ($this->cinemaList as $cinema) 
+            {
+                if($cinema->getCinemaName() != $cinemaName)
+                {
+				array_push($newList, $cinema);
+                }
+                else
+                {
+                    if($cinema["cinemaName"] != $updatedCinema->getCinemaName() && $updatedCinema->getCinemaName() != NULL)
+                    {
+                        $cinema->setCinemaName($updatedCinema->getCinemaName());
+                    }
+                    if($cinema["adress"] != $updatedCinema->getAdress() && $updatedCinema->getAdress() != NULL)
+                    {
+                        $cinema->setAdress($updatedCinema->getAdress());
+                    }
+                    if($cinema["totalCap"] != $updatedCinema->getTotalCap() && $updatedCinema->getTotalCap() != NULL)
+                    {
+                        $cinema->setTotalCap($updatedCinema->getTotalCap());
+                    }
+                    if($cinema["ticketPrice"] != $updatedCinema->getTicketPrice() && $updatedCinema->getTicketPrice() != NULL)
+                    {
+                        $cinema->setTicketPrice($updatedCinema->getTicketPrice());
+                    }
+                    array_push($newList, $cinema);
+                }
+		    }  
+            
+		    $this->cinemaList = $newList;
+		    $this->SaveData();
+        }
+
         private function SaveData()
         {
             $arrayToEncode = array();
@@ -41,16 +93,16 @@
 
             $jsonContent = json_encode($arrayToEncode, JSON_PRETTY_PRINT);
             
-            file_put_contents('../Data/cinemas.json', $jsonContent);
+            file_put_contents(ROOT . 'Data/cinemas.json', $jsonContent);
         }
 
         private function RetrieveData()
         {
             $this->cinemaList = array();
 
-            if(file_exists('../Data/cinemas.json'))
+            if(file_exists(ROOT . 'Data/cinemas.json'))
             {
-                $jsonContent = file_get_contents('../Data/cinemas.json');
+                $jsonContent = file_get_contents(ROOT . 'Data/cinemas.json');
 
                 $arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();
 

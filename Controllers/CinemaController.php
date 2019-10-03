@@ -56,5 +56,20 @@
             }
             echo "window.location = '../index.php'; </script>";
         }
+
+        public function Delete()
+        {   
+            if($_POST){
+                
+            $cinemaName=$_POST["cinemaName"];
+            $repo=new CinemaDAO();
+            $repo->Delete($cinemaName);
+        
+                echo "<script> alert('Cinema deleted');";
+            }else{
+                echo "<script> alert('Cinema error');";  
+            }
+            echo "window.location = '../index.php'; </script>";
+        }
     }
 ?>

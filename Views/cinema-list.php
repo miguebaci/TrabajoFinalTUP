@@ -13,6 +13,7 @@
                          <th>Precio unitario de entrada</th>
                     </thead>
                     <tbody>
+                    <form action="<?php echo FRONT_ROOT ?>Cinema/Delete" method="POST">
                          <?php
                               foreach($cinemaList as $cinema)
                               {
@@ -22,11 +23,14 @@
                                              <td><?php echo $cinema->getAdress() ?></td>
                                              <td><?php echo $cinema->getTotalCap() ?></td>
                                              <td><?php echo $cinema->getTicketPrice() ?></td>
+                                             <td> 
+                                                  <button type="submit" name="cinemaName" class="btn btn-danger" value="<?php echo $cinema->getCinemaName(); ?>"> Eliminar </button>
+                                             </td>
                                         </tr>
                                    <?php
                               }
                          ?>
-                         </tr>
+                         </form>
                     </tbody>
                </table>
           </div>
