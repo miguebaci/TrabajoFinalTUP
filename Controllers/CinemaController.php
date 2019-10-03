@@ -1,16 +1,17 @@
 <?php
     namespace Controllers;
 
-    use Repositories\CinemaRepository as CinemaRepository;
+    use DAO\ICinemaDAO as ICinemaDAO;
+    use DAO\CinemaDAO as CinemaDAO;
     use Models\Cinema as Cinema;
 
     class CinemaController
     {
-        private $cinemaRepository;
+        private $cinemaDAO;
 
         public function __construct()
         {
-            $this->cinemaRepository = new CinemaRepository();
+            $this->cinemaDAO = new CinemaDAO();
         }
 
         public function ShowAddView()
@@ -20,22 +21,40 @@
 
         public function ShowListView()
         {
-            $cinemaList = $this->cinemaRepository->GetAll();
+            $cinemaList = $this->cinemaDAO->GetAll();
 
             require_once(VIEWS_PATH."cinema-list.php");
         }
 
-        public function Add($recordId, $firstName, $lastName)
-        {
-            $cinema = new Cinema();
-            $cinema->setCinemaName($cinemaName);
-            $cinema->setadress($adress);
-            $cinema->setTotalCap($totalCap);
-            $cinema->setTicketPrice($ticketPrice);
-
-            $this->cinemaRepository->Add($cinema);
-
-            $this->ShowAddView();
+        public function Add()
+        {   
+            if($_POST){
+                $cinemaName="";
+                $adress="";
+                $totalCap=0;
+                $ticketPrice=0;
+                if(isset($_POST["cinemaName"])){
+                    $cinemaName=$_POST["cinemaName"];
+                }
+                if(isset($_POST["adress"])){
+                    $adress=$_POST["adress"];
+                }
+                if(isset($_POST["totalCap"])){
+                    $totalCap=$_POST["totalCap"];
+                }
+                if(isset($_POST["ticketPrice"])){
+                    $ticketPrice=$_POST["ticketPrice"];
+                }
+        
+                $newCinema=new Cinema($cinemaName,$adress,$totalCap,$ticketPrice);
+                $repo=new CinemaDAO();
+                $repo->Add($newCinema);
+        
+                echo "<script> alert('Cinema added');";
+            }else{
+                echo "<script> alert('Cinema error');";  
+            }
+            echo "window.location = '../index.php'; </script>";
         }
     }
 ?>

@@ -6,8 +6,8 @@
 
 <body>
     
-<button onclick ="window.location.href= '/trabajoFinal/Models/altaCines.php';" >Alta de Cines</button>
-<button onclick ="window.location.href= '/trabajoFinal/Models/cinemaList.php';" >Listado de cines para modificacion</button>
+<button onclick ="window.location.href= '<?php echo FRONT_ROOT ?> Cinema/ShowAddView'" >Alta de Cines</button>
+<button onclick ="window.location.href= '<?php echo FRONT_ROOT ?> Cinema/ShowListView'" >Listado de cines para modificacion</button>
 
 </body>
 
