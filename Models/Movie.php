@@ -4,30 +4,31 @@ namespace Models;
 use Models\Movie as Movie;
 
 class Movie
-{   private static $autoIncrement;
+{   //private static $autoIncrement;
     private $idMovie;
     private $movieName;
     private $duration;
     private $language;
     private $image;
 
-    public function __construct($movieName, $language, $duration, $image){
+    public function __construct($idMovie, $movieName, $language, $duration, $image){
+        $this->idMovie=$idMovie;
         $this->movieName = $movieName;
         $this->duration = $duration;
         $this->language = $language;
         $this->image = $image;
     }
     
-   /* public function getIdMovie()
+    public function getIdMovie()
     {
         return $this->idMovie;
     }
 
-    public function setIdMovie($idMovie)
+    private function setIdMovie($idMovie)
     {
         $this->idMovie = $idMovie;
     }
-
+    /*
     private function IncrementId(){
         self::$autoIncrement++;
         return self::$autoIncrement;
