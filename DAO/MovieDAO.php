@@ -77,5 +77,83 @@
                 }
             }
         }
+
+        public function UpdateAll(){
+
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://api.themoviedb.org/3/movie/now_playing?page=1&language=en-US&api_key=f9b934d767d65140edaa81c51e8a4111",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10000,
+                CURLOPT_TIMEOUT => 10000,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET",
+                CURLOPT_POSTFIELDS => "{}",
+            ));
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+
+            curl_close($curl);
+
+            $pages=json_decode($response,true);
+
+            echo $pages["total_pages"];
+
+            for($i=1;$i<$pages["total_pages"];$i++){
+                $curl = curl_init();
+
+                curl_setopt_array($curl, array(
+                    CURLOPT_URL => "https://api.themoviedb.org/3/movie/now_playing?page=".$i."&language=en-US&api_key=f9b934d767d65140edaa81c51e8a4111",
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10000,
+                    CURLOPT_TIMEOUT => 10000,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "GET",
+                    CURLOPT_POSTFIELDS => "{}",
+                ));
+
+                $response = curl_exec($curl);
+                $err = curl_error($curl);
+
+                curl_close($curl);
+
+                $arrayToDecode=json_decode($response,true);
+
+                $array=$arrayToDecode["results"];
+
+                foreach($array as $thing=>$movie){
+
+                    $movies=new Movie($movie['id'],$movie['title'],$movie['original_language'],$movie['poster_path']);
+                    $this->Add($movies);
+                }
+            }
+        }
+        
+        private function RetrieveRuntime($id){
+            $curl = curl_init();
+        
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://api.themoviedb.org/3/movie/".$id."?language=en-US&api_key=f9b934d767d65140edaa81c51e8a4111",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET",
+                CURLOPT_POSTFIELDS => "{}",
+            ));
+        
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+        
+            curl_close($curl);
+        
+            $arrayToDecode=json_decode($response,true);
+        
+            return $arrayToDecode['runtime'];
     }
 ?>
