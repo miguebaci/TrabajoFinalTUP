@@ -19,4 +19,9 @@
 
             require_once(VIEWS_PATH."movie-list.php");
         }
+        public function UpdateMovies(){
+            $this->movieDAO->UpdateAll();
+
+            require_once(VIEWS_PATH."movie-list.php");
+        }
 ?>
