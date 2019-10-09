@@ -8,6 +8,9 @@
           </li>
           <li class="nav-item">
                <a class="nav-link" href="<?php echo FRONT_ROOT ?>Cinema/ShowListView">Listar Cines</a>
-          </li>          
+          </li>     
+          <li class="nav-item">
+               <a class="nav-link" href="<?php echo FRONT_ROOT ?>Movie/UpdateMovies">Update Movie</a>
+          </li>      
      </ul>
 </nav>
