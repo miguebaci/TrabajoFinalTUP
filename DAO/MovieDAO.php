@@ -7,7 +7,6 @@
     class MovieDAO implements IMovieDAO
     {
         private $movieList = array();
-        private $newMovieList=array();
 
         public function Add(Movie $movie)
         {
@@ -80,11 +79,36 @@
         }
 
         public function UpdateAll(){
-            $pages=$this->RetriveTotalPages();
-            for($i=1;$i<5;$i++){
-                $this->SavePage($i);
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://api.themoviedb.org/3/movie/now_playing?page=1&language=en-US&api_key=f9b934d767d65140edaa81c51e8a4111",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10000,
+                CURLOPT_TIMEOUT => 10000,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET",
+                CURLOPT_POSTFIELDS => "{}",
+            ));
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+
+            curl_close($curl);
+
+            $arrayToDecode=json_decode($response,true);
+
+            $array=$arrayToDecode["results"];
+
+            $newMovieList=array();
+
+            foreach($array as $thing=>$movie){
+
+                $movies=new Movie($movie['id'],$movie['title'],$movie['original_language'],$this->RetrieveRuntime($movie['id']),$movie['poster_path']);
+                array_push($newMovieList,$movies);
             }
-            $this->movieList=$this->newMovieList;
+            $this->movieList=$newMovieList;
             $this->SaveData();
         }
         
@@ -111,60 +135,6 @@
         
             return $arrayToDecode['runtime'];
         }
-
-        private function RetriveTotalPages(){
-            $curl = curl_init();
-
-            curl_setopt_array($curl, array(
-                CURLOPT_URL => "https://api.themoviedb.org/3/movie/now_playing?page=1&language=en-US&api_key=f9b934d767d65140edaa81c51e8a4111",
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => "",
-                CURLOPT_MAXREDIRS => 10000,
-                CURLOPT_TIMEOUT => 10000,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => "GET",
-                CURLOPT_POSTFIELDS => "{}",
-            ));
-
-            $response = curl_exec($curl);
-            $err = curl_error($curl);
-
-            curl_close($curl);
-
-            $pages=json_decode($response,true);
-
-            return $pages["total_pages"];
-        }
-
-        public function SavePage($page){
-
-            $curl = curl_init();
-
-            curl_setopt_array($curl, array(
-                CURLOPT_URL => "https://api.themoviedb.org/3/movie/now_playing?page=".$page."&language=en-US&api_key=f9b934d767d65140edaa81c51e8a4111",
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => "",
-                CURLOPT_MAXREDIRS => 10000,
-                CURLOPT_TIMEOUT => 10000,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => "GET",
-                CURLOPT_POSTFIELDS => "{}",
-            ));
-
-            $response = curl_exec($curl);
-            $err = curl_error($curl);
-
-            curl_close($curl);
-
-            $arrayToDecode=json_decode($response,true);
-
-            $array=$arrayToDecode["results"];
-
-            foreach($array as $thing=>$movie){
-
-                $movies=new Movie($movie['id'],$movie['title'],$movie['original_language'],$this->RetrieveRuntime($movie['id']),$movie['poster_path']);
-                array_push($this->newMovieList,$movies);
-            }
-        }
+        
     }
 ?>
