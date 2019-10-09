@@ -8,9 +8,9 @@
                <table class="table bg-light-alpha">
                     <thead>
                          <th>Nombre</th>
-                         <th>Direccion</th>
-                         <th>Capacidad total</th>
-                         <th>Precio unitario de entrada</th>
+                         <th>Lenguaje</th>
+                         <th>Duracion total</th>
+                         <th></th>
                     </thead>
                     <tbody>
                          <?php
@@ -21,7 +21,7 @@
                                              <td><?php echo $movie->getMovieName() ?></td>
                                              <td><?php echo $movie->getLanguage() ?></td>
                                              <td><?php echo $movie->getDuration() ?></td>
-                                             <td><?php echo $movie->getImage() ?></td>
+                                             <td><?php echo "<".POSTER_ROOT . $movie->getImage().">" ?></td>
                                         </tr>
                                    <?php
                               }

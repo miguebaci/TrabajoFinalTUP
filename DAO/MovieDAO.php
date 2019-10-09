@@ -80,39 +80,6 @@
         }
 
         public function UpdateAll(){
-            $pages=$this->RetriveTotalPages();
-            for($i=1;$i<5;$i++){
-                $this->SavePage($i);
-            }
-            $this->movieList=$this->newMovieList;
-            $this->SaveData();
-        }
-        
-        private function RetrieveRuntime($id){
-            $curl = curl_init();
-        
-            curl_setopt_array($curl, array(
-                CURLOPT_URL => "https://api.themoviedb.org/3/movie/".$id."?language=en-US&api_key=f9b934d767d65140edaa81c51e8a4111",
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => "",
-                CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 30,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => "GET",
-                CURLOPT_POSTFIELDS => "{}",
-            ));
-        
-            $response = curl_exec($curl);
-            $err = curl_error($curl);
-        
-            curl_close($curl);
-        
-            $arrayToDecode=json_decode($response,true);
-        
-            return $arrayToDecode['runtime'];
-        }
-
-        private function RetriveTotalPages(){
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
@@ -131,13 +98,22 @@
 
             curl_close($curl);
 
-            $pages=json_decode($response,true);
+            $arrayToDecode=json_decode($response,true);
 
-            return $pages["total_pages"];
+            $array=$arrayToDecode["results"];
+
+            $newMovieList=array();
+
+            foreach($array as $thing=>$movie){
+
+                $movies=new Movie($movie['id'],$movie['title'],$movie['original_language'],$this->RetrieveRuntime($movie['id']),$movie['poster_path']);
+                array_push($newMovieList,$movies);
+            }
+            $this->movieList=$newMovieList;
+            $this->SaveData();
         }
-
-        public function SavePage($page){
-
+        
+        private function RetrieveRuntime($id){
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
@@ -157,14 +133,8 @@
             curl_close($curl);
 
             $arrayToDecode=json_decode($response,true);
-
-            $array=$arrayToDecode["results"];
-
-            foreach($array as $thing=>$movie){
-
-                $movies=new Movie($movie['id'],$movie['title'],$movie['original_language'],$this->RetrieveRuntime($movie['id']),$movie['poster_path']);
-                array_push($this->newMovieList,$movies);
-            }
+        
+            return $arrayToDecode['runtime'];
         }
     }
 ?>
