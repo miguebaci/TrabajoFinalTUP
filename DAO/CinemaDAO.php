@@ -3,27 +3,65 @@
 
     use DAO\ICinemaDAO as ICinemaDAO;
     use Models\Cinema as Cinema;
+    use DAO\Connection as Connection;
 
     class CinemaDAO implements ICinemaDAO
     {
-        private $cinemaList = array();
+        private $connection;
+        private $tableName = "cinema";
 
-        public function Add(cinema $cinema)
+        public function Add(Cinema $cinema)
         {
-            $this->RetrieveData();
-            
-            array_push($this->cinemaList, $cinema);
+            try
+            {
+                $query = "INSERT INTO ".$this->tableName." (cinemaName, adress, totalCap, ticketPrice) VALUES (:cinemaName, :adress, :totalCap, :ticketPrice);";
+                
+                $parameters["cinemaName"] = $cinema->getCinemaName();
+                $parameters["adress"] = $cinema->getAdress();
+                $parameters["totalCap"] = $cinema->getTotalCap();
+                $parameters["ticketPrice"] = $cinema->getTicketPrice();
 
-            $this->SaveData();
+                $this->connection = Connection::GetInstance();
+
+                $this->connection->ExecuteNonQuery($query, $parameters);
+            }
+            catch(Exception $ex)
+            {
+                throw $ex;
+            }
         }
 
         public function GetAll()
         {
-            $this->RetrieveData();
+            try
+            {
+                $cinemaList = array();
 
-            return $this->cinemaList;
+                $query = "SELECT * FROM ".$this->tableName;
+
+                $this->connection = Connection::GetInstance();
+
+                $resultSet = $this->connection->Execute($query);
+                
+                foreach ($resultSet as $row)
+                {                
+                    $cinema = new Cinema($row["cinemaName"],$row["adress"],$row["totalCap"],$row["ticketPrice"]);
+                    /*$cinema->setCinemaName($row["cinemaName"]);
+                    $cinema->setAdress($row["adress"]);
+                    $cinema->setTotalCap($row["totalCap"]);
+                    $cinema->setTicketPrice($row["ticketPrice"]);*/
+
+                    array_push($cinemaList, $cinema);
+                }
+
+                return $cinemaList;
+            }
+            catch(Exception $ex)
+            {
+                throw $ex;
+            }
         }
-
+    
         public function Delete($cinemaName)
         {
             $this->retrieveData();

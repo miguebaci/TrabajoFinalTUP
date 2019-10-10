@@ -22,7 +22,7 @@
         public function UpdateMovies(){
             $this->movieDAO->UpdateAll();
 
-            $this->ShowListView();
+          //  $this->ShowListView();
         }
     }
 ?>

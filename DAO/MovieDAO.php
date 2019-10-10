@@ -3,26 +3,65 @@
 
     use DAO\IMovieDAO as IMovieDAO;
     use Models\Movie as Movie;
+    use DAO\Connection as Connection;
 
     class MovieDAO implements IMovieDAO
     {
-        private $movieList = array();
-        private $newMovieList=array();
+        private $connection;
+        private $tableName = "movie";
 
         public function Add(Movie $movie)
         {
-            $this->RetrieveData();
-            
-            array_push($this->movieList, $movie);
+            try
+            {
+                $query = "INSERT INTO ".$this->tableName." (idMovie, movieName, movielanguage, duration, poster_image) VALUES (:idMovie, :movieName, :movielanguage, :duration, :poster_image);";
+                
+                $parameters["idMovie"] = $movie->getIdMovie();
+                $parameters["movieName"] = $movie->getMovieName();
+                $parameters["movielanguage"] = $movie->getLanguage();
+                $parameters["duration"] = $movie->getDuration();
+                $parameters["poster_image"] = $movie->getImage();
 
-            $this->SaveData();
+                $this->connection = Connection::GetInstance();
+
+                $this->connection->ExecuteNonQuery($query, $parameters);
+            }
+            catch(Exception $ex)
+            {
+                throw $ex;
+            }
         }
 
         public function GetAll()
         {
-            $this->RetrieveData();
+            try
+            {
+                $movieList = array();
 
-            return $this->movieList;
+                $query = "SELECT * FROM ".$this->tableName;
+
+                $this->connection = Connection::GetInstance();
+
+                $resultSet = $this->connection->Execute($query);
+                
+                foreach ($resultSet as $row)
+                {                
+                    $movie = new Movie(
+                    $row["idMovie"],
+                    $row["movieName"],
+                    $row["movielanguage"],
+                    $row["duration"],
+                    $row["poster_image"]);
+
+                    array_push($movieList, $movie);
+                }
+
+                return $movieList;
+            }
+            catch(Exception $ex)
+            {
+                throw $ex;
+            }
         }
 
         public function Delete($idMovie)
@@ -47,13 +86,13 @@
 
             foreach($this->movieList as $movie)
             {
-                $valuesArray["idMovie"] = $movie->getIdMovie();
-                $valuesArray["movieName"] = $movie->getMovieName();
-                $valuesArray["language"] = $movie->getLanguage();
-                $valuesArray["duration"] = $movie->getDuration();
-                $valuesArray["image"] = $movie->getImage();
+                $parameters["idMovie"] = $movie->getIdMovie();
+                $parameters["movieName"] = $movie->getMovieName();
+                $parameters["language"] = $movie->getLanguage();
+                $parameters["duration"] = $movie->getDuration();
+                $parameters["image"] = $movie->getImage();
 
-                array_push($arrayToEncode, $valuesArray);
+                array_push($arrayToEncode, $parameters);
             }
 
             $jsonContent = json_encode($arrayToEncode, JSON_PRETTY_PRINT);
@@ -71,9 +110,9 @@
 
                 $arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();
 
-                foreach($arrayToDecode as $valuesArray)
+                foreach($arrayToDecode as $parameters)
                 {
-                    $movie = new Movie($valuesArray["idMovie"], $valuesArray["movieName"],$valuesArray["language"],$valuesArray["duration"],$valuesArray["image"]);
+                    $movie = new Movie($parameters["idMovie"], $parameters["movieName"],$parameters["language"],$parameters["duration"],$parameters["image"]);
                     array_push($this->movieList, $movie);
                 }
             }
@@ -83,7 +122,7 @@
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-                CURLOPT_URL => "https://api.themoviedb.org/3/movie/now_playing?page=1&language=en-US&api_key=f9b934d767d65140edaa81c51e8a4111",
+                CURLOPT_URL => "http://api.themoviedb.org/3/movie/now_playing?page=1&language=en-US&api_key=f9b934d767d65140edaa81c51e8a4111",
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => "",
                 CURLOPT_MAXREDIRS => 10000,
@@ -94,30 +133,29 @@
             ));
 
             $response = curl_exec($curl);
+            
             $err = curl_error($curl);
 
             curl_close($curl);
-
+            sleep(10);
             $arrayToDecode=json_decode($response,true);
-
+            
             $array=$arrayToDecode["results"];
 
-            $newMovieList=array();
-
-            foreach($array as $thing=>$movie){
+            foreach($array as $thing => $movie){
 
                 $movies=new Movie($movie['id'],$movie['title'],$movie['original_language'],$this->RetrieveRuntime($movie['id']),$movie['poster_path']);
-                array_push($newMovieList,$movies);
+                if(){
+                $this->Add($movies);
+                }
             }
-            $this->movieList=$newMovieList;
-            $this->SaveData();
         }
         
         private function RetrieveRuntime($id){
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-                CURLOPT_URL => "https://api.themoviedb.org/3/movie/".$id."?language=en-US&api_key=f9b934d767d65140edaa81c51e8a4111",
+                CURLOPT_URL => "http://api.themoviedb.org/3/movie/".$id."?language=en-US&api_key=f9b934d767d65140edaa81c51e8a4111",
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => "",
                 CURLOPT_MAXREDIRS => 10000,
