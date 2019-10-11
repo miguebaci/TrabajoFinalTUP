@@ -24,7 +24,7 @@
                                              <td><?php echo $cinema->getTotalCap() ?></td>
                                              <td><?php echo $cinema->getTicketPrice() ?></td>
                                              <td> 
-                                                  <button type="submit" name="cinemaName" class="btn btn-danger" value="<?php echo $cinema->getCinemaName(); ?>"> Eliminar </button>
+                                                  <button type="submit" name="idCinema" class="btn btn-danger" value="<?php echo $cinema->getIdCinema(); ?>"> Eliminar </button>
                                              </td>
                                         </tr>
                                    <?php

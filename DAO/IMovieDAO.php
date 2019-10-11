@@ -5,6 +5,6 @@
     {
         function Add(Movie $movie);
         function GetAll();
-        function Delete($IdMovie);
+        //function Delete($IdMovie);
     }
 ?>

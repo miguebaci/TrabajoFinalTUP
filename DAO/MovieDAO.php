@@ -64,94 +64,53 @@
             }
         }
 
-        public function Delete($idMovie)
-        {
-            $this->retrieveData();
-		    $newList = array();
-            foreach ($this->movieList as $Movie) 
-            {
-                if($movie->getIdMovie() != $idMovie)
-                {
-				array_push($newList, $movie);
-			    }
-		    }  
-
-		    $this->movieList = $newList;
-		    $this->SaveData();
-        }
-
-        private function SaveData()
-        {
-            $arrayToEncode = array();
-
-            foreach($this->movieList as $movie)
-            {
-                $parameters["idMovie"] = $movie->getIdMovie();
-                $parameters["movieName"] = $movie->getMovieName();
-                $parameters["language"] = $movie->getLanguage();
-                $parameters["duration"] = $movie->getDuration();
-                $parameters["image"] = $movie->getImage();
-
-                array_push($arrayToEncode, $parameters);
-            }
-
-            $jsonContent = json_encode($arrayToEncode, JSON_PRETTY_PRINT);
-            
-            file_put_contents(ROOT . 'Data/Movies.json', $jsonContent);
-        }
-
-        private function RetrieveData()
-        {
-            $this->movieList = array();
-
-            if(file_exists(ROOT . 'Data/Movies.json'))
-            {
-                $jsonContent = file_get_contents(ROOT . 'Data/Movies.json');
-
-                $arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();
-
-                foreach($arrayToDecode as $parameters)
-                {
-                    $movie = new Movie($parameters["idMovie"], $parameters["movieName"],$parameters["language"],$parameters["duration"],$parameters["image"]);
-                    array_push($this->movieList, $movie);
-                }
-            }
-        }
-
         public function UpdateAll(){
-            $curl = curl_init();
+            try{
+                $curl = curl_init();
+                
+                curl_setopt_array($curl, array(
+                    CURLOPT_URL => "http://api.themoviedb.org/3/movie/now_playing?page=1&language=en-US&api_key=f9b934d767d65140edaa81c51e8a4111",
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10000,
+                    CURLOPT_TIMEOUT => 10000,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "GET",
+                    CURLOPT_POSTFIELDS => "{}",
+                ));
 
-            curl_setopt_array($curl, array(
-                CURLOPT_URL => "http://api.themoviedb.org/3/movie/now_playing?page=1&language=en-US&api_key=f9b934d767d65140edaa81c51e8a4111",
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => "",
-                CURLOPT_MAXREDIRS => 10000,
-                CURLOPT_TIMEOUT => 10000,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => "GET",
-                CURLOPT_POSTFIELDS => "{}",
-            ));
+                $response = curl_exec($curl);
+                
+                $err = curl_error($curl);
 
-            $response = curl_exec($curl);
-            
-            $err = curl_error($curl);
+                curl_close($curl);
+                $arrayToDecode=json_decode($response,true);
+                
+                $array=$arrayToDecode["results"];
 
-            curl_close($curl);
-            sleep(10);
-            $arrayToDecode=json_decode($response,true);
-            
-            $array=$arrayToDecode["results"];
+                foreach($array as $thing => $movie){
+                
+                    $url_id = $movie['id'];
+                    $query = "SELECT idMovie FROM " .$this->tableName." WHERE idMovie ='$url_id'";
+                    $this->connection = Connection::GetInstance();
+                    $resultSet= NULL;
+                    $resultSet = $this->connection->Execute($query);                
 
-            foreach($array as $thing => $movie){
-
-                $movies=new Movie($movie['id'],$movie['title'],$movie['original_language'],$this->RetrieveRuntime($movie['id']),$movie['poster_path']);
-                if(){
-                $this->Add($movies);
+                    $movies=new Movie($movie['id'],$movie['title'],$movie['original_language'],$this->RetrieveRuntime($movie['id']),$movie['poster_path']);
+                    if($resultSet == NULL){
+                    $this->Add($movies);
                 }
+                
+                }
+            }
+            catch(Exception $ex)
+            {
+               throw $ex;
             }
         }
         
         private function RetrieveRuntime($id){
+            try{
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
@@ -173,6 +132,11 @@
             $arrayToDecode=json_decode($response,true);
         
             return $arrayToDecode['runtime'];
+            }
+            catch(Exception $ex)
+            {
+               throw $ex;
+            }
         }
     }
 ?>

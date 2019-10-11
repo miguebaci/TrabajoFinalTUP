@@ -44,12 +44,12 @@
                 $resultSet = $this->connection->Execute($query);
                 
                 foreach ($resultSet as $row)
-                {                
-                    $cinema = new Cinema($row["cinemaName"],$row["adress"],$row["totalCap"],$row["ticketPrice"]);
-                    /*$cinema->setCinemaName($row["cinemaName"]);
-                    $cinema->setAdress($row["adress"]);
-                    $cinema->setTotalCap($row["totalCap"]);
-                    $cinema->setTicketPrice($row["ticketPrice"]);*/
+                {               
+                    $cinema = new Cinema($row["idCinema"],
+                    $row["cinemaName"],
+                    $row["adress"],
+                    $row["totalCap"],
+                    $row["ticketPrice"]);
 
                     array_push($cinemaList, $cinema);
                 }
@@ -61,96 +61,42 @@
                 throw $ex;
             }
         }
-    
-        public function Delete($cinemaName)
-        {
-            $this->retrieveData();
-		    $newList = array();
-            foreach ($this->cinemaList as $cinema) 
+        
+        public function Delete(Cinema $cinema)
+        {   
+            try
             {
-                if($cinema->getCinemaName() != $cinemaName)
-                {
-				array_push($newList, $cinema);
-			    }
-		    }  
-
-		    $this->cinemaList = $newList;
-		    $this->SaveData();
-        }
-
-        public function Update(Cinema $updatedCinema, $cinemaName)
-        {
-            $this->retrieveData();
-		    $newList = array();
-            foreach ($this->cinemaList as $cinema) 
-            {
-                if($cinema->getCinemaName() != $cinemaName)
-                {
-				array_push($newList, $cinema);
-                }
-                else
-                {
-                    if($cinema["cinemaName"] != $updatedCinema->getCinemaName() && $updatedCinema->getCinemaName() != NULL)
-                    {
-                        $cinema->setCinemaName($updatedCinema->getCinemaName());
-                    }
-                    if($cinema["adress"] != $updatedCinema->getAdress() && $updatedCinema->getAdress() != NULL)
-                    {
-                        $cinema->setAdress($updatedCinema->getAdress());
-                    }
-                    if($cinema["totalCap"] != $updatedCinema->getTotalCap() && $updatedCinema->getTotalCap() != NULL)
-                    {
-                        $cinema->setTotalCap($updatedCinema->getTotalCap());
-                    }
-                    if($cinema["ticketPrice"] != $updatedCinema->getTicketPrice() && $updatedCinema->getTicketPrice() != NULL)
-                    {
-                        $cinema->setTicketPrice($updatedCinema->getTicketPrice());
-                    }
-                    array_push($newList, $cinema);
-                }
-		    }  
-            
-		    $this->cinemaList = $newList;
-		    $this->SaveData();
-        }
-
-        private function SaveData()
-        {
-            $arrayToEncode = array();
-
-            foreach($this->cinemaList as $cinema)
-            {
-                //$valuesArray["idCine"] = $cinema->getIdCine();
-                $valuesArray["cinemaName"] = $cinema->getCinemaName();
-                $valuesArray["adress"] = $cinema->getAdress();
-                $valuesArray["totalCap"] = $cinema->getTotalCap();
-                $valuesArray["ticketPrice"] = $cinema->getTicketPrice();
-
-                array_push($arrayToEncode, $valuesArray);
+            $idCinema=$cinema->getIdCinema();
+            $query = "DELETE FROM ". $this->tableName . " WHERE ". $this->tableName . ".idCinema ='$idCinema'";
+                $this->connection = Connection::GetInstance();
+                $this->connection->ExecuteNonQuery($query);
             }
-
-            $jsonContent = json_encode($arrayToEncode, JSON_PRETTY_PRINT);
-            
-            file_put_contents(ROOT . 'Data/cinemas.json', $jsonContent);
+            catch(Exception $ex)
+            {
+               throw $ex;
+            }
         }
 
-        private function RetrieveData()
-        {
-            $this->cinemaList = array();
-
-            if(file_exists(ROOT . 'Data/cinemas.json'))
+        public function GetById($idCinema){
+            try
             {
-                $jsonContent = file_get_contents(ROOT . 'Data/cinemas.json');
-
-                $arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();
-
-                foreach($arrayToDecode as $valuesArray)
-                {
-                    $cinema = new Cinema($valuesArray["cinemaName"],$valuesArray["adress"],$valuesArray["totalCap"],$valuesArray["ticketPrice"]);
-                    //$cinema->setIdCine($valuesArray["idCine"]);
-
-                    array_push($this->cinemaList, $cinema);
+            $query = "SELECT * FROM ".$this->tableName. " WHERE ". $this->tableName .".idCinema ='$idCinema'";
+            $this->connection = Connection::GetInstance();
+            $resultSet = $this->connection->Execute($query);
+            $cinema=NULL;
+            foreach ($resultSet as $row)
+                {               
+                    $cinema = new Cinema($row["idCinema"],
+                    $row["cinemaName"],
+                    $row["adress"],
+                    $row["totalCap"],
+                    $row["ticketPrice"]);
                 }
+            return $cinema;
+            }
+            catch(Exception $ex)
+            {
+               throw $ex;
             }
         }
     }

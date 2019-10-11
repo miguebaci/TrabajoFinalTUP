@@ -4,7 +4,7 @@
     use Models\Genre as Genre;
 
     class Genre
-    {
+    {   
         private $description;
 
         public function __construct($description){

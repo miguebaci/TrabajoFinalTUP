@@ -22,7 +22,6 @@
         public function ShowListView()
         {
             $cinemaList = $this->cinemaDAO->GetAll();
-
             require_once(VIEWS_PATH."cinema-list.php");
         }
 
@@ -46,7 +45,7 @@
                     $ticketPrice=$_POST["ticketPrice"];
                 }
         
-                $newCinema=new Cinema($cinemaName,$adress,$totalCap,$ticketPrice);
+                $newCinema=new Cinema(0,$cinemaName,$adress,$totalCap,$ticketPrice);
                 $repo=new CinemaDAO();
                 $repo->Add($newCinema);
         
@@ -61,9 +60,10 @@
         {   
             if($_POST){
                 
-            $cinemaName=$_POST["cinemaName"];
+            $idCinema=$_POST["idCinema"];
             $repo=new CinemaDAO();
-            $repo->Delete($cinemaName);
+            $cinema=$repo->GetById($idCinema);
+            $repo->Delete($cinema);
         
                 echo "<script> alert('Cinema deleted');";
             }else{
