@@ -1,16 +1,16 @@
 [
     {
         "idCinema": 1,
-        "cinemaName": "Cine 1",
-        "adress": "Direccion 1 ",
-        "totalCap": "200",
-        "ticketPrice": "300"
+        "cinemaName": "C1",
+        "adress": "D1",
+        "totalCap": "100",
+        "ticketPrice": "100"
     },
     {
-        "idCinema": 1,
-        "cinemaName": "Cine 10",
-        "adress": "Direccion 20",
-        "totalCap": "400",
-        "ticketPrice": "500"
+        "idCinema": 3,
+        "cinemaName": "C3",
+        "adress": "D3",
+        "totalCap": "300",
+        "ticketPrice": "300"
     }
 ]
