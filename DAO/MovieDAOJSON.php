@@ -4,7 +4,7 @@
     use DAO\IMovieDAO as IMovieDAO;
     use Models\Movie as Movie;
 
-    class MovieDAO implements IMovieDAO
+    class MovieDAOJSON implements IMovieDAO
     {
         private $movieList = array();
         private $newMovieList=array();
@@ -83,7 +83,7 @@
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-                CURLOPT_URL => "https://api.themoviedb.org/3/movie/now_playing?page=1&language=en-US&api_key=f9b934d767d65140edaa81c51e8a4111",
+                CURLOPT_URL => "http://api.themoviedb.org/3/movie/now_playing?page=1&language=en-US&api_key=f9b934d767d65140edaa81c51e8a4111",
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => "",
                 CURLOPT_MAXREDIRS => 10000,
@@ -104,20 +104,29 @@
 
             $newMovieList=array();
 
-            foreach($array as $thing=>$movie){
+            $this->RetrieveData();
 
-                $movies=new Movie($movie['id'],$movie['title'],$movie['original_language'],$this->RetrieveRuntime($movie['id']),$movie['poster_path']);
-                array_push($newMovieList,$movies);
+            foreach($array as $thing=>$movie){
+                $flag=false;
+                foreach($this->movieList as $movieJSON){
+                    if($movieJSON->getIdMovie()==$movie['id']){
+                        $flag=true;
+                    }
+                }
+                if($flag==false){
+                    $movies=new Movie($movie['id'],$movie['title'],$movie['original_language'],$this->RetrieveRuntime($movie['id']),$movie['poster_path']);
+                    $this->Add($movies);   
+                }
             }
-            $this->movieList=$newMovieList;
-            $this->SaveData();
+            //$this->movieList=$newMovieList;
+            //$this->SaveData();
         }
         
         private function RetrieveRuntime($id){
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-                CURLOPT_URL => "https://api.themoviedb.org/3/movie/".$id."?language=en-US&api_key=f9b934d767d65140edaa81c51e8a4111",
+                CURLOPT_URL => "http://api.themoviedb.org/3/movie/".$id."?language=en-US&api_key=f9b934d767d65140edaa81c51e8a4111",
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => "",
                 CURLOPT_MAXREDIRS => 10000,

@@ -2,7 +2,8 @@
     namespace Controllers;
 
     use DAO\IMovieDAO as IMovieDAO;
-    use DAO\MovieDAO as MovieDAO;
+    //use DAO\MovieDAO as MovieDAO;
+    use DAO\MovieDAOJSON as MovieDAO;
     use Models\Movie as Movie;
 
     class MovieController
