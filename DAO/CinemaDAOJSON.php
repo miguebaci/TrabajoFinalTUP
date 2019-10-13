@@ -4,13 +4,15 @@
     use DAO\ICinemaDAO as ICinemaDAO;
     use Models\Cinema as Cinema;
 
-    class CinemaDAO implements ICinemaDAO
+    class CinemaDAOJSON implements ICinemaDAO
     {
         private $cinemaList = array();
 
         public function Add(cinema $cinema)
         {
             $this->RetrieveData();
+
+            $cinema->setIdCinema($this->getLastId());
             
             array_push($this->cinemaList, $cinema);
 
@@ -24,15 +26,16 @@
             return $this->cinemaList;
         }
 
-        public function Delete($cinemaName)
+        public function Delete(Cinema $cinema)
         {
             $this->retrieveData();
-		    $newList = array();
-            foreach ($this->cinemaList as $cinema) 
+            $newList = array();
+            $idCinema=$cinema->getIdCinema();
+            foreach ($this->cinemaList as $cinemas) 
             {
-                if($cinema->getCinemaName() != $cinemaName)
+                if($cinemas->getIdCinema() != $idCinema)
                 {
-				array_push($newList, $cinema);
+				    array_push($newList, $cinemas);
 			    }
 		    }  
 
@@ -82,7 +85,7 @@
 
             foreach($this->cinemaList as $cinema)
             {
-                //$valuesArray["idCine"] = $cinema->getIdCine();
+                $valuesArray["idCinema"] = $cinema->getIdCinema();
                 $valuesArray["cinemaName"] = $cinema->getCinemaName();
                 $valuesArray["adress"] = $cinema->getAdress();
                 $valuesArray["totalCap"] = $cinema->getTotalCap();
@@ -108,12 +111,21 @@
 
                 foreach($arrayToDecode as $valuesArray)
                 {
-                    $cinema = new Cinema($valuesArray["cinemaName"],$valuesArray["adress"],$valuesArray["totalCap"],$valuesArray["ticketPrice"]);
-                    //$cinema->setIdCine($valuesArray["idCine"]);
+                    $cinema = new Cinema($valuesArray["idCinema"],$valuesArray["cinemaName"],$valuesArray["adress"],$valuesArray["totalCap"],$valuesArray["ticketPrice"]);
 
                     array_push($this->cinemaList, $cinema);
                 }
             }
+        }
+
+        private function GetLastId(){
+            $this->RetrieveData();
+            $this->cinemaList!=NULL ? $cinema=end($this->cinemaList):$cinema=NULL;
+            return $cinema==NULL ? 1 : $cinema->getIdCinema();
+        }
+
+        public function GetById($idCinema){
+
         }
     }
 ?>
