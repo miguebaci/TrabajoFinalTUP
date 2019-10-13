@@ -5,10 +5,11 @@
      <section id="listado" class="mb-5">
           <div class="container">
                <h2 class="mb-4">Modificar Cine</h2>
-               <form action="" method="GET" class="bg-light-alpha p-5">
+               <form action="<?php echo FRONT_ROOT ?>Cinema/Update" method="POST" class="bg-light-alpha p-5">
                     <div class="row">                         
                          <div class="col-lg-4">
                               <div class="form-group">
+                              <input type="hidden" name="idCinema" value="<?php echo $cinema->getIdCinema();?>">
                                    <label for="">Nombre</label>
                                    <input type="text" name="cinemaName" value="<?php echo $cinema->getCinemaName();?>" class="form-control">
                               </div>
@@ -35,7 +36,7 @@
                          </div>
                          <div>
                               <div class="form-group">
-                              <button type="submit" name="button" class="btn btn-dark ml-auto d-block">Agregar</button>
+                              <button type="submit" name="button" class="btn btn-dark ml-auto d-block">Editar</button>
                               </div>
                          </div>
                     </div>

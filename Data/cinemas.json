@@ -1,12 +1,5 @@
 [
     {
-        "idCinema": 2,
-        "cinemaName": "L3",
-        "adress": "F2",
-        "totalCap": "21",
-        "ticketPrice": "21"
-    },
-    {
         "idCinema": 3,
         "cinemaName": "O4",
         "adress": "L9",
