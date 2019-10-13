@@ -12,7 +12,7 @@
         {
             $this->RetrieveData();
 
-            $cinema->setIdCinema($this->getLastId());
+            $cinema->setIdCinema($this->getLastId()+1);
             
             array_push($this->cinemaList, $cinema);
 
@@ -121,11 +121,18 @@
         private function GetLastId(){
             $this->RetrieveData();
             $this->cinemaList!=NULL ? $cinema=end($this->cinemaList):$cinema=NULL;
-            return $cinema==NULL ? 1 : $cinema->getIdCinema();
+            return $cinema==NULL ? 0 : $cinema->getIdCinema();
         }
 
         public function GetById($idCinema){
-
+            $cinema;
+            $this->RetrieveData();
+            foreach($this->cinemaList as $cinemas){
+                if($cinemas->getIdCinema()==$idCinema){
+                    $cinema=$cinemas;
+                }
+            }
+            return $cinema;
         }
     }
 ?>
