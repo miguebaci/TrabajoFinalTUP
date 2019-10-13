@@ -43,33 +43,33 @@
 		    $this->SaveData();
         }
 
-        public function Update(Cinema $updatedCinema, $cinemaName)
+        public function Update(Cinema $cinema, $updatedCinema)
         {
             $this->retrieveData();
 		    $newList = array();
             foreach ($this->cinemaList as $cinema) 
             {
-                if($cinema->getCinemaName() != $cinemaName)
+                if($cinema->getIdCinema() != $updatedCinema["idCinema"])
                 {
 				array_push($newList, $cinema);
                 }
                 else
                 {
-                    if($cinema["cinemaName"] != $updatedCinema->getCinemaName() && $updatedCinema->getCinemaName() != NULL)
+                    if($updatedCinema["cinemaName"] != $cinema->getCinemaName() && $updatedCinema["cinemaName"] != NULL)
                     {
-                        $cinema->setCinemaName($updatedCinema->getCinemaName());
+                        $cinema->setCinemaName($updatedCinema["cinemaName"]);
                     }
-                    if($cinema["adress"] != $updatedCinema->getAdress() && $updatedCinema->getAdress() != NULL)
+                    if($updatedCinema["adress"] != $cinema->getAdress() && $updatedCinema["adress"] != NULL)
                     {
-                        $cinema->setAdress($updatedCinema->getAdress());
+                        $cinema->setAdress($updatedCinema["adress"]);
                     }
-                    if($cinema["totalCap"] != $updatedCinema->getTotalCap() && $updatedCinema->getTotalCap() != NULL)
+                    if($updatedCinema["totalCap"] != $cinema->getTotalCap() && $updatedCinema["totalCap"] != NULL)
                     {
-                        $cinema->setTotalCap($updatedCinema->getTotalCap());
+                        $cinema->setTotalCap($updatedCinema["totalCap"]);
                     }
-                    if($cinema["ticketPrice"] != $updatedCinema->getTicketPrice() && $updatedCinema->getTicketPrice() != NULL)
+                    if($updatedCinema["ticketPrice"] != $cinema->getTicketPrice() && $updatedCinema["ticketPrice"] != NULL)
                     {
-                        $cinema->setTicketPrice($updatedCinema->getTicketPrice());
+                        $cinema->setTicketPrice($updatedCinema["ticketPrice"]);
                     }
                     array_push($newList, $cinema);
                 }

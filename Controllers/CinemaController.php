@@ -57,20 +57,37 @@
             echo "window.location = '../index.php'; </script>";
         }
 
-        public function Delete()
+        public function Update()
+        {   
+            if($_POST){
+                $updatedCinema=$_POST;
+                $repo=new CinemaDAO();
+                $cinema=$repo->GetById($updatedCinema["idCinema"]);
+                $repo->Update($cinema, $updatedCinema);
+                $this->ShowListView();
+
+            }
+        }
+
+        public function Select()
         {   
             if($_POST){
                 
-            $idCinema=$_POST["idCinema"];
-            $repo=new CinemaDAO();
-            $cinema=$repo->GetById($idCinema);
-            $repo->Delete($cinema);
-        
-                echo "<script> alert('Cinema deleted');";
-            }else{
-                echo "<script> alert('Cinema error');";  
-            }
-            echo "window.location = '../index.php'; </script>";
+                if(isset($_POST["edit_button"])){
+                    $idCinema=$_POST["edit_button"];
+                    $repo=new CinemaDAO();
+                    $cinema=$repo->GetById($idCinema);
+                    require_once(VIEWS_PATH."cinema-mod.php");
+
+                }
+                else if(isset($_POST["delete_button"])){
+                    $idCinema=$_POST["delete_button"];
+                    $repo=new CinemaDAO();
+                    $cinema=$repo->GetById($idCinema);
+                    $repo->Delete($cinema);
+                    $this->ShowListView();
+                }
+        }
         }
     }
 ?>
