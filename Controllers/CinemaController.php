@@ -57,20 +57,31 @@
             echo "window.location = '../index.php'; </script>";
         }
 
-        public function Delete()
+        public function Select()
         {   
             if($_POST){
                 
-            $idCinema=$_POST["idCinema"];
-            $repo=new CinemaDAO();
-            $cinema=$repo->GetById($idCinema);
-            $repo->Delete($cinema);
-        
-                echo "<script> alert('Cinema deleted');";
-            }else{
-                echo "<script> alert('Cinema error');";  
-            }
-            echo "window.location = '../index.php'; </script>";
+                if(isset($_POST["edit_button"])){
+                    $idCinema=$_POST["edit_button"];
+                    $repo=new CinemaDAO();
+                    $cinema=$repo->GetById($idCinema);
+
+                }
+                else if(isset($_POST["delete_button"])){
+                    $idCinema=$_POST["delete_button"];
+                    $repo=new CinemaDAO();
+                    $cinema=$repo->GetById($idCinema);
+                    $repo->Delete($cinema);
+                }
+                else{
+                    echo "<script> alert('Error');";
+                }
+            
+                    echo "<script> alert('Cinema edited');";
+                }else{
+                    echo "<script> alert('Cinema error');";  
+                }
+                echo "window.location = '../index.php'; </script>";
         }
     }
 ?>
