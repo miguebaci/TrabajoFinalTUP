@@ -1,8 +1,16 @@
 [
     {
-        "cinemaName": "carlos",
-        "adress": "jkl",
+        "idCinema": 1,
+        "cinemaName": "Cine 1",
+        "adress": "Direccion 1 ",
         "totalCap": "200",
-        "ticketPrice": "150"
+        "ticketPrice": "300"
+    },
+    {
+        "idCinema": 1,
+        "cinemaName": "Cine 10",
+        "adress": "Direccion 20",
+        "totalCap": "400",
+        "ticketPrice": "500"
     }
 ]

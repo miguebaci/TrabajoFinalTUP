@@ -20,7 +20,11 @@
             $this->ticketPrice = $ticketPrice;
         }
         
-       public function getIdCinema()
+        public function setIdCinema($idCinema){
+            $this->idCinema=$idCinema;
+        }
+
+        public function getIdCinema()
         {
             return $this->idCinema;
         }
