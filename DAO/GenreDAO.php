@@ -14,10 +14,10 @@
         {
             try
             {
-                $query = "INSERT INTO ".$this->tableName." (idGenre, description) VALUES (:idGenre, :descripcion);";
+                $query = "INSERT INTO ".$this->tableName." (idGenre, description) VALUES (:idGenre, :description);";
                 
                 $parameters["idGenre"] = $genre->getIdGenre();
-                $parameters["description"] = $description->getDescription();
+                $parameters["description"] = $genre->getDescription();
 
                 $this->connection = Connection::GetInstance();
 
@@ -79,18 +79,18 @@
                 curl_close($curl);
                 $arrayToDecode=json_decode($response,true);
                 
-                $array=$arrayToDecode["results"];
+                $array=$arrayToDecode["genres"];
 
-                foreach($array as $thing => $genre){
+                foreach($array as $genre){
                 
-                    $url_id = $genre['idGenre'];
+                    $url_id = $genre['id'];
                     $query = "SELECT idGenre FROM " .$this->tableName." WHERE idGenre ='$url_id'";
                     $this->connection = Connection::GetInstance();
                     $resultSet= NULL;
                     $resultSet = $this->connection->Execute($query);                
 
-                    $genres=new Genre($genre['idGenre'],$genre['descrption']);
                     if($resultSet == NULL){
+                        $genres=new Genre($genre['id'],$genre['name']);
                         $this->Add($genres);
                     }
                 }
