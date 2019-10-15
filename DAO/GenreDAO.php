@@ -114,7 +114,7 @@
                         $row["description"],
                         $row["adress"]);
                     }
-                return $cinema;
+                return $genre;
             }
             catch(Exception $ex)
             {
