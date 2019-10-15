@@ -92,19 +92,19 @@
 
             $arrayToDecode=json_decode($response,true);
 
-            $array=$arrayToDecode["results"];
+            $array=$arrayToDecode["genres"];
 
             $this->RetrieveData();
 
-            foreach($array as $thing=>$genre){
+            foreach($array as $genre){
                 $flag=false;
                 foreach($this->genreList as $genreJSON){
-                    if($genreJSON->getIdGenre()==$genre['idGenre']){
+                    if($genreJSON->getIdGenre()==$genre['id']){
                         $flag=true;
                     }
                 }
                 if($flag==false){
-                    $genres=new Genre($genre['idGenre'],$genre['description']);
+                    $genres=new Genre($genre['id'],$genre['name']);
                     $this->Add($genres);   
                 }
             }
