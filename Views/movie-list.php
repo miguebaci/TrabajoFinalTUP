@@ -10,7 +10,8 @@
                          <th>Nombre</th>
                          <th>Lenguaje</th>
                          <th>Duracion total</th>
-                         <th></th>
+                         <th>Genre</th>
+                         <th>Poster</th>
                     </thead>
                     <tbody>
                          <?php
@@ -21,6 +22,7 @@
                                              <td><?php echo $movie->getMovieName() ?></td>
                                              <td><?php echo $movie->getLanguage() ?></td>
                                              <td><?php echo $movie->getDuration() ?></td>
+                                             <td><?php foreach($movie->getIdGenre() as $genres) {echo $genres." ";} ?></td>
                                              <td><?php echo "<".POSTER_ROOT . $movie->getImage().">" ?></td>
                                         </tr>
                                    <?php

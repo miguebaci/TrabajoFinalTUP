@@ -98,7 +98,7 @@
                     $resultSet= NULL;
                     $resultSet = $this->connection->Execute($query);                
 
-                    $movies=new Movie($movie['id'],$movie['title'],$movie['original_language'],$this->RetrieveRuntime($movie['id']),$movie['poster_path'],$movie['idGenre']);
+                    $movies=new Movie($movie['id'],$movie['title'],$movie['original_language'],$this->RetrieveRuntime($movie['id']),$movie['poster_path'],$movie['genre_ids']);
                     if($resultSet == NULL){
                         $this->Add($movies);
                     }
