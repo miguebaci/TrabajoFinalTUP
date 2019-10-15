@@ -33,7 +33,7 @@
             {
                 if($movie->getIdMovie() != $idMovie)
                 {
-				array_push($newList, $movie);
+				    array_push($newList, $movie);
 			    }
 		    }  
 
@@ -52,6 +52,7 @@
                 $valuesArray["language"] = $movie->getLanguage();
                 $valuesArray["duration"] = $movie->getDuration();
                 $valuesArray["image"] = $movie->getImage();
+                $valuesArray["idGenre"] = $movie->getIdGenre();
 
                 array_push($arrayToEncode, $valuesArray);
             }
@@ -73,7 +74,7 @@
 
                 foreach($arrayToDecode as $valuesArray)
                 {
-                    $movie = new Movie($valuesArray["idMovie"], $valuesArray["movieName"],$valuesArray["language"],$valuesArray["duration"],$valuesArray["image"]);
+                    $movie = new Movie($valuesArray["idMovie"], $valuesArray["movieName"],$valuesArray["language"],$valuesArray["duration"],$valuesArray["image"],$valuesArray["idGenre"]);
                     array_push($this->movieList, $movie);
                 }
             }
@@ -114,7 +115,7 @@
                     }
                 }
                 if($flag==false){
-                    $movies=new Movie($movie['id'],$movie['title'],$movie['original_language'],$this->RetrieveRuntime($movie['id']),$movie['poster_path']);
+                    $movies=new Movie($movie['id'],$movie['title'],$movie['original_language'],$this->RetrieveRuntime($movie['id']),$movie['poster_path'],$movie['idGenre']);
                     $this->Add($movies);   
                 }
             }
