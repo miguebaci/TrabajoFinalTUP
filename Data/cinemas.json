@@ -1,16 +1,16 @@
 [
     {
         "idCinema": 3,
-        "cinemaName": "O4",
-        "adress": "L9",
-        "totalCap": "54",
-        "ticketPrice": "54"
+        "cinemaName": "Cinema 23",
+        "adress": "Direccion 23",
+        "totalCap": "9000",
+        "ticketPrice": "9"
     },
     {
-        "idCinema": 4,
-        "cinemaName": "F5",
-        "adress": "G6",
-        "totalCap": "50",
-        "ticketPrice": "50"
+        "idCinema": 5,
+        "cinemaName": "Cinema 50",
+        "adress": "Direccion 60",
+        "totalCap": "300",
+        "ticketPrice": "400"
     }
 ]
