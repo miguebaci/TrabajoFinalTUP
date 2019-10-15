@@ -109,10 +109,8 @@
                 $resultSet = $this->connection->Execute($query);
                 $genre=NULL;
                 foreach ($resultSet as $row)
-                    {               
-                        $genre = new Genre($row["idGenre"],
-                        $row["description"],
-                        $row["adress"]);
+                    {   
+                        $genre = new Genre($row["idGenre"],$row["description"]);
                     }
                 return $genre;
             }

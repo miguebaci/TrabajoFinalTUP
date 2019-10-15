@@ -21,7 +21,7 @@
                 $parameters["movielanguage"] = $movie->getLanguage();
                 $parameters["duration"] = $movie->getDuration();
                 $parameters["poster_image"] = $movie->getImage();
-                $parameters["idGenre"] = $movie->getIdGenre();
+                $parameters["idGenre"] = json_encode($movie->getIdGenre());
 
                 $this->connection = Connection::GetInstance();
 
@@ -52,7 +52,7 @@
                     $row["movieName"],
                     $row["movielanguage"],
                     $row["duration"],
-                    $row["poster_image"]
+                    $row["poster_image"],
                     $row["idGenre"]);
 
                     array_push($movieList, $movie);
@@ -97,7 +97,7 @@
                     $this->connection = Connection::GetInstance();
                     $resultSet= NULL;
                     $resultSet = $this->connection->Execute($query);                
-
+                    
                     $movies=new Movie($movie['id'],$movie['title'],$movie['original_language'],$this->RetrieveRuntime($movie['id']),$movie['poster_path'],$movie['genre_ids']);
                     if($resultSet == NULL){
                         $this->Add($movies);
