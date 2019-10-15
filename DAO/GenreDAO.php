@@ -100,5 +100,26 @@
                throw $ex;
             }
         }
+
+        public function GetById($idGenre){
+            try
+            {
+                $query = "SELECT * FROM ".$this->tableName. " WHERE ". $this->tableName .".idGenre ='$idGenre'";
+                $this->connection = Connection::GetInstance();
+                $resultSet = $this->connection->Execute($query);
+                $genre=NULL;
+                foreach ($resultSet as $row)
+                    {               
+                        $genre = new Genre($row["idGenre"],
+                        $row["description"],
+                        $row["adress"]);
+                    }
+                return $cinema;
+            }
+            catch(Exception $ex)
+            {
+                throw $ex;
+            }
+        }
     }
 ?>
