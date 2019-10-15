@@ -77,6 +77,23 @@
             }
         }
 
+        public function Update(Cinema $cinema, $updatedCinema)
+        {
+            try{
+                $idCinema=$cinema->getIdCinema();
+                $newName=$updatedCinema['cinemaName'];
+                $newAdress=$updatedCinema['adress'];
+                $newTotalCap=$updatedCinema['totalCap'];
+                $newTicketPrice=$updatedCinema['ticketPrice'];
+                $query = "UPDATE ". $this->tableName ." SET cinemaName='$newName', adress='$newAdress', totalCap='$newTotalCap', ticketPrice='$newTicketPrice'"  . " WHERE idCinema ='$idCinema'";
+                $this->connection = Connection::GetInstance();
+                $this->connection->ExecuteNonQuery($query);
+                }
+                catch(Exception $ex){
+                    throw $ex;
+                }
+        }
+
         public function GetById($idCinema){
             try
             {
