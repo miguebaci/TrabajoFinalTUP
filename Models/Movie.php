@@ -10,13 +10,15 @@ class Movie
     private $duration;
     private $language;
     private $image;
+    private $idGenre;
 
-    public function __construct($idMovie, $movieName, $language, $duration, $image){
+    public function __construct($idMovie, $movieName, $language, $duration, $image, $idGenre){
         $this->idMovie=$idMovie;
         $this->movieName = $movieName;
         $this->duration = $duration;
         $this->language = $language;
         $this->image = $image;
+        $this->idGenre= $idGenre;
     }
     
     public function getIdMovie()
@@ -72,6 +74,14 @@ class Movie
     public function setImage($image)
     {
         $this->image = $image;
+    }
+
+    public function getIdGenre(){
+        return $this->idGenre;
+    }
+
+    public function setIdGenre($idGenre){
+        $this->idGenre=$idGenre;
     }
 }
 ?>
