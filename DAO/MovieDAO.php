@@ -14,13 +14,14 @@
         {
             try
             {
-                $query = "INSERT INTO ".$this->tableName." (idMovie, movieName, movielanguage, duration, poster_image) VALUES (:idMovie, :movieName, :movielanguage, :duration, :poster_image);";
+                $query = "INSERT INTO ".$this->tableName." (idMovie, movieName, movielanguage, duration, poster_image, idGenre) VALUES (:idMovie, :movieName, :movielanguage, :duration, :poster_image, :idGenre);";
                 
                 $parameters["idMovie"] = $movie->getIdMovie();
                 $parameters["movieName"] = $movie->getMovieName();
                 $parameters["movielanguage"] = $movie->getLanguage();
                 $parameters["duration"] = $movie->getDuration();
                 $parameters["poster_image"] = $movie->getImage();
+                $parameters["idGenre"] = $movie->getIdGenre();
 
                 $this->connection = Connection::GetInstance();
 
@@ -51,7 +52,8 @@
                     $row["movieName"],
                     $row["movielanguage"],
                     $row["duration"],
-                    $row["poster_image"]);
+                    $row["poster_image"]
+                    $row["idGenre"]);
 
                     array_push($movieList, $movie);
                 }
@@ -96,10 +98,10 @@
                     $resultSet= NULL;
                     $resultSet = $this->connection->Execute($query);                
 
-                    $movies=new Movie($movie['id'],$movie['title'],$movie['original_language'],$this->RetrieveRuntime($movie['id']),$movie['poster_path']);
+                    $movies=new Movie($movie['id'],$movie['title'],$movie['original_language'],$this->RetrieveRuntime($movie['id']),$movie['poster_path'],$movie['idGenre']);
                     if($resultSet == NULL){
-                    $this->Add($movies);
-                }
+                        $this->Add($movies);
+                    }
                 
                 }
             }
