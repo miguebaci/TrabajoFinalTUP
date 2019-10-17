@@ -2,8 +2,8 @@
     namespace Controllers;
 
     use DAO\ICinemaDAO as ICinemaDAO;
-    //use DAO\CinemaDAO as CinemaDAO;
-    use DAO\CinemaDAOJSON as CinemaDAO;
+    use DAO\CinemaDAO as CinemaDAO;
+    //use DAO\CinemaDAOJSON as CinemaDAO;
     use Models\Cinema as Cinema;
 
     class CinemaController

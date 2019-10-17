@@ -9,23 +9,34 @@
     {
         private $connection;
         private $tableName = "movie";
+        private $mxgTable = "moviexgenre";
 
         public function Add(Movie $movie)
         {
             try
             {
-                $query = "INSERT INTO ".$this->tableName." (idMovie, movieName, movielanguage, duration, poster_image, idGenre) VALUES (:idMovie, :movieName, :movielanguage, :duration, :poster_image, :idGenre);";
+                $query = "INSERT INTO ".$this->tableName." (idMovie, movieName, movielanguage, duration, poster_image) VALUES (:idMovie, :movieName, :movielanguage, :duration, :poster_image);";
                 
                 $parameters["idMovie"] = $movie->getIdMovie();
                 $parameters["movieName"] = $movie->getMovieName();
                 $parameters["movielanguage"] = $movie->getLanguage();
                 $parameters["duration"] = $movie->getDuration();
                 $parameters["poster_image"] = $movie->getImage();
-                $parameters["idGenre"] = json_encode($movie->getIdGenre());
 
                 $this->connection = Connection::GetInstance();
 
                 $this->connection->ExecuteNonQuery($query, $parameters);
+
+                foreach($movie->getIdGenre() as $genres){
+                    $query2 = "INSERT INTO ".$this->mxgTable." (idMovie, idGenre) VALUES (:idMovie, :idGenre);";
+
+                    $parameters2["idMovie"]=$movie->getIdMovie();
+                    $parameters2["idGenre"]=$genres;
+
+                    $this->connection = Connection::GetInstance();
+
+                    $this->connection->ExecuteNonQuery($query2, $parameters2);
+                }
             }
             catch(Exception $ex)
             {
@@ -39,21 +50,37 @@
             {
                 $movieList = array();
 
-                $query = "SELECT * FROM ".$this->tableName;
+                $query = "SELECT * FROM ".$this->tableName." limit 2";
 
                 $this->connection = Connection::GetInstance();
 
                 $resultSet = $this->connection->Execute($query);
                 
+               // var_dump($resultSet);
+
                 foreach ($resultSet as $row)
-                {                
+                {   
+                    
+                    $query2= "SELECT MXG.idGenre
+                    FROM ".$this->mxgTable." MXG
+                    INNER JOIN ".$this->tableName." M ON MXG.idMovie = M.idMovie
+                    WHERE MXG.idMovie = ".$row['idMovie'].";";
+                    
+                    $this->connection = Connection::GetInstance();
+
+                    $resultSet2 = $this->connection->Execute($query2);
+
+                    $genreArray = array();
+                    foreach($resultSet2 as $row2){
+                        array_push($genreArray, $row2['idGenre']);
+                    }
                     $movie = new Movie(
                     $row["idMovie"],
                     $row["movieName"],
                     $row["movielanguage"],
                     $row["duration"],
                     $row["poster_image"],
-                    $row["idGenre"]);
+                    $genreArray);
 
                     array_push($movieList, $movie);
                 }

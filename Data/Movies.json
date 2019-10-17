@@ -260,5 +260,17 @@
             28,
             53
         ]
+    },
+    {
+        "idMovie": 420809,
+        "movieName": "Maleficent: Mistress of Evil",
+        "language": "en",
+        "duration": 119,
+        "image": "\/tBuabjEqxzoUBHfbyNbd8ulgy5j.jpg",
+        "idGenre": [
+            12,
+            14,
+            10751
+        ]
     }
 ]
