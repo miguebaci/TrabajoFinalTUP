@@ -18,7 +18,7 @@ class Movie
         $this->duration = $duration;
         $this->language = $language;
         $this->image = $image;
-        $this->idGenre= json_encode($idGenre);
+        $this->idGenre= $idGenre;
     }
     
     public function getIdMovie()
@@ -78,12 +78,11 @@ class Movie
 
     public function getIdGenre(){
 
-        return json_decode($this->idGenre,true);
+        return $this->idGenre;
     }
 
     public function setIdGenre($idGenre){
-        $idGenres=json_encode($idGenre);
-        $this->idGenre=$idGenres;
+        $this->idGenre=$idGenre;
     }
 }
 ?>

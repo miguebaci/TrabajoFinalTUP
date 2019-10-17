@@ -20,9 +20,9 @@ CREATE TABLE movie
     poster_image VARCHAR(100) NOT NULL
 )Engine=InnoDB;
 
-CREATE TABLE gerne
+CREATE TABLE genre
 (   idGenre INT NOT NULL PRIMARY KEY,
-    genre_description VARCHAR(100) NOT NULL
+    description VARCHAR(100) NOT NULL
 )Engine=InnoDB;
 
 CREATE TABLE movieXgenre
@@ -30,5 +30,14 @@ CREATE TABLE movieXgenre
 	idMovie INT NOT NULL,
     idGenre INT NOT NULL,
     constraint pfk_idMovie FOREIGN KEY(idMovie) references movie(idMovie),
-    constraint pfk_idGenre FOREIGN KEY(idGenre) references gerne(idGenre)
+    constraint pfk_idGenre FOREIGN KEY(idGenre) references genre(idGenre)
+)Engine=InnoDB;
+
+CREATE TABLE movieXgenre
+(
+	idMovie INT NOT NULL,
+    idGenre INT NOT NULL,
+    PRIMARY KEY (idMovie, idGenre),
+    constraint pfk_idMovie FOREIGN KEY(idMovie) references movie(idMovie),
+    constraint pfk_idGenre FOREIGN KEY(idGenre) references genre(idGenre)
 )Engine=InnoDB;
