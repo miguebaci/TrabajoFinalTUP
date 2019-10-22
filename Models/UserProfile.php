@@ -9,10 +9,17 @@
         private $firstName;
         private $dni;
 
+<<<<<<< HEAD
         public function __construct($lastName, $firstName, $dni){
             $this->lastName = $lastName;
             $this->firstName = $firstName;
             $this->dni = $dni;
+=======
+        public function __construct($lastName, $firstName,$dni){
+            $this->lastName = $lastName;
+            $this->firstName = $firstName;
+            $this->dni=$dni;
+>>>>>>> Creation of UserDAO
         }
 
         public function getLastName()
