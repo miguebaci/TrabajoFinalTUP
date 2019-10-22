@@ -33,15 +33,22 @@ CREATE TABLE movieXgenre
     constraint pfk_idGenre FOREIGN KEY (idGenre) references genre(idGenre)
 )Engine=InnoDB;
 
+CREATE TABLE room
+(   idRoom INT AUTO_INCREMENT NOT NULL,
+    idCinema INT NOT NULL,
+    constraint pk_idRoom PRIMARY KEY (idRoom),
+    constraint fk_idCinema FOREIGN KEY (idCinema) references cinema(idCinema)
+)Engine=InnoDB;
+
 CREATE TABLE moviefunction
 (   idMovieFunction INT AUTO_INCREMENT NOT NULL,
     idMovie INT NOT NULL,
-    idCinema INT NOT NULL,
+    idRoom INT NOT NULL,
     function_date DATE,
     function_time TIME,
     constraint pk_idMovieFunction PRIMARY KEY (idMovieFunction),
     constraint fk_idMovie FOREIGN KEY (idMovie) references movie(idMovie),
-    constraint fk_idGenre FOREIGN KEY (idCinema) references cinema(idMovie)
+    constraint fk_idRoom FOREIGN KEY (idRoom) references room(idRoom)
 )Engine=InnoDB;
 
 CREATE TABLE user
@@ -61,11 +68,28 @@ CREATE TABLE userProfile
     idUserProfile INT AUTO_INCREMENT NOT NULL,
     firstName VARCHAR(100) NOT NULL,
     lastName VARCHAR(100) NOT NULL,
-    dni INT NOT NULL,
+    dni INT NOT NULL UNIQUE
 )Engine=InnoDB;
 
 CREATE TABLE userRole
 (
     idRole INT NOT NULL PRIMARY KEY,
     role_description VARCHAR(100) NOT NULL
+)Engine=InnoDB;
+
+CREATE TABLE ticket
+(   idTicket INT AUTO_INCREMENT NOT NULL,
+    idMovieFunction INT NOT NULL,
+    constraint pk_idTicket PRIMARY KEY (idTicket),
+    constraint fk_idMovieFunction FOREIGN KEY (idMovieFunction) references moviefunction(idMovieFunction)
+)Engine=InnoDB;
+
+CREATE TABLE purchase
+(
+    idPurchase INT AUTO_INCREMENT NOT NULL,
+    idUser INT NOT NULL,
+    idMoviefunction INT NOT NULL,
+    constraint pk_idPurchase PRIMARY KEY (idPurchase),
+    constraint fk_idUser FOREIGN KEY (idUser) references user(idUser),
+    constraint fk_idTicket FOREIGN KEY (idTicket) references ticket(idTicket)
 )Engine=InnoDB;
