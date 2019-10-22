@@ -7,6 +7,7 @@
 
     class User
     {
+        private $idUser;
         private $email;
         private $password;
         private $role;
