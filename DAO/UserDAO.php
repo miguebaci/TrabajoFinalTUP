@@ -44,30 +44,29 @@
                 
                 foreach ($resultSet as $row)
                 {               
-                    $cinema = new Cinema($row["idUser"],
+                    $user = new User($row["idUser"],
                     $row["email"],
                     $row["password"],
                     $this->getRoleById($row["idRole"]));
 
-                    array_push($cinemaList, $cinema);
+                    array_push($userList, $user);
                 }
 
-                return $cinemaList;
+                return $userList;
             }
             catch(Exception $ex)
             {
                 throw $ex;
             }
         }
-        
-        public function Delete(Cinema $cinema)
-        {   
+
+        public function GetByIdRole($role){
             try
             {
-            $idCinema=$cinema->getIdCinema();
-            $query = "DELETE FROM ". $this->tableName . " WHERE ". $this->tableName . ".idCinema ='$idCinema'";
+                $query = "SELECT idRole FROM ".$this->tableName. " WHERE ". $this->tableName .".description ='$role'";
                 $this->connection = Connection::GetInstance();
-                $this->connection->ExecuteNonQuery($query);
+                $resultSet = $this->connection->Execute($query);
+                return $resultSet["idRole"];
             }
             catch(Exception $ex)
             {
@@ -75,44 +74,19 @@
             }
         }
 
-        public function Update(Cinema $cinema, $updatedCinema)
-        {
-            try{
-                $idCinema=$cinema->getIdCinema();
-                $newName=$updatedCinema['cinemaName'];
-                $newAdress=$updatedCinema['adress'];
-                $newTotalCap=$updatedCinema['totalCap'];
-                $newTicketPrice=$updatedCinema['ticketPrice'];
-                $query = "UPDATE ". $this->tableName ." SET cinemaName='$newName', adress='$newAdress', totalCap='$newTotalCap', ticketPrice='$newTicketPrice'"  . " WHERE idCinema ='$idCinema'";
-                $this->connection = Connection::GetInstance();
-                $this->connection->ExecuteNonQuery($query);
-                }
-                catch(Exception $ex){
-                    throw $ex;
-                }
-        }
-
-        public function GetById($idCinema){
+        public function GetRoleById($idRole){
             try
             {
-            $query = "SELECT * FROM ".$this->tableName. " WHERE ". $this->tableName .".idCinema ='$idCinema'";
-            $this->connection = Connection::GetInstance();
-            $resultSet = $this->connection->Execute($query);
-            $cinema=NULL;
-            foreach ($resultSet as $row)
-                {               
-                    $cinema = new Cinema($row["idCinema"],
-                    $row["cinemaName"],
-                    $row["adress"],
-                    $row["totalCap"],
-                    $row["ticketPrice"]);
-                }
-            return $cinema;
+                $query = "SELECT description FROM ".$this->tableName. " WHERE ". $this->tableName .".idRole ='$idRole'";
+                $this->connection = Connection::GetInstance();
+                $resultSet = $this->connection->Execute($query);
+                return $resultSet["idRole"];
             }
             catch(Exception $ex)
             {
                throw $ex;
             }
         }
+
     }
 ?>
