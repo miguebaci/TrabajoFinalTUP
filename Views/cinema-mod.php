@@ -22,13 +22,6 @@
                          </div>
                          <div class="col-lg-4">
                               <div class="form-group">
-                                   <label for="">Capacidad Total</label>
-                                   <input type="number" name="totalCap" value="<?php echo $cinema->getTotalCap();?>" class="form-control">
-                              </div>
-                         </div>
-                    
-                         <div class="col-lg-4">
-                              <div class="form-group">
                                    <label for="">Precio de Ticket</label>
                                    <input type="number" min = "1" step ="any" name="ticketPrice" value="<?php echo $cinema->getTicketPrice();?>" class="form-control">
                               </div>

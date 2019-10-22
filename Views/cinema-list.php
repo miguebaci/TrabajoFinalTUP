@@ -9,7 +9,6 @@
                     <thead>
                          <th>Nombre</th>
                          <th>Direccion</th>
-                         <th>Capacidad total</th>
                          <th>Precio unitario de entrada</th>
                     </thead>
                     <tbody>
@@ -21,7 +20,6 @@
                                         <tr>
                                              <td><?php echo $cinema->getCinemaName() ?></td>
                                              <td><?php echo $cinema->getAdress() ?></td>
-                                             <td><?php echo $cinema->getTotalCap() ?></td>
                                              <td><?php echo $cinema->getTicketPrice() ?></td>
                                              <td> 
                                                   <button type="submit" class ="btn btn-warning" name ='edit_button' value='<?php echo $cinema->getIdCinema(); ?>'> Editar </button>

@@ -4,7 +4,10 @@
     interface IMovieDAO
     {
         function Add(Movie $movie);
+        function MXG($idMovie, $genres);
         function GetAll();
-        //function Delete($IdMovie);
+        function GetIdGenreById($idMovie);
+        function UpdateAll();
+        function RetrieveRuntime($id);
     }
 ?>

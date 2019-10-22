@@ -8,14 +8,12 @@
         
         private $idCinema;
         private $cinemaName;
-        private $totalCap;
         private $adress;
         private $ticketPrice;
 
-        public function __construct($idCinema,$cinemaName, $adress, $totalCap, $ticketPrice){
+        public function __construct($idCinema,$cinemaName, $adress, $ticketPrice){
             $this->idCinema=$idCinema;
             $this->cinemaName = $cinemaName;
-            $this->totalCap = $totalCap;
             $this->adress = $adress;
             $this->ticketPrice = $ticketPrice;
         }
@@ -47,16 +45,6 @@
         public function setAdress($adress)
         {
             $this->adress = $adress;
-        }
-
-        public function getTotalCap()
-        {
-            return $this->totalCap;
-        }
-
-        public function setTotalCap($totalCap)
-        {
-            $this->totalCap = $totalCap;
         }
 
         public function getTicketPrice()
