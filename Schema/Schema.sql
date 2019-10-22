@@ -51,6 +51,12 @@ CREATE TABLE moviefunction
     constraint fk_idRoom FOREIGN KEY (idRoom) references room(idRoom)
 )Engine=InnoDB;
 
+CREATE TABLE userRole
+(
+    idRole INT NOT NULL PRIMARY KEY,
+    role_description VARCHAR(100) NOT NULL
+)Engine=InnoDB;
+
 CREATE TABLE user
 (
     idUser INT AUTO_INCREMENT NOT NULL,
@@ -70,12 +76,6 @@ CREATE TABLE userProfile
     constraint pfk_idUser FOREIGN KEY (idUser) references user(idUser)
 )Engine=InnoDB;
 
-CREATE TABLE userRole
-(
-    idRole INT NOT NULL PRIMARY KEY,
-    role_description VARCHAR(100) NOT NULL
-)Engine=InnoDB;
-
 CREATE TABLE ticket
 (   idTicket INT AUTO_INCREMENT NOT NULL,
     idMovieFunction INT NOT NULL,
@@ -87,7 +87,7 @@ CREATE TABLE purchase
 (
     idPurchase INT AUTO_INCREMENT NOT NULL,
     idUser INT NOT NULL,
-    idMoviefunction INT NOT NULL,
+    idTicket INT NOT NULL,
     constraint pk_idPurchase PRIMARY KEY (idPurchase),
     constraint fk_idUser FOREIGN KEY (idUser) references user(idUser),
     constraint fk_idTicket FOREIGN KEY (idTicket) references ticket(idTicket)

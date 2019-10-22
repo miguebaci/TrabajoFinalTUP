@@ -27,20 +27,25 @@
 
                 $this->connection->ExecuteNonQuery($query, $parameters);
 
-                foreach($movie->getIdGenre() as $genres){
-                    $query2 = "INSERT INTO ".$this->mxgTable." (idMovie, idGenre) VALUES (:idMovie, :idGenre);";
-
-                    $parameters2["idMovie"]=$movie->getIdMovie();
-                    $parameters2["idGenre"]=$genres;
-
-                    $this->connection = Connection::GetInstance();
-
-                    $this->connection->ExecuteNonQuery($query2, $parameters2);
-                }
+                
             }
             catch(Exception $ex)
             {
                 throw $ex;
+            }
+        }
+
+
+        public function MXG($idMovie, $genres){
+            foreach($genres as $idGenre){
+                $query = "INSERT INTO ".$this->mxgTable." (idMovie, idGenre) VALUES (:idMovie, :idGenre);";
+
+                $parameters["idMovie"]=$idMovie;
+                $parameters["idGenre"]=$idGenre;
+
+                $this->connection = Connection::GetInstance();
+
+                $this->connection->ExecuteNonQuery($query, $parameters);
             }
         }
 
@@ -50,37 +55,20 @@
             {
                 $movieList = array();
 
-                $query = "SELECT * FROM ".$this->tableName." limit 2";
+                $query = "SELECT * FROM ".$this->tableName;
 
                 $this->connection = Connection::GetInstance();
 
                 $resultSet = $this->connection->Execute($query);
-                
-               // var_dump($resultSet);
 
                 foreach ($resultSet as $row)
                 {   
-                    
-                    $query2= "SELECT MXG.idGenre
-                    FROM ".$this->mxgTable." MXG
-                    INNER JOIN ".$this->tableName." M ON MXG.idMovie = M.idMovie
-                    WHERE MXG.idMovie = ".$row['idMovie'].";";
-                    
-                    $this->connection = Connection::GetInstance();
-
-                    $resultSet2 = $this->connection->Execute($query2);
-
-                    $genreArray = array();
-                    foreach($resultSet2 as $row2){
-                        array_push($genreArray, $row2['idGenre']);
-                    }
                     $movie = new Movie(
                     $row["idMovie"],
                     $row["movieName"],
                     $row["movielanguage"],
                     $row["duration"],
-                    $row["poster_image"],
-                    $genreArray);
+                    $row["poster_image"]);
 
                     array_push($movieList, $movie);
                 }
@@ -91,6 +79,23 @@
             {
                 throw $ex;
             }
+        }
+
+        public function GetIdGenreById($idMovie){
+            $query= "SELECT MXG.idGenre
+                    FROM ".$this->mxgTable." MXG
+                    WHERE MXG.idMovie = ".$idMovie.";";
+                    
+                    $this->connection = Connection::GetInstance();
+
+                    $resultSet = $this->connection->Execute($query);
+
+                    $genreArray = array();
+                    foreach($resultSet as $row){
+                        array_push($genreArray, $row['idGenre']);
+                    }
+
+            return $genreArray;
         }
 
         public function UpdateAll(){
@@ -125,9 +130,10 @@
                     $resultSet= NULL;
                     $resultSet = $this->connection->Execute($query);                
                     
-                    $movies=new Movie($movie['id'],$movie['title'],$movie['original_language'],$this->RetrieveRuntime($movie['id']),$movie['poster_path'],$movie['genre_ids']);
+                    $movies=new Movie($movie['id'],$movie['title'],$movie['original_language'],$this->RetrieveRuntime($movie['id']),$movie['poster_path']);
                     if($resultSet == NULL){
                         $this->Add($movies);
+                        $this->MXG($movies->getIdMovie(),$movie['genre_ids']);
                     }
                 
                 }
