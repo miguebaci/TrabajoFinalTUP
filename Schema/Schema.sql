@@ -56,19 +56,18 @@ CREATE TABLE user
     idUser INT AUTO_INCREMENT NOT NULL,
     email VARCHAR(100) NOT NULL,
     password VARCHAR(100) NOT NULL,
-    idUserProfile INT NOT NULL,
     idRole INT NOT NULL,
     constraint pk_idUser PRIMARY KEY (idUser),
-    constraint fk_idUserProfile FOREIGN KEY (idUserProfile) references userProfile(idUserProfile),
     constraint fk_idRole FOREIGN KEY (idRole) references userRole(idRole)
 )Engine=InnoDB;
 
 CREATE TABLE userProfile
 (
-    idUserProfile INT AUTO_INCREMENT NOT NULL,
-    firstName VARCHAR(100) NOT NULL,
-    lastName VARCHAR(100) NOT NULL,
-    dni INT NOT NULL UNIQUE
+    idUser INT,
+    firstName VARCHAR(100),
+    lastName VARCHAR(100),
+    dni INT,
+    constraint pfk_idUser FOREIGN KEY (idUser) references user(idUser)
 )Engine=InnoDB;
 
 CREATE TABLE userRole
