@@ -30,7 +30,6 @@
             if($_POST){
                 $cinemaName="";
                 $adress="";
-                $totalCap=0;
                 $ticketPrice=0;
                 if(isset($_POST["cinemaName"])){
                     $cinemaName=$_POST["cinemaName"];
@@ -38,14 +37,11 @@
                 if(isset($_POST["adress"])){
                     $adress=$_POST["adress"];
                 }
-                if(isset($_POST["totalCap"])){
-                    $totalCap=$_POST["totalCap"];
-                }
                 if(isset($_POST["ticketPrice"])){
                     $ticketPrice=$_POST["ticketPrice"];
                 }
         
-                $newCinema=new Cinema(0,$cinemaName,$adress,$totalCap,$ticketPrice);
+                $newCinema=new Cinema(0,$cinemaName,$adress,$ticketPrice);
                 $this->cinemaDAO->Add($newCinema);
         
                 echo "<script> alert('Cinema added');";
@@ -73,7 +69,8 @@
                 if(isset($_POST["room_button"])){
                     $idCinema=$_POST["room_button"];
                     $cinema=$this->cinemaDAO->GetById($idCinema);
-                    require_once(VIEWS_PATH."cinemaRoom-list.php");
+                    echo"<script>";
+                    echo "window.location = '".FRONT_ROOT."CinemaRoom/ShowListView'; </script>";
 
                 }
                 if(isset($_POST["edit_button"])){

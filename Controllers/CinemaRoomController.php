@@ -5,7 +5,7 @@
     use DAO\RoomDAO as RoomDAO;
     use Models\CinemaRoom as CinemaRoom;
 
-    class RoomController
+    class CinemaRoomController
     {
         private $cinemaRoomDAO;
 

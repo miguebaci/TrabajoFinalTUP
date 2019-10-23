@@ -19,12 +19,6 @@
                                    <input type="text" name="adress" value="" class="form-control">
                               </div>
                          </div>
-                         <div class="col-lg-4">
-                              <div class="form-group">
-                                   <label for="">Capacidad Total</label>
-                                   <input type="number" name="totalCap" value="" class="form-control">
-                              </div>
-                         </div>
                     
                          <div class="col-lg-4">
                               <div class="form-group">

@@ -14,11 +14,10 @@
         {
             try
             {
-                $query = "INSERT INTO ".$this->tableName." (cinemaName, adress, totalCap, ticketPrice) VALUES (:cinemaName, :adress, :totalCap, :ticketPrice);";
+                $query = "INSERT INTO ".$this->tableName." (cinemaName, adress, ticketPrice) VALUES (:cinemaName, :adress, :ticketPrice);";
                 
                 $parameters["cinemaName"] = $cinema->getCinemaName();
                 $parameters["adress"] = $cinema->getAdress();
-                $parameters["totalCap"] = $cinema->getTotalCap();
                 $parameters["ticketPrice"] = $cinema->getTicketPrice();
 
                 $this->connection = Connection::GetInstance();
@@ -48,7 +47,6 @@
                     $cinema = new Cinema($row["idCinema"],
                     $row["cinemaName"],
                     $row["adress"],
-                    $row["totalCap"],
                     $row["ticketPrice"]);
 
                     array_push($cinemaList, $cinema);
@@ -83,9 +81,8 @@
                 $idCinema=$cinema->getIdCinema();
                 $newName=$updatedCinema['cinemaName'];
                 $newAdress=$updatedCinema['adress'];
-                $newTotalCap=$updatedCinema['totalCap'];
                 $newTicketPrice=$updatedCinema['ticketPrice'];
-                $query = "UPDATE ". $this->tableName ." SET cinemaName='$newName', adress='$newAdress', totalCap='$newTotalCap', ticketPrice='$newTicketPrice'"  . " WHERE idCinema ='$idCinema'";
+                $query = "UPDATE ". $this->tableName ." SET cinemaName='$newName', adress='$newAdress', ticketPrice='$newTicketPrice'"  . " WHERE idCinema ='$idCinema'";
                 $this->connection = Connection::GetInstance();
                 $this->connection->ExecuteNonQuery($query);
                 }
@@ -106,7 +103,6 @@
                     $cinema = new Cinema($row["idCinema"],
                     $row["cinemaName"],
                     $row["adress"],
-                    $row["totalCap"],
                     $row["ticketPrice"]);
                 }
             return $cinema;

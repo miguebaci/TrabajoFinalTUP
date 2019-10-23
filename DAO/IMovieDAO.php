@@ -8,6 +8,5 @@
         function GetAll();
         function GetIdGenreById($idMovie);
         function UpdateAll();
-        function RetrieveRuntime($id);
     }
 ?>
