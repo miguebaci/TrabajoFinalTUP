@@ -9,12 +9,14 @@
     {
         private $connection;
         private $tableName = "user";
+        private $roleTable = "role";
 
         public function Add(User $user)
         {
             try
             {
-                $query = "INSERT INTO ".$this->tableName." (email, password, idRole) VALUES (:email, :password, :idRole);";
+                $query = "INSERT INTO ".$this->tableName." (email, password, idRole) 
+                            VALUES (:email, :password, :idRole);";
                 
                 $parameters["email"] = $user->getEmail();
                 $parameters["password"] = $cinema->getPassword();
@@ -36,7 +38,10 @@
             {
                 $cinemaList = array();
 
-                $query = "SELECT * FROM ".$this->tableName;
+                $query = "SELECT U.idUser,U.email,U.password,R.description 
+                            FROM ".$this->tableName. " U 
+                            INNER JOIN ".$this->roleTable." R 
+                            ON R.idRole = U.idRole";
 
                 $this->connection = Connection::GetInstance();
 
@@ -47,7 +52,7 @@
                     $user = new User($row["idUser"],
                     $row["email"],
                     $row["password"],
-                    $this->getRoleById($row["idRole"]));
+                    $row["description"]));
 
                     array_push($userList, $user);
                 }
@@ -60,24 +65,10 @@
             }
         }
 
-        public function GetByIdRole($role){
+        public function GetIdRole($role){
             try
             {
                 $query = "SELECT idRole FROM ".$this->tableName. " WHERE ". $this->tableName .".description ='$role'";
-                $this->connection = Connection::GetInstance();
-                $resultSet = $this->connection->Execute($query);
-                return $resultSet["idRole"];
-            }
-            catch(Exception $ex)
-            {
-               throw $ex;
-            }
-        }
-
-        public function GetRoleById($idRole){
-            try
-            {
-                $query = "SELECT description FROM ".$this->tableName. " WHERE ". $this->tableName .".idRole ='$idRole'";
                 $this->connection = Connection::GetInstance();
                 $resultSet = $this->connection->Execute($query);
                 return $resultSet["idRole"];
