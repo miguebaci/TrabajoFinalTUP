@@ -7,10 +7,12 @@
  {
      
      private $idCinemaRoom;
+     private $roomName;
      private $totalCap;
 
-     public function __construct($idCinemaRoom,$totalCap){
+     public function __construct($idCinemaRoom, $roomName, $totalCap){
          $this->idCinemaRoom=$idCinemaRoom;
+         $this->roomName=$roomName;
          $this->totalCap = $totalCap;
      }
      
@@ -22,6 +24,16 @@
      {
          return $this->idCinemaRoom;
      }
+
+     public function setRoomName($roomName){
+        $this->roomName=$roomName;
+    }
+
+    public function getRoomName()
+    {
+        return $this->roomName;
+    }
+    
      public function getTotalCap()
      {
          return $this->totalCap;

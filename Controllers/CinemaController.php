@@ -46,8 +46,7 @@
                 }
         
                 $newCinema=new Cinema(0,$cinemaName,$adress,$totalCap,$ticketPrice);
-                $repo=new CinemaDAO();
-                $repo->Add($newCinema);
+                $this->cinemaDAO->Add($newCinema);
         
                 echo "<script> alert('Cinema added');";
             }else{
@@ -60,9 +59,8 @@
         {   
             if($_POST){
                 $updatedCinema=$_POST;
-                $repo=new CinemaDAO();
-                $cinema=$repo->GetById($updatedCinema["idCinema"]);
-                $repo->Update($cinema, $updatedCinema);
+                $cinema=$this->cinemaDAO->GetById($updatedCinema["idCinema"]);
+                $this->cinemaDAO->Update($cinema, $updatedCinema);
                 $this->ShowListView();
 
             }
@@ -71,19 +69,23 @@
         public function Select()
         {   
             if($_POST){
-                
+
+                if(isset($_POST["room_button"])){
+                    $idCinema=$_POST["room_button"];
+                    $cinema=$this->cinemaDAO->GetById($idCinema);
+                    require_once(VIEWS_PATH."cinemaRoom-list.php");
+
+                }
                 if(isset($_POST["edit_button"])){
                     $idCinema=$_POST["edit_button"];
-                    $repo=new CinemaDAO();
-                    $cinema=$repo->GetById($idCinema);
+                    $cinema=$this->cinemaDAO->GetById($idCinema);
                     require_once(VIEWS_PATH."cinema-mod.php");
 
                 }
                 else if(isset($_POST["delete_button"])){
                     $idCinema=$_POST["delete_button"];
-                    $repo=new CinemaDAO();
-                    $cinema=$repo->GetById($idCinema);
-                    $repo->Delete($cinema);
+                    $cinema=$this->cinemaDAO->GetById($idCinema);
+                    $this->cinemaDAO->Delete($cinema);
                     $this->ShowListView();
                 }
         }

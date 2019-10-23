@@ -22,6 +22,9 @@
                                              <td><?php echo $cinema->getAdress() ?></td>
                                              <td><?php echo $cinema->getTicketPrice() ?></td>
                                              <td> 
+                                                  <button type="submit" class ="btn btn-primary" name ='room_button' value='<?php echo $cinema->getIdCinema(); ?>'> Editar </button>
+                                             </td>
+                                             <td> 
                                                   <button type="submit" class ="btn btn-warning" name ='edit_button' value='<?php echo $cinema->getIdCinema(); ?>'> Editar </button>
                                              </td>
                                              <td> 

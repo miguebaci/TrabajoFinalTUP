@@ -36,6 +36,7 @@ CREATE TABLE movieXgenre
 CREATE TABLE room
 (   idRoom INT AUTO_INCREMENT NOT NULL,
     idCinema INT NOT NULL,
+    roomName VARCHAR(100) NOT NULL,
     constraint pk_idRoom PRIMARY KEY (idRoom),
     constraint fk_idCinema FOREIGN KEY (idCinema) references cinema(idCinema)
 )Engine=InnoDB;
@@ -60,7 +61,7 @@ CREATE TABLE userRole
 CREATE TABLE user
 (
     idUser INT AUTO_INCREMENT NOT NULL,
-    email VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(100) NOT NULL,
     idRole INT NOT NULL,
     constraint pk_idUser PRIMARY KEY (idUser),
