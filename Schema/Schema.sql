@@ -59,6 +59,8 @@ CREATE TABLE userRole
     role_description VARCHAR(100) NOT NULL
 )Engine=InnoDB;
 
+INSERT INTO userrole(idRole,role_description) VALUES (1,"User"),(2,"Admin");
+
 CREATE TABLE user
 (
     idUser INT AUTO_INCREMENT NOT NULL,

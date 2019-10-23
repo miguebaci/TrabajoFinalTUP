@@ -9,7 +9,8 @@
     {
         private $connection;
         private $tableName = "user";
-        private $roleTable = "role";
+        private $roleTable = "userrole";
+        private $profileTable = "userprofile";
 
         public function Add(User $user)
         {
@@ -19,8 +20,8 @@
                             VALUES (:email, :password, :idRole);";
                 
                 $parameters["email"] = $user->getEmail();
-                $parameters["password"] = $cinema->getPassword();
-                $parameters["idRole"] = $this->getIdRole($cinema->getRole());
+                $parameters["password"] = $user->getPassword();
+                $parameters["idRole"] = $this->getIdRole($user->getRole());
 
                 $this->connection = Connection::GetInstance();
 
@@ -38,10 +39,15 @@
             {
                 $cinemaList = array();
 
-                $query = "SELECT U.idUser,U.email,U.password,R.description 
+                $query = "SELECT U.idUser,U.email,U.password,R.role_description 
                             FROM ".$this->tableName. " U 
                             INNER JOIN ".$this->roleTable." R 
                             ON R.idRole = U.idRole";
+
+                $query2 ="SELECT UP.firstName,UP.lastName,UP.dni 
+                            FROM ".$this->tableName. " U 
+                            INNER JOIN ".$this->profileTable." UP
+                            ON U.idUser = UP.idUser";
 
                 $this->connection = Connection::GetInstance();
 
@@ -52,7 +58,20 @@
                     $user = new User($row["idUser"],
                     $row["email"],
                     $row["password"],
-                    $row["description"]));
+                    $row["role_description"]);
+
+                    $query2 ="SELECT UP.firstName,UP.lastName,UP.dni 
+                            FROM ".$this->tableName. " U 
+                            INNER JOIN ".$this->profileTable." UP
+                            ON U.idUser = UP.idUser";
+
+                    $this->connection = Connection::GetInstance();
+
+                    $resultSet2 = $this->connection->Execute($query2);
+
+                    if($resultSet2!=NULL){
+                        $user->setUserProfile($resultSet2[0]["firstName"],$resultSet2[0]["lastName"],$resultSet2[0]["dni"]);
+                    }
 
                     array_push($userList, $user);
                 }
@@ -68,10 +87,24 @@
         public function GetIdRole($role){
             try
             {
-                $query = "SELECT idRole FROM ".$this->tableName. " WHERE ". $this->tableName .".description ='$role'";
+                $query = "SELECT idRole FROM ".$this->roleTable. " WHERE ". $this->roleTable .".role_description ='$role'";
                 $this->connection = Connection::GetInstance();
                 $resultSet = $this->connection->Execute($query);
-                return $resultSet["idRole"];
+                return $resultSet[0]["idRole"];
+            }
+            catch(Exception $ex)
+            {
+               throw $ex;
+            }
+        }
+        public function emailVerification($email){
+            try
+            {
+                $query = "SELECT * FROM ".$this->tableName. " 
+                            WHERE ". $this->tableName .".email ='$email'";
+                $this->connection = Connection::GetInstance();
+                $resultSet = $this->connection->Execute($query);
+                return $resultSet;
             }
             catch(Exception $ex)
             {
