@@ -2,10 +2,10 @@
     namespace DAO;
 
     use DAO\IRoomDAO as IRoomDAO;
-    use Models\Cinema as Cinema;
+    use Models\CinemaRoom as CinemaRoom;
     use DAO\Connection as Connection;
 
-    class CinemaDAO implements ICinemaRoomDAO
+    class RoomDAO implements IRoomDAO
     {
         private $connection;
         private $tableName = "room";
@@ -14,8 +14,9 @@
         {
             try
             {
-                $query = "INSERT INTO ".$this->tableName." (totalCap, idCinema) VALUES (:totalCap, :idCinema);";
+                $query = "INSERT INTO ".$this->tableName." (roomName, totalCap, idCinema) VALUES (:roomName, :totalCap, :idCinema);";
                 
+                $parameters["roomName"] = $cinemaRoom->getRoomName();
                 $parameters["totalCap"] = $cinemaRoom->getTotalCap();
                 $parameters["idCinema"] = $idCinema;
 
@@ -33,7 +34,7 @@
         {
             try
             {
-                $cinemaList = array();
+                $roomList = array();
 
                 $query = "SELECT * FROM ".$this->tableName;
 

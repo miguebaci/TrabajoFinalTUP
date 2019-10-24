@@ -36,6 +36,7 @@ CREATE TABLE room
 (   idRoom INT AUTO_INCREMENT NOT NULL,
     idCinema INT NOT NULL,
     roomName VARCHAR(100) NOT NULL,
+    totalCap INT NOT NULL,
     constraint pk_idRoom PRIMARY KEY (idRoom),
     constraint fk_idCinema FOREIGN KEY (idCinema) references cinema(idCinema)
 )Engine=InnoDB;
