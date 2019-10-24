@@ -14,11 +14,11 @@
         {
             try
             {
-                $query = "INSERT INTO ".$this->tableName." (roomName, totalCap, idCinema) VALUES (:roomName, :totalCap, :idCinema);";
+                $query = "INSERT INTO ".$this->tableName." (idCinema, roomName, totalCap) VALUES (:idCinema, :roomName, :totalCap);";
                 
+                $parameters["idCinema"] = $idCinema;
                 $parameters["roomName"] = $cinemaRoom->getRoomName();
                 $parameters["totalCap"] = $cinemaRoom->getTotalCap();
-                $parameters["idCinema"] = $idCinema;
 
                 $this->connection = Connection::GetInstance();
 
@@ -45,11 +45,40 @@
                 foreach ($resultSet as $row)
                 {               
                     $cinemaRoom = new CinemaRoom($row["idRoom"],
+                    $row["roomName"],
                     $row["totalCap"]);
 
                     array_push($roomList, $cinemaRoom);
                 }
 
+                return $roomList;
+            }
+            catch(Exception $ex)
+            {
+                throw $ex;
+            }
+        }
+        
+        public function GetAllByCinemaId($idCinema)
+        {
+            try
+            {
+                $roomList = array();
+
+                $query = "SELECT * FROM ".$this->tableName. " WHERE ".$this->tableName.".idCinema = ".$idCinema;
+
+                $this->connection = Connection::GetInstance();
+
+                $resultSet = $this->connection->Execute($query);
+                
+                foreach ($resultSet as $row)
+                {               
+                    $cinemaRoom = new CinemaRoom($row["idRoom"],
+                    $row["roomName"],
+                    $row["totalCap"]);
+
+                    array_push($roomList, $cinemaRoom);
+                }
                 return $roomList;
             }
             catch(Exception $ex)
@@ -97,6 +126,7 @@
             foreach ($resultSet as $row)
                 {               
                     $cinemaRoom = new CinemaRoom($row["idRoom"],
+                    $row["roomName"],
                     $row["totalCap"]);
                 }
             return $cinemaRoom;
@@ -106,5 +136,25 @@
                throw $ex;
             }
         }
+    
+
+        public function GetCinemaId($idRoom){
+        try
+        {
+        $query = "SELECT idCinema FROM ".$this->tableName. " WHERE ". $this->tableName .".idRoom ='$idRoom'";
+        $this->connection = Connection::GetInstance();
+        $resultSet = $this->connection->Execute($query);
+        $cinemaRoom=NULL;
+        foreach ($resultSet as $row)
+            {               
+                $cinemaRoom = $row["idCinema"];
+            }
+        return $cinemaRoom;
+        }
+        catch(Exception $ex)
+        {
+           throw $ex;
+        }
     }
+}
 ?>

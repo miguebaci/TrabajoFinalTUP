@@ -1,8 +1,12 @@
 <?php
     namespace Controllers;
 
+    use DAO\IRoomDAO as IRoomDAO;
+    use DAO\RoomDAO as RoomDAO;
+
     use DAO\ICinemaDAO as ICinemaDAO;
     use DAO\CinemaDAO as CinemaDAO;
+
     use Models\Cinema as Cinema;
 
     class CinemaController
@@ -68,9 +72,10 @@
 
                 if(isset($_POST["room_button"])){
                     $idCinema=$_POST["room_button"];
+                    $cinemaRoomDAO=new RoomDAO(); 
                     $cinema=$this->cinemaDAO->GetById($idCinema);
-                    echo"<script>";
-                    echo "window.location = '".FRONT_ROOT."CinemaRoom/ShowListView'; </script>";
+                    $cinemaRoomList=$cinemaRoomDAO->GetAllByCinemaId($idCinema);
+                    require_once(VIEWS_PATH."cinemaRoom-list.php");
 
                 }
                 if(isset($_POST["edit_button"])){

@@ -11,7 +11,7 @@
                               <div class="form-group">
                               <input type="hidden" name="idRoom" value="<?php echo $room->getIdRoom();?>">
                                    <label for="">Nombre</label>
-                                   <input type="text" name="RoomName" value="<?php echo $room->getRoomName();?>" class="form-control">
+                                   <input type="text" name="roomName" value="<?php echo $room->getRoomName();?>" class="form-control">
                               </div>
                          </div>
                          <div class="col-lg-4">

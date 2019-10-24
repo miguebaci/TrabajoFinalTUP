@@ -9,6 +9,9 @@
                     <thead>
                          <th>Nombre</th>
                          <th>Capacidad de la sala</th>
+                         <th></th>
+                         <th></th>
+                         <th></th>
                     </thead>
                     <tbody>
                     <form action="<?php echo FRONT_ROOT ?>CinemaRoom/Select" method="POST">
@@ -37,7 +40,6 @@
                               }
                               
                          ?>
-                         <!--<button type="submit" class ="btn btn-primary" name ='add_button' value='<?php echo $cinema->getIdCinema(); ?>'> Agregar Sala </button>-->
                          </form>
                     </tbody>
                </table>

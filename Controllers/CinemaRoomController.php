@@ -3,6 +3,10 @@
 
     use DAO\IRoomDAO as IRoomDAO;
     use DAO\RoomDAO as RoomDAO;
+
+    use DAO\ICinemaDAO as ICinemaDAO;
+    use DAO\CinemaDAO as CinemaDAO;
+
     use Models\CinemaRoom as CinemaRoom;
 
     class CinemaRoomController
@@ -92,9 +96,14 @@
                 }
                 else if(isset($_POST["delete_button"])){
                     $idRoom=$_POST["delete_button"];
+                    $idCinema=$this->cinemaRoomDAO->GetCinemaId($idRoom);
                     $room=$this->cinemaRoomDAO->GetById($idRoom);
+                    $cinemaDAO=new CinemaDAO();
                     $this->cinemaRoomDAO->Delete($room);
-                    $this->ShowListView();
+                    $cinema=$cinemaDAO->GetById($idCinema);
+                    $cinemaRoomList=$this->cinemaRoomDAO->GetAllByCinemaId($idCinema);
+                    require_once(VIEWS_PATH."cinemaRoom-list.php");
+                    
                 }
         }
         }
