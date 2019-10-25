@@ -12,6 +12,7 @@
                          <th></th>
                          <th></th>
                          <th></th>
+                         <th></th>
                     </thead>
                     <tbody>
                     <form action="<?php echo FRONT_ROOT ?>CinemaRoom/Select" method="POST">

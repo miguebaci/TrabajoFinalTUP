@@ -106,8 +106,9 @@
         {
             try{
                 $idRoom=$cinemaRoom->getIdCinemaRoom();
+                $newName=$updatedRoom['roomName'];
                 $newTotalCap=$updatedRoom['totalCap'];
-                $query = "UPDATE ". $this->tableName ." SET totalCap='$newTotalCap' "  . " WHERE idRoom ='$idRoom'";
+                $query = "UPDATE ". $this->tableName ." SET roomName='$newName', totalCap='$newTotalCap' "  . " WHERE idRoom ='$idRoom'";
                 $this->connection = Connection::GetInstance();
                 $this->connection->ExecuteNonQuery($query);
                 }

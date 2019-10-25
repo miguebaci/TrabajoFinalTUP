@@ -23,8 +23,10 @@
             require_once(VIEWS_PATH."cinemaRoom-add.php");
         }
 
-        public function ShowListView()
+        public function ShowListView($idCinema)
         {
+            $cinemaDAO=new CinemaDAO();
+            $cinema=$cinemaDAO->GetById($idCinema);
             $cinemaRoomList = $this->cinemaRoomDAO->GetAll();
             require_once(VIEWS_PATH."cinemaRoom-list.php");
         }
@@ -52,17 +54,19 @@
             }else{
                 echo "<script> alert('Room error');";  
             }
-            echo "window.location = '../index.php'; </script>";
+            echo "</script>";
+            $this->ShowListView($idCinema);
+
         }
 
         public function Update()
         {   
             if($_POST){
                 $updatedRoom=$_POST;
-                $Room=$this->cinemaRoomDAO->GetById($updatedRoom["idRoom"]);
-                $this->cinemaRoomDAO->Update($Room, $updatedRoom);
-                $this->ShowListView();
-
+                $idCinema=$this->cinemaRoomDAO->GetCinemaId($updatedRoom["idRoom"]);
+                $room=$this->cinemaRoomDAO->GetById($updatedRoom["idRoom"]);
+                $this->cinemaRoomDAO->Update($room, $updatedRoom);
+                $this->ShowListView($idCinema);
             }
         }
 
@@ -98,11 +102,8 @@
                     $idRoom=$_POST["delete_button"];
                     $idCinema=$this->cinemaRoomDAO->GetCinemaId($idRoom);
                     $room=$this->cinemaRoomDAO->GetById($idRoom);
-                    $cinemaDAO=new CinemaDAO();
                     $this->cinemaRoomDAO->Delete($room);
-                    $cinema=$cinemaDAO->GetById($idCinema);
-                    $cinemaRoomList=$this->cinemaRoomDAO->GetAllByCinemaId($idCinema);
-                    require_once(VIEWS_PATH."cinemaRoom-list.php");
+                    $this->ShowListView($idCinema);
                     
                 }
         }
