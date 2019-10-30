@@ -4,7 +4,7 @@
 <main class="py-5">
      <section id="listado" class="mb-5">
           <div class="container">
-               <h2 class="mb-4">Modificar Cine</h2>
+               <h2 class="mb-4">Modificar Sala</h2>
                <form action="<?php echo FRONT_ROOT ?>CinemaRoom/Update" method="POST" class="bg-light-alpha p-5">
                     <div class="row">                         
                          <div class="col-lg-4">

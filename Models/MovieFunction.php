@@ -4,20 +4,26 @@
     use Models\MovieFunction as MovieFunction;
 
     class MovieFunction
-    {
-        private $day;
+    {   
+        private $idFunction;
+        private $date;
         private $time;
 
         public function __construct($day){
             $this->day = $day;
         }
 
-        public function getDay()
+        public function getIdFunction()
+        {
+            return $this->idFunction;
+        }
+
+        public function getDate()
         {
             return $this->day;
         }
 
-        public function setDay($day)
+        public function setDate($day)
         {
             $this->day = $day;
         }

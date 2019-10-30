@@ -145,12 +145,12 @@
         $query = "SELECT idCinema FROM ".$this->tableName. " WHERE ". $this->tableName .".idRoom ='$idRoom'";
         $this->connection = Connection::GetInstance();
         $resultSet = $this->connection->Execute($query);
-        $cinemaRoom=NULL;
+        $idCinema=NULL;
         foreach ($resultSet as $row)
             {               
-                $cinemaRoom = $row["idCinema"];
+                $idCinema = $row["idCinema"];
             }
-        return $cinemaRoom;
+        return $idCinema;
         }
         catch(Exception $ex)
         {

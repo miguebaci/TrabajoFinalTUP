@@ -81,6 +81,35 @@
             }
         }
 
+        public function GetById($idMovie)
+        {
+            try
+            {
+
+                $query = "SELECT * FROM ".$this->tableName." WHERE idMovie ='$idMovie'";
+
+                $this->connection = Connection::GetInstance();
+
+                $resultSet = $this->connection->Execute($query);
+
+                foreach ($resultSet as $row)
+                {   
+                    $movie = new Movie(
+                    $row["idMovie"],
+                    $row["movieName"],
+                    $row["movielanguage"],
+                    $row["duration"],
+                    $row["poster_image"]);
+                }
+
+                return $movie;
+            }
+            catch(Exception $ex)
+            {
+                throw $ex;
+            }
+        }
+
         public function GetIdGenreById($idMovie){
             $query= "SELECT MXG.idGenre
                     FROM ".$this->mxgTable." MXG

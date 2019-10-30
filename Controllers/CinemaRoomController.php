@@ -25,9 +25,7 @@
 
         public function ShowListView($idCinema)
         {
-            $cinemaDAO=new CinemaDAO();
-            $cinema=$cinemaDAO->GetById($idCinema);
-            $cinemaRoomList = $this->cinemaRoomDAO->GetAll();
+            $cinemaRoomList = $this->cinemaRoomDAO->GetAllByCinemaId($idCinema);
             require_once(VIEWS_PATH."cinemaRoom-list.php");
         }
 
@@ -81,14 +79,14 @@
                 if(isset($_POST["function_button"])){
                     $idRoom=$_POST["function_button"];
                     $room=$this->cinemaRoomDAO->GetById($idRoom);
-                    require_once(VIEWS_PATH."moviefunction-add.php");
+                    require_once(VIEWS_PATH."moviefunction-list.php");
 
                 }
 
                 if(isset($_POST["list_button"])){
                     $idRoom=$_POST["list_button"];
                     $room=$this->cinemaRoomDAO->GetById($idRoom);
-                    require_once(VIEWS_PATH."movieFunction-list.php");
+                    require_once(VIEWS_PATH."cinemaRoom-list.php");
 
                 }
                 

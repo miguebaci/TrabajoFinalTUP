@@ -42,7 +42,8 @@ CREATE TABLE room
 )Engine=InnoDB;
 
 CREATE TABLE moviefunction
-(   idMovieFunction INT AUTO_INCREMENT NOT NULL,
+(   
+    idMovieFunction INT AUTO_INCREMENT NOT NULL,
     idMovie INT NOT NULL,
     idRoom INT NOT NULL,
     function_date DATE,

@@ -16,7 +16,7 @@
                     </thead>
                     <tbody>
                     <form action="<?php echo FRONT_ROOT ?>CinemaRoom/Select" method="POST">
-                    <button type="submit" class ="btn btn-primary" name ='add_button' value='<?php echo $cinema->getIdCinema(); ?>'> Agregar Sala </button>
+                    <button type="submit" class ="btn btn-primary" name ='add_button' value='<?php echo $idCinema; ?>'> Agregar Sala </button>
                          <?php
                               foreach($cinemaRoomList as $room)
                               {
