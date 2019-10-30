@@ -26,6 +26,58 @@
                 $this->connection = Connection::GetInstance();
 
                 $this->connection->ExecuteNonQuery($query, $parameters);
+
+                $idUser=$this->getEmailID($email);
+
+                $query = "INSERT INTO ".$this->tableName." (idUser, firstName, lastName, dni) 
+                            VALUES (:idUser, :firstName, :lastName, :dni);";
+                
+                $parameters["idUser"] = $idUser;
+                $parameters["firstName"] = -1;
+                $parameters["lastName"] = -1;
+                $parameters["dni"] = -1;
+
+                $this->connection = Connection::GetInstance();
+
+                $this->connection->ExecuteNonQuery($query, $parameters);
+            }
+            catch(Exception $ex)
+            {
+                throw $ex;
+            }
+        }
+
+        public function AddFacebook($email,$first_name,$last_name)
+        {
+            try
+            {
+                $query = "INSERT INTO ".$this->tableName." (email, password, idRole) 
+                            VALUES (:email, :password, :idRole);";
+                
+                $parameters["email"] = $email;
+                $parameters["password"] = "FACEBOOK".$email;
+                $parameters["idRole"] = 1;
+
+                $this->connection = Connection::GetInstance();
+
+                $this->connection->ExecuteNonQuery($query, $parameters);
+
+                $idUser=$this->getEmailID($email);
+
+                $query2 = "INSERT INTO ".$this->profileTable." (idUser, firstName, lastName, dni) 
+                            VALUES (:idUser, :firstName, :lastName, :dni);";
+                
+                $parameters2["idUser"] = $idUser;
+                $parameters2["firstName"] = $first_name;
+                $parameters2["lastName"] = $last_name;
+                $parameters2["dni"] = 1;
+
+                var_dump($query2);
+                var_dump($parameters2);
+
+                $this->connection = Connection::GetInstance();
+
+                $this->connection->ExecuteNonQuery($query2, $parameters2);
             }
             catch(Exception $ex)
             {
@@ -97,6 +149,21 @@
                throw $ex;
             }
         }
+
+        public function GetRoleById($idRole){
+            try
+            {
+                $query = "SELECT role_description FROM ".$this->roleTable. " WHERE ". $this->roleTable .".idRole ='$idRole'";
+                $this->connection = Connection::GetInstance();
+                $resultSet = $this->connection->Execute($query);
+                return $resultSet[0]["role_description"];
+            }
+            catch(Exception $ex)
+            {
+               throw $ex;
+            }
+        }
+
         public function emailVerification($email){
             try
             {
@@ -105,6 +172,21 @@
                 $this->connection = Connection::GetInstance();
                 $resultSet = $this->connection->Execute($query);
                 return $resultSet;
+            }
+            catch(Exception $ex)
+            {
+               throw $ex;
+            }
+        }
+
+        private function getEmailID($email){
+            try
+            {
+                $query = "SELECT idUser FROM ".$this->tableName. " 
+                            WHERE ". $this->tableName .".email ='$email'";
+                $this->connection = Connection::GetInstance();
+                $resultSet = $this->connection->Execute($query);
+                return $resultSet[0]["idUser"];
             }
             catch(Exception $ex)
             {
