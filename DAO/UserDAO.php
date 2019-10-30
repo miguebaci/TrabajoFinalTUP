@@ -11,6 +11,7 @@
         private $tableName = "user";
         private $roleTable = "userrole";
         private $profileTable = "userprofile";
+        private $userList = array();
 
         public function Add(User $user)
         {
@@ -27,19 +28,19 @@
 
                 $this->connection->ExecuteNonQuery($query, $parameters);
 
-                $idUser=$this->getEmailID($email);
+                $idUser=$this->getEmailID($user->getEmail());
 
-                $query = "INSERT INTO ".$this->tableName." (idUser, firstName, lastName, dni) 
+                $query2 = "INSERT INTO ".$this->profileTable." (idUser, firstName, lastName, dni) 
                             VALUES (:idUser, :firstName, :lastName, :dni);";
                 
-                $parameters["idUser"] = $idUser;
-                $parameters["firstName"] = -1;
-                $parameters["lastName"] = -1;
-                $parameters["dni"] = -1;
+                $parameters2["idUser"] = $idUser;
+                $parameters2["firstName"] = -1;
+                $parameters2["lastName"] = -1;
+                $parameters2["dni"] = -1;
 
                 $this->connection = Connection::GetInstance();
 
-                $this->connection->ExecuteNonQuery($query, $parameters);
+                $this->connection->ExecuteNonQuery($query2, $parameters2);
             }
             catch(Exception $ex)
             {
@@ -70,7 +71,7 @@
                 $parameters2["idUser"] = $idUser;
                 $parameters2["firstName"] = $first_name;
                 $parameters2["lastName"] = $last_name;
-                $parameters2["dni"] = 1;
+                $parameters2["dni"] = -1;
 
                 var_dump($query2);
                 var_dump($parameters2);
@@ -125,10 +126,10 @@
                         $user->setUserProfile($resultSet2[0]["firstName"],$resultSet2[0]["lastName"],$resultSet2[0]["dni"]);
                     }
 
-                    array_push($userList, $user);
+                    array_push($this->userList, $user);
                 }
 
-                return $userList;
+                return $this->userList;
             }
             catch(Exception $ex)
             {
@@ -165,33 +166,19 @@
         }
 
         public function emailVerification($email){
-            try
-            {
-                $query = "SELECT * FROM ".$this->tableName. " 
-                            WHERE ". $this->tableName .".email ='$email'";
-                $this->connection = Connection::GetInstance();
-                $resultSet = $this->connection->Execute($query);
+            $this->getAll();
+                $resultSet=NULL;
+                foreach($this->userList as $user){
+                    if($email==$user->getEmail()){
+                        $resultSet=$user;
+                    }
+                }
                 return $resultSet;
-            }
-            catch(Exception $ex)
-            {
-               throw $ex;
-            }
         }
 
         private function getEmailID($email){
-            try
-            {
-                $query = "SELECT idUser FROM ".$this->tableName. " 
-                            WHERE ". $this->tableName .".email ='$email'";
-                $this->connection = Connection::GetInstance();
-                $resultSet = $this->connection->Execute($query);
-                return $resultSet[0]["idUser"];
-            }
-            catch(Exception $ex)
-            {
-               throw $ex;
-            }
+            $user=$this->emailVerification($email);
+            return $user->getIdUser();
         }
 
     }
