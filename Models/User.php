@@ -20,6 +20,16 @@
             $this->role = $role;
         }
 
+        public function getIdUser()
+        {
+            return $this->idUser;
+        }
+
+        public function setIdUser($idUser)
+        {
+            $this->idUser = $idUser;
+        } 
+
         public function getEmail()
         {
             return $this->email;

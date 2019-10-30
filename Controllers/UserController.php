@@ -52,17 +52,22 @@
             if($_POST){
                 $user=$this->userDAO->emailVerification($_POST["email"]);
                 if($user!=NULL){
-                    if($_POST["password"]=$user[0]["password"]){
-                        $loggedUser= new User($user[0]["idUser"],$user[0]["email"],$user[0]["password"],$this->userDAO->getRoleById($user[0]["idRole"]));
+                    if($_POST["password"]=$user->getPassword()){
+                        $loggedUser= $user;
                         $_SESSION["loggedUser"]=$loggedUser;
                         //var_dump($loggedUser);
                         echo "<script> alert('Logged In');";
                         echo "window.location = '".FRONT_ROOT."index.php'; </script>";
+                    }else{
+                        echo "<script> alert('Wrong Password');";
+                        echo "window.location = '".FRONT_ROOT."User/Login'; </script>";
                     }
-                    echo "<script> alert('Wrong Password');";
+                }else{
+                    echo "<script> alert('Email does not exist');";
                     echo "window.location = '".FRONT_ROOT."User/Login'; </script>";
                 }
-                echo "<script> alert('Email does not exist');";
+            }else{
+                echo "<script> alert('Erro');";
                 echo "window.location = '".FRONT_ROOT."User/Login'; </script>";
             }
         }
@@ -153,11 +158,12 @@
                 $user=$this->userDAO->emailVerification($userNode["email"]);
                 $loggedUser=NULL;
                 if($user!=NULL){
-                    $loggedUser= new User($user[0]["idUser"],$user[0]["email"],$user[0]["password"],$this->userDAO->getRoleById($user[0]["idRole"]));
+                    $loggedUser= $user;
                 }else{
+                    
                     $this->userDAO->AddFacebook($userNode["email"],$userNode["first_name"],$userNode["last_name"]);
                     $user=$this->userDAO->emailVerification($userNode["email"]);
-                    $loggedUser= new User($user[0]["idUser"],$user[0]["email"],$user[0]["password"],$this->userDAO->getRoleById($user[0]["idRole"]));
+                    $loggedUser=$user;
                 }
                 $_SESSION["loggedUser"]=$loggedUser;
 
