@@ -66,5 +66,13 @@
             }
         }
 
+        public function LoginFacebook(){
+            require_once(VIEWS_PATH."loginfb.php");
+        }
+
+        public function FBCallback(){
+            require_once(VIEWS_PATH."fb-callback.php");
+        }
+
     }
 ?>
