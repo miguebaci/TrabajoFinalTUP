@@ -7,6 +7,9 @@
     use DAO\ICinemaDAO as ICinemaDAO;
     use DAO\CinemaDAO as CinemaDAO;
 
+    use DAO\IFunctionDAO as IFunctionDAO;
+    use DAO\FunctionDAO as FunctionDAO;
+
     use Models\CinemaRoom as CinemaRoom;
 
     class CinemaRoomController
@@ -77,16 +80,12 @@
 
                 }
                 if(isset($_POST["function_button"])){
+                    
+                    $functionDAO = new FunctionDAO();
                     $idRoom=$_POST["function_button"];
                     $room=$this->cinemaRoomDAO->GetById($idRoom);
+                    $functionList=$functionDAO->GetAllByRoomId($idRoom);
                     require_once(VIEWS_PATH."moviefunction-list.php");
-
-                }
-
-                if(isset($_POST["list_button"])){
-                    $idRoom=$_POST["list_button"];
-                    $room=$this->cinemaRoomDAO->GetById($idRoom);
-                    require_once(VIEWS_PATH."cinemaRoom-list.php");
 
                 }
                 

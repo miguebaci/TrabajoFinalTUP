@@ -12,7 +12,6 @@
                          <th></th>
                          <th></th>
                          <th></th>
-                         <th></th>
                     </thead>
                     <tbody>
                     <form action="<?php echo FRONT_ROOT ?>CinemaRoom/Select" method="POST">
@@ -25,10 +24,7 @@
                                              <td><?php echo $room->getRoomName() ?></td>
                                              <td><?php echo $room->getTotalCap() ?></td>
                                              <td> 
-                                                  <button type="submit" class ="btn btn-primary" name ='function_button' value='<?php echo $room->getIdCinemaRoom(); ?>'> Añadir Funcion </button>
-                                             </td>
-                                             <td> 
-                                                  <button type="submit" class ="btn btn-primary" name ='list_button' value='<?php echo $room->getIdCinemaRoom(); ?>'> Listado de Funciones </button>
+                                                  <button type="submit" class ="btn btn-primary" name ='function_button' value='<?php echo $room->getIdCinemaRoom(); ?>'> Funciones </button>
                                              </td>
                                              <td> 
                                                   <button type="submit" class ="btn btn-warning" name ='edit_button' value='<?php echo $room->getIdCinemaRoom(); ?>'> Editar </button>

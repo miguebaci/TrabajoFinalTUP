@@ -13,7 +13,7 @@
                     </thead>
                     <tbody>
                     <form action="<?php echo FRONT_ROOT ?>Function/Select" method="POST">
-                    <button type="submit" class ="btn btn-primary" name ='add_button' value='<?php echo $idRoom; ?>'> Agregar Sala </button>
+                    <button type="submit" class ="btn btn-primary" name ='add_button' value='<?php echo $idRoom; ?>'> Agregar Funcion </button>
                          <?php
                               foreach($functionList as $function)
                               {
