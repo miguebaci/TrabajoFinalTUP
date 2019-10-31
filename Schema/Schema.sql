@@ -71,6 +71,8 @@ CREATE TABLE user
     constraint fk_idRole FOREIGN KEY (idRole) references userRole(idRole)
 )Engine=InnoDB;
 
+INSERT INTO user(email,password,idRole) VALUES ("admin@localhost.com", "admin", 2);
+
 CREATE TABLE userProfile
 (
     idUser INT,
