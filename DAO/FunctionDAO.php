@@ -11,6 +11,7 @@
         private $connection;
         private $tableName = "moviefunction";
         private $movieTable ="movie";
+        private $mxgTable= "movieXgenre";
 
         public function Add(MovieFunction $movieFunction, $idMovie, $idRoom)
         {
@@ -86,6 +87,35 @@
 
                     array_push($functionList, $movieFunction);
                 }
+                return $functionList;
+            }
+            catch(Exception $ex)
+            {
+                throw $ex;
+            }
+        }
+
+        public function GetAllByGenre($idGenre)
+        {
+            try
+            {
+                $functionList = array();
+
+                $query = "SELECT * FROM ".$this->tableName. " F INNER JOIN ".$this->mxgTable." MXG ON F.idMovie = MXG.idMovie  WHERE idGenre = " .$idGenre;
+
+                $this->connection = Connection::GetInstance();
+
+                $resultSet = $this->connection->Execute($query);
+                
+                foreach ($resultSet as $row)
+                {               
+                    $movieFunction = new MovieFunction($row["idMovieFunction"],
+                    $row["function_date"],
+                    $row["function_time"]);
+
+                    array_push($functionList, $movieFunction);
+                }
+
                 return $functionList;
             }
             catch(Exception $ex)

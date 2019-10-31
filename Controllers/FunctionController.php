@@ -43,6 +43,15 @@
             
         }
 
+        public function ShowGenreListView($idGenre)
+        {
+            $functionDAO = $this->functionDAO;
+            $functionList = $this->functionDAO->GetAllByGenre($idGenre);
+            $genreRepo = new GenreDAO();
+            $movieDAO= new MovieDAO();
+            require_once(VIEWS_PATH."movieFunction-genreList.php");
+        }
+
         public function ShowListView($idRoom)
         {
             if(isset($_SESSION["loggedUser"])){
@@ -131,6 +140,12 @@
                     $idMovie=$_POST["select_movie"];
                     $idRoom=$_POST["idRoom"];
                     require_once(VIEWS_PATH."movieFunction-add.php");
+
+                }
+
+                if(isset($_POST["genre_select"])){
+                    $idGenre=$_POST["genre_select"];
+                    $this->ShowGenreListView($idGenre);
 
                 }
 
