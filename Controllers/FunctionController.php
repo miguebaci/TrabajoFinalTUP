@@ -29,16 +29,37 @@
 
         public function ShowAddView()
         {
-            require_once(VIEWS_PATH."movieFunction-add.php");
+            if(isset($_SESSION["loggedUser"])){
+                if($_SESSION["loggedUser"]->getRole()=="Admin"){
+                    require_once(VIEWS_PATH."movieFunction-add.php");
+                }else{
+                    echo "<script> alert('You need to be admin to access this page');";  
+                    echo "window.location = '../index.php'; </script>";
+                }
+            }else{
+                echo "<script> alert('You need to be admin to access this page');";  
+                echo "window.location = '../index.php'; </script>";
+            }
+            
         }
 
         public function ShowListView($idRoom)
         {
-            $functionDAO = $this->functionDAO;
-            $functionList = $this->functionDAO->GetAllByRoomId($idRoom);
-            $genreRepo = new GenreDAO();
-            $movieDAO= new MovieDAO();
-            require_once(VIEWS_PATH."movieFunction-list.php");
+            if(isset($_SESSION["loggedUser"])){
+                if($_SESSION["loggedUser"]->getRole()=="Admin"){
+                    $functionDAO = $this->functionDAO;
+                    $functionList = $this->functionDAO->GetAllByRoomId($idRoom);
+                    $genreRepo = new GenreDAO();
+                    $movieDAO= new MovieDAO();
+                    require_once(VIEWS_PATH."movieFunction-list.php");
+                }else{
+                    echo "<script> alert('You need to be admin to access this page');";  
+                    echo "window.location = '../index.php'; </script>";
+                }
+            }else{
+                echo "<script> alert('You need to be admin to access this page');";  
+                echo "window.location = '../index.php'; </script>";
+            }
         }
 
         public function Add()
