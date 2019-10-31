@@ -15,9 +15,19 @@
         }
 
         public function UpdateGenres(){
-            $this->genreDAO->UpdateAll();
-
-            echo "Where do we go now?";
+            if(isset($_SESSION["loggedUser"])){
+                if($_SESSION["loggedUser"]->getRole()=="Admin"){
+                    $this->genreDAO->UpdateAll();
+                    echo "<script> alert('Genres Updated');";  
+                    echo "window.location = '../index.php'; </script>";
+                }else{
+                    echo "<script> alert('You need to be admin to access this page');";  
+                    echo "window.location = '../index.php'; </script>";
+            }
+            }else{
+                echo "<script> alert('You need to be admin to access this page');";  
+                echo "window.location = '../index.php'; </script>";
+            }
         }
     }
 ?>

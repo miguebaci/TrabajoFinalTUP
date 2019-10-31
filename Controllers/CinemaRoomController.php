@@ -29,13 +29,33 @@
 
         public function ShowAddView()
         {
-            require_once(VIEWS_PATH."cinemaRoom-add.php");
+            if(isset($_SESSION["loggedUser"])){
+                if($_SESSION["loggedUser"]->getRole()=="Admin"){
+                    require_once(VIEWS_PATH."cinemaRoom-add.php");
+                }else{
+                    echo "<script> alert('You need to be admin to access this page');";  
+                    echo "window.location = '../index.php'; </script>";
+                }
+            }else{
+                echo "<script> alert('You need to be admin to access this page');";  
+                echo "window.location = '../index.php'; </script>";
+            }
         }
 
         public function ShowListView($idCinema)
         {
-            $cinemaRoomList = $this->cinemaRoomDAO->GetAllByCinemaId($idCinema);
-            require_once(VIEWS_PATH."cinemaRoom-list.php");
+            if(isset($_SESSION["loggedUser"])){
+                if($_SESSION["loggedUser"]->getRole()=="Admin"){
+                    $cinemaRoomList = $this->cinemaRoomDAO->GetAllByCinemaId($idCinema);
+                    require_once(VIEWS_PATH."cinemaRoom-list.php");
+                }else{
+                    echo "<script> alert('You need to be admin to access this page');";  
+                    echo "window.location = '../index.php'; </script>";
+                }
+            }else{
+                echo "<script> alert('You need to be admin to access this page');";  
+                echo "window.location = '../index.php'; </script>";
+            }
         }
 
         public function Add()
