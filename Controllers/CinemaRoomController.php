@@ -7,8 +7,14 @@
     use DAO\ICinemaDAO as ICinemaDAO;
     use DAO\CinemaDAO as CinemaDAO;
 
+    use DAO\MovieDAO as MovieDAO;
+    use DAO\IMovieDAO as IMovieDAO;
+
     use DAO\IFunctionDAO as IFunctionDAO;
     use DAO\FunctionDAO as FunctionDAO;
+    
+    use DAO\IGenreDAO as IGenreDAO;
+    use DAO\GenreDAO as GenreDAO;
 
     use Models\CinemaRoom as CinemaRoom;
 
@@ -82,6 +88,8 @@
                 if(isset($_POST["function_button"])){
                     
                     $functionDAO = new FunctionDAO();
+                    $movieDAO = new MovieDAO();
+                    $genreRepo = new GenreDAO();
                     $idRoom=$_POST["function_button"];
                     $room=$this->cinemaRoomDAO->GetById($idRoom);
                     $functionList=$functionDAO->GetAllByRoomId($idRoom);

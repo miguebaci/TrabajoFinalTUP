@@ -3,15 +3,16 @@
 
     use DAO\MovieDAO as MovieDAO;
     use DAO\IMovieDAO as IMovieDAO;
+    use Models\Movie as Movie;
 
     use DAO\IRoomDAO as IRoomDAO;
     use DAO\RoomDAO as RoomDAO;
 
-    use DAO\IGenreDAO as IGenreDAO;
-    use DAO\GenreDAO as GenreDAO;
-
     use DAO\IFunctionDAO as IFunctionDAO;
     use DAO\FunctionDAO as FunctionDAO;
+    
+    use DAO\IGenreDAO as IGenreDAO;
+    use DAO\GenreDAO as GenreDAO;
 
     use Date as Date;
 
@@ -33,7 +34,10 @@
 
         public function ShowListView($idRoom)
         {
+            $functionDAO = $this->functionDAO;
             $functionList = $this->functionDAO->GetAllByRoomId($idRoom);
+            $genreRepo = new GenreDAO();
+            $movieDAO= new MovieDAO();
             require_once(VIEWS_PATH."movieFunction-list.php");
         }
 
@@ -62,11 +66,10 @@
                 $functionDate = date_create($functionStartDate);
                 $functionEndDate = date_create($functionEndDate);                
                 
-                while($functionDate < $functionEndDate) {
+                while($functionDate <= $functionEndDate) {
                     $newFunction=new MovieFunction(0,$functionDate,$functionTime);
                     $this->functionDAO->Add($newFunction, $idMovie, $idRoom);
                     $functionDate =date_add($functionDate,date_interval_create_from_date_string("1 days"));//funcion de aumento
-                    //var_dump($functionDate);
                 }
         
                 
@@ -112,8 +115,7 @@
 
                 if(isset($_POST["list_button"])){
                     $idRoom=$_POST["list_button"];
-                    $movieFunction=$this->functionDAO->GetById($idRoom);
-                    require_once(VIEWS_PATH."movieFunction-list.php");
+                    $this->ShowListView($idRoom);
 
                 }
                 else if(isset($_POST["delete_button"])){

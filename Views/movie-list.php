@@ -10,7 +10,7 @@
                          <th>Nombre</th>
                          <th>Lenguaje</th>
                          <th>Duracion total</th>
-                         <th>Genre</th>
+                         <th>Genero/s</th>
                          <th>Poster</th>
                     </thead>
                     <tbody>

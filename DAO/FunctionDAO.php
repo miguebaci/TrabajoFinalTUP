@@ -10,6 +10,7 @@
     {
         private $connection;
         private $tableName = "moviefunction";
+        private $movieTable ="movie";
 
         public function Add(MovieFunction $movieFunction, $idMovie, $idRoom)
         {
@@ -17,10 +18,11 @@
             {
                 $query = "INSERT INTO ".$this->tableName." (idMovie, idRoom, function_date, function_time) VALUES (:idMovie, :idRoom, :function_date, :function_time);";
                 
+                $date = $movieFunction->getDate();
+                $date= $date->format("Y-m-d");
                 $parameters["idMovie"] = $idMovie;
                 $parameters["idRoom"] = $idRoom;
-                $parameters["function_date"] = $movieFunction->getDate();
-                //$parameters["function_date"] = date("Y-m-d");
+                $parameters["function_date"] = $date;
                 $parameters["function_time"] = $movieFunction->getTime();
 
                 $this->connection = Connection::GetInstance();
@@ -91,6 +93,35 @@
                 throw $ex;
             }
         }
+
+        public function GetMovieByFunctionId($idFunction)
+        {
+            try
+            {
+
+                $query = "SELECT M.idMovie, M.movieName, M.movielanguage, M.duration, M.poster_image FROM ".$this->movieTable." M INNER JOIN ".$this->tableName." F ON M.idMovie = F.IdMovie   WHERE F.idMovieFunction = '$idFunction'";
+
+                $this->connection = Connection::GetInstance();
+
+                $resultSet = $this->connection->Execute($query);
+                
+                foreach ($resultSet as $row)
+                {               
+                    $movie = new Movie(
+                        $row["idMovie"],
+                        $row["movieName"],
+                        $row["movielanguage"],
+                        $row["duration"],
+                        $row["poster_image"]);
+                }
+                return $movie;
+            }
+            catch(Exception $ex)
+            {
+                throw $ex;
+            }
+        }
+
         
         public function Delete(MovieFunction $movieFunction)
         {   
