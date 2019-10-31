@@ -97,11 +97,6 @@
                             INNER JOIN ".$this->roleTable." R 
                             ON R.idRole = U.idRole";
 
-                $query2 ="SELECT UP.firstName,UP.lastName,UP.dni 
-                            FROM ".$this->tableName. " U 
-                            INNER JOIN ".$this->profileTable." UP
-                            ON U.idUser = UP.idUser";
-
                 $this->connection = Connection::GetInstance();
 
                 $resultSet = $this->connection->Execute($query);
@@ -125,7 +120,6 @@
                     if($resultSet2!=NULL){
                         $user->setUserProfile($resultSet2[0]["firstName"],$resultSet2[0]["lastName"],$resultSet2[0]["dni"]);
                     }
-
                     array_push($this->userList, $user);
                 }
 
