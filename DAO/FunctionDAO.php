@@ -20,6 +20,7 @@
                 $parameters["idMovie"] = $idMovie;
                 $parameters["idRoom"] = $idRoom;
                 $parameters["function_date"] = $movieFunction->getDate();
+                //$parameters["function_date"] = date("Y-m-d");
                 $parameters["function_time"] = $movieFunction->getTime();
 
                 $this->connection = Connection::GetInstance();

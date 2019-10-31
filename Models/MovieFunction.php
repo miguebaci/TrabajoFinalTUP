@@ -9,8 +9,10 @@
         private $date;
         private $time;
 
-        public function __construct($day){
-            $this->day = $day;
+        public function __construct($idFunction, $date , $time){
+            $this->idFunction = $idFunction;
+            $this->date = $date;
+            $this->time = $time;
         }
 
         public function getIdFunction()
@@ -20,12 +22,12 @@
 
         public function getDate()
         {
-            return $this->day;
+            return $this->date;
         }
 
-        public function setDate($day)
+        public function setDate($date)
         {
-            $this->day = $day;
+            $this->date = $date;
         }
 
         public function getTime()
