@@ -52,7 +52,7 @@
             if($_POST){
                 $user=$this->userDAO->emailVerification($_POST["email"]);
                 if($user!=NULL){
-                    if($_POST["password"]=$user->getPassword()){
+                    if($_POST["password"]==$user->getPassword()){
                         $loggedUser= $user;
                         $_SESSION["loggedUser"]=$loggedUser;
                         echo "<script> alert('Logged In');";
@@ -168,6 +168,8 @@
         
         public function Logout(){
             session_destroy();
+            unset($_SESSION["loggedUser"]);
+            unset($_SESSION["fb_access_token"]);
             echo "<script> alert('Logged Out');";
             echo "window.location = '".FRONT_ROOT."index.php'; </script>";
         }
@@ -191,6 +193,68 @@
             }else{
                 echo "<script> alert('You need to be logged in to access this page');";  
                 echo "window.location = '../index.php'; </script>";
+            }
+        }
+
+        public function ChangePassword(){
+            if(isset($_SESSION["loggedUser"])){
+                if(isset($_SESSION["loggedUser"])){
+                    require_once(VIEWS_PATH."change-password.php");
+                }else{
+                    echo "<script> alert('You need to be logged in to access this page');";  
+                    echo "window.location = '../index.php'; </script>";
+                }
+            }else{
+                echo "<script> alert('You need to be logged in to access this page');";  
+                echo "window.location = '../index.php'; </script>";
+            }
+        }
+
+        public function ChangePasswordConfirm(){
+            if(isset($_POST)){
+                if($_SESSION["loggedUser"]->getPassword()==$_POST["oldPassword"]){
+                    if($_POST["newPassword"]==$_POST["newPassword2"]){
+                        $_SESSION["loggedUser"]->setPassword($_POST["newPassword"]);
+                        $this->userDAO->setNewPassword($_POST["newPassword"], $_SESSION["loggedUser"]->getIdUser());
+                        echo "<script> alert('Password changed');";
+                        echo "window.location = '".FRONT_ROOT."User/UserProfile'; </script>";
+                    }else{
+                        echo "<script> alert('The Passwords do not match');";
+                        echo "window.location = '".FRONT_ROOT."User/ChangePassword'; </script>";
+                    }
+                }else{
+                    echo "<script> alert('Old Password field is wrong');";
+                    echo "window.location = '".FRONT_ROOT."User/ChangePassword'; </script>";
+                }
+            }else{
+                echo "<script> alert('Error');";
+                echo "window.location = '".FRONT_ROOT."index.php'; </script>";
+            }
+        }
+
+        public function ChangeUserProfile(){
+            if(isset($_SESSION["loggedUser"])){
+                if(isset($_SESSION["loggedUser"])){
+                    require_once(VIEWS_PATH."change-user-profile.php");
+                }else{
+                    echo "<script> alert('You need to be logged in to access this page');";  
+                    echo "window.location = '../index.php'; </script>";
+                }
+            }else{
+                echo "<script> alert('You need to be logged in to access this page');";  
+                echo "window.location = '../index.php'; </script>";
+            }
+        }
+
+        public function changeUserProfileConfirm(){
+            if(isset($_POST)){
+                $_SESSION["loggedUser"]->setUserProfile($_POST["lastName"],$_POST["firstName"],$_POST["dni"]);
+                $this->userDAO->setUserNewProfile($_SESSION["loggedUser"]->getUserProfile(),$_SESSION["loggedUser"]->getIdUser());
+                echo "<script> alert('Info changed');";
+                echo "window.location = '".FRONT_ROOT."User/UserProfile'; </script>";
+            }else{
+                echo "<script> alert('Error');";
+                echo "window.location = '".FRONT_ROOT."index.php'; </script>";
             }
         }
 
