@@ -116,7 +116,7 @@
                     $resultSet2 = $this->connection->Execute($query2);
 
                     if($resultSet2!=NULL){
-                        $user->setUserProfile($resultSet2[0]["firstName"],$resultSet2[0]["lastName"],$resultSet2[0]["dni"]);
+                        $user->setUserProfile($resultSet2[0]["lastName"],$resultSet2[0]["firstName"],$resultSet2[0]["dni"]);
                         $resultSet2=NULL;
                     }
                     array_push($this->userList, $user);
@@ -186,6 +186,50 @@
                 $this->connection = Connection::GetInstance();
 
                 $this->connection->ExecuteNonQuery($query, $parameters);
+            }
+            catch(Exception $ex)
+            {
+                throw $ex;
+            }
+        }
+
+        public function setUserNewProfile($userProfile,$idUser){
+            try
+            {   
+                $query2 ="SELECT *
+                            FROM ".$this->profileTable." UP
+                            WHERE UP.idUser=".$idUser;
+
+                $this->connection = Connection::GetInstance();
+
+                $resultSet2 = $this->connection->Execute($query2);
+                
+                if($resultSet2!=NULL){
+                    $query = "UPDATE ".$this->profileTable."
+                    SET lastName = :lastName, firstName = :firstName, dni = :dni
+                    WHERE idUser= ".$idUser;
+          
+                    $parameters["lastName"] = $userProfile->getLastName();
+                    $parameters["firstName"] = $userProfile->getFirstName();
+                    $parameters["dni"] = $userProfile->getDni();
+
+                    $this->connection = Connection::GetInstance();
+
+                    $this->connection->ExecuteNonQuery($query, $parameters);
+                }else{
+                    $query = "INSERT INTO ".$this->profileTable." (idUser, firstName, lastName, dni) 
+                            VALUES (:idUser, :firstName, :lastName, :dni);";
+                
+                    $parameters["idUser"] = $idUser;
+                    $parameters["lastName"] = $userProfile->getLastName();
+                    $parameters["firstName"] = $userProfile->getFirstName();
+                    $parameters["dni"] = $userProfile->getDni();
+
+                    $this->connection = Connection::GetInstance();
+
+                    $this->connection->ExecuteNonQuery($query, $parameters);
+                }
+
             }
             catch(Exception $ex)
             {

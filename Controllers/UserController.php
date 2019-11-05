@@ -232,5 +232,31 @@
             }
         }
 
+        public function ChangeUserProfile(){
+            if(isset($_SESSION["loggedUser"])){
+                if(isset($_SESSION["loggedUser"])){
+                    require_once(VIEWS_PATH."change-user-profile.php");
+                }else{
+                    echo "<script> alert('You need to be logged in to access this page');";  
+                    echo "window.location = '../index.php'; </script>";
+                }
+            }else{
+                echo "<script> alert('You need to be logged in to access this page');";  
+                echo "window.location = '../index.php'; </script>";
+            }
+        }
+
+        public function changeUserProfileConfirm(){
+            if(isset($_POST)){
+                $_SESSION["loggedUser"]->setUserProfile($_POST["lastName"],$_POST["firstName"],$_POST["dni"]);
+                $this->userDAO->setUserNewProfile($_SESSION["loggedUser"]->getUserProfile(),$_SESSION["loggedUser"]->getIdUser());
+                echo "<script> alert('Info changed');";
+                echo "window.location = '".FRONT_ROOT."User/UserProfile'; </script>";
+            }else{
+                echo "<script> alert('Error');";
+                echo "window.location = '".FRONT_ROOT."index.php'; </script>";
+            }
+        }
+
     }
 ?>

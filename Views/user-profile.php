@@ -10,15 +10,15 @@
                <?php
                     if($_SESSION["loggedUser"]->getUserProfile()!=NULL){
                ?>
-               <h6 class="mb-1">Last Name: <?php if($_SESSION["loggedUser"]->getUserProfile()->getFirstName()!="-1" && $_SESSION["loggedUser"]->getUserProfile()->getFirstName()!=NULL) echo $_SESSION["loggedUser"]->getUserProfile()->getFirstName(); else echo "Not Set"; ?><h6>
-               <h6 class="mb-1">First Name: <?php if($_SESSION["loggedUser"]->getUserProfile()->getLastName()!="-1" && $_SESSION["loggedUser"]->getUserProfile()->getLastName()!=NULL) echo $_SESSION["loggedUser"]->getUserProfile()->getLastName(); else echo "Not Set"; ?><h6>
+               <h6 class="mb-1">First Name: <?php if($_SESSION["loggedUser"]->getUserProfile()->getFirstName()!="-1" && $_SESSION["loggedUser"]->getUserProfile()->getFirstName()!=NULL) echo $_SESSION["loggedUser"]->getUserProfile()->getFirstName(); else echo "Not Set"; ?><h6>
+               <h6 class="mb-1">Last Name: <?php if($_SESSION["loggedUser"]->getUserProfile()->getLastName()!="-1" && $_SESSION["loggedUser"]->getUserProfile()->getLastName()!=NULL) echo $_SESSION["loggedUser"]->getUserProfile()->getLastName(); else echo "Not Set"; ?><h6>
                <h6 class="mb-1">DNI: <?php if($_SESSION["loggedUser"]->getUserProfile()->getDni()!="-1" && $_SESSION["loggedUser"]->getUserProfile()->getDni()!=NULL) echo $_SESSION["loggedUser"]->getUserProfile()->getDni(); else echo "Not Set"; ?><h6>
                <?php
                     }else{
                ?>
 
-               <h6 class="mb-1">Last Name: Not Set</h6>
                <h6 class="mb-1">First Name: Not Set</h6>
+               <h6 class="mb-1">Last Name: Not Set</h6>
                <h6 class="mb-1">DNI: Not Set</h6>
 
                <?php
@@ -37,7 +37,7 @@
                ?>
 
                <form>
-                    <input type="button" class="btn btn-dark mr-auto d-block" value="Change Info" onclick="window.location.href='<?php echo FRONT_ROOT."User/Login" ?> '" />
+                    <input type="button" class="btn btn-dark mr-auto d-block" value="Change Info" onclick="window.location.href='<?php echo FRONT_ROOT."User/ChangeUserProfile" ?> '" />
                </form> 
           </div>
      </section>
