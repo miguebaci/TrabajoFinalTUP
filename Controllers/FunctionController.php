@@ -94,17 +94,29 @@
                 }
                 
                 $functionDate = date_create($functionStartDate);
-                $functionEndDate = date_create($functionEndDate);                
-                
-                while($functionDate <= $functionEndDate) {
-                    $newFunction=new MovieFunction(0,$functionDate,$functionTime);
-                    $this->functionDAO->Add($newFunction, $idMovie, $idRoom);
-                    $functionDate =date_add($functionDate,date_interval_create_from_date_string("1 days"));//funcion de aumento
+                $functionEndDate = date_create($functionEndDate);               
+                if($functionDate<=$functionEndDate)
+                {
+                    while($functionDate <= $functionEndDate)
+                    {   $exists=$this->functionDAO->FunctionExist($functionDate, $functionTime);
+                        if(!$exists)
+                        {
+                            $newFunction=new MovieFunction(0,$functionDate,$functionTime);
+                            $this->functionDAO->Add($newFunction, $idMovie, $idRoom);
+                        }
+                        else{
+                            echo "<script> alert('Function already exists on date: ".$functionDate->format('Y-m-d')." at: ".$functionTime."');";
+                            echo "</script>";
+                        }
+                        $functionDate = date_add($functionDate, date_interval_create_from_date_string("1 days"));//funcion de aumento
+                    }
                 }
-        
-                
-        
-                echo "<script> alert('Function added');";
+                else
+                {
+                    echo "<script> alert('Function date incorrect, try a valid date');";
+                    echo "</script>";
+                    $this->ShowAddView();
+                }
             }else{
                 echo "<script> alert('Function error');";  
             }

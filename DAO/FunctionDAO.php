@@ -204,6 +204,49 @@
             }
         }
     
+        public function FunctionExist($date, $time){
+            try
+        {
+        $query = "SELECT function_date, function_time FROM ".$this->tableName;
+        $this->connection = Connection::GetInstance();
+        $resultSet = $this->connection->Execute($query);
+        $exists=false;
+        foreach ($resultSet as $row)
+            {        
+                    $functionTime = date_create($row["function_time"]);
+                    $functionDate = date_create($row["function_date"]);
+                if($functionDate == $date && $functionTime->format('H:i') == $time){
+                    return $exists = true;
+                }
+            }
+        return $exists;
+        }
+        catch(Exception $ex)
+        {
+           throw $ex;
+        }
+        }
+        public function GetFunctionByDateAndTime($date, $time)
+        {
+        try
+            {
+            $query = "SELECT * FROM ".$this->tableName. " WHERE function_date = '$date' AND function_time = '$time'";
+            $this->connection = Connection::GetInstance();
+            $resultSet = $this->connection->Execute($query);
+                foreach ($resultSet as $row)
+                        {               
+                            $movieFunction = new MovieFunction($row["idMovieFunction"],
+                            $row["function_date"],
+                            $row["function_time"]);
+                        }
+            return $movieFunction;
+            }
+        catch(Exception $ex)
+            {
+            throw $ex;
+            }
+
+        }
 
         public function GetRoomId($idFunction){
         try
@@ -212,10 +255,10 @@
         $this->connection = Connection::GetInstance();
         $resultSet = $this->connection->Execute($query);
         $idRoom=NULL;
-        foreach ($resultSet as $row)
-            {               
-                $idRoom = $row["idRoom"];
-            }
+            foreach ($resultSet as $row)
+                {               
+                    $idRoom = $row["idRoom"];
+                }
         return $idRoom;
         }
         catch(Exception $ex)
@@ -223,5 +266,6 @@
            throw $ex;
         }
     }
+
 }
 ?>
