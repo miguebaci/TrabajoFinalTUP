@@ -39,8 +39,8 @@
                          </div>
                          <div>
                               <div class="form-group">
-                              <button type="submit" name="button" class="btn btn-dark ml-auto d-block">Log in</button>
-                              <?php echo '<a class="btn btn-primary ml-auto d-block" href="' . htmlspecialchars($loginUrl) . '">Or log in with Facebook!</a>'; ?>
+                                   <button type="submit" name="button" class="btn btn-dark ml-auto d-block">Log in</button>
+                                   <?php echo '<a class="btn btn-primary ml-auto float-right" href="' . htmlspecialchars($loginUrl) . '">Or log in with Facebook!</a>'; ?>
                               </form>
                               </div>
                          </div>
