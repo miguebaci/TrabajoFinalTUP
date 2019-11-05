@@ -179,5 +179,20 @@
             else
                 echo "No logged user";
         }
+
+        public function UserProfile(){
+            if(isset($_SESSION["loggedUser"])){
+                if(isset($_SESSION["loggedUser"])){
+                    require_once(VIEWS_PATH."user-profile.php");
+                }else{
+                    echo "<script> alert('You need to be logged in to access this page');";  
+                    echo "window.location = '../index.php'; </script>";
+                }
+            }else{
+                echo "<script> alert('You need to be logged in to access this page');";  
+                echo "window.location = '../index.php'; </script>";
+            }
+        }
+
     }
 ?>
