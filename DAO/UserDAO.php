@@ -73,9 +73,6 @@
                 $parameters2["lastName"] = $last_name;
                 $parameters2["dni"] = -1;
 
-                var_dump($query2);
-                var_dump($parameters2);
-
                 $this->connection = Connection::GetInstance();
 
                 $this->connection->ExecuteNonQuery($query2, $parameters2);
@@ -111,7 +108,8 @@
                     $query2 ="SELECT UP.firstName,UP.lastName,UP.dni 
                             FROM ".$this->tableName. " U 
                             INNER JOIN ".$this->profileTable." UP
-                            ON U.idUser = UP.idUser";
+                            ON U.idUser = UP.idUser
+                            WHERE U.idUser=".$row["idUser"];
 
                     $this->connection = Connection::GetInstance();
 
@@ -119,6 +117,7 @@
 
                     if($resultSet2!=NULL){
                         $user->setUserProfile($resultSet2[0]["firstName"],$resultSet2[0]["lastName"],$resultSet2[0]["dni"]);
+                        $resultSet2=NULL;
                     }
                     array_push($this->userList, $user);
                 }
@@ -173,6 +172,25 @@
         private function getEmailID($email){
             $user=$this->emailVerification($email);
             return $user->getIdUser();
+        }
+
+        public function setNewPassword($password,$idUser){
+            try
+            {
+                $query = "UPDATE ".$this->tableName."
+                          SET password = :password 
+                          WHERE idUser= ".$idUser;
+                
+                $parameters["password"] = $password;
+
+                $this->connection = Connection::GetInstance();
+
+                $this->connection->ExecuteNonQuery($query, $parameters);
+            }
+            catch(Exception $ex)
+            {
+                throw $ex;
+            }
         }
 
     }
