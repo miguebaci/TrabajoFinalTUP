@@ -15,6 +15,11 @@
                </li>
                <?php
                     }else{
+                         ?>
+                              <li class="nav-item">
+                                   <a class="nav-link" href="<?php echo FRONT_ROOT ?>User/UserProfile">Your Profile</a>
+                              </li>
+                         <?php
                          if($_SESSION["loggedUser"]->getRole()=="Admin"){
                ?>
                <li class="nav-item dropdown">
