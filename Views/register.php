@@ -46,8 +46,8 @@
                          </div>
                          <div>
                               <div class="form-group">
-                              <button type="submit" name="button" class="btn btn-dark ml-auto d-block">Registro</button>
-                              <?php echo '<a class="btn btn-primary ml-auto d-block" href="' . htmlspecialchars($loginUrl) . '">Or Continue with Facebook!</a>'; ?>
+                              <button type="submit" name="button" class="btn btn-dark ml-auto d-block ">Registro</button>
+                              <?php echo '<a class="btn btn-primary ml-auto float-right" href="' . htmlspecialchars($loginUrl) . '">Or Continue with Facebook!</a>'; ?>
                               </div>
                          </div>
                     </div>
