@@ -46,7 +46,7 @@
         public function ShowGenreListView($idGenre)
         {
             $functionDAO = $this->functionDAO;
-            $functionList = $this->functionDAO->GetAllByGenre($idGenre);
+            $functionList = $functionDAO->GetAllByGenre($idGenre);
             $genreRepo = new GenreDAO();
             $movieDAO= new MovieDAO();
             require_once(VIEWS_PATH."movieFunction-genreList.php");

@@ -101,7 +101,7 @@
             {
                 $functionList = array();
 
-                $query = "SELECT * FROM ".$this->tableName. " F INNER JOIN ".$this->mxgTable." MXG ON F.idMovie = MXG.idMovie  WHERE idGenre = " .$idGenre;
+                $query = "SELECT * FROM ".$this->tableName." F INNER JOIN ".$this->mxgTable." MXG ON F.idMovie = MXG.idMovie  WHERE MXG.idGenre = ".$idGenre;
 
                 $this->connection = Connection::GetInstance();
 
