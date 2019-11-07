@@ -3,10 +3,6 @@
 
     use DAO\IMovieDAO as IMovieDAO;
     use Models\Movie as Movie;
-
-    use DAO\GenreDAO as GenreDAO;
-    use Models\Genre as Genre;
-
     use DAO\Connection as Connection;
 
     class MovieDAO implements IMovieDAO
@@ -14,11 +10,6 @@
         private $connection;
         private $tableName = "movie";
         private $mxgTable = "moviexgenre";
-        private $genreDAO;
-
-        public function __construct() {
-            $this->genreDAO=new GenreDAO();
-        }
 
         public function Add(Movie $movie)
         {
@@ -36,8 +27,6 @@
 
                 $this->connection->ExecuteNonQuery($query, $parameters);
 
-                $this->MXG($movie);
-
                 
             }
             catch(Exception $ex)
@@ -47,12 +36,12 @@
         }
 
 
-        public function MXG($movie){
-            foreach($movie->getGenre() as $genre){
+        public function MXG($idMovie, $genres){
+            foreach($genres as $idGenre){
                 $query = "INSERT INTO ".$this->mxgTable." (idMovie, idGenre) VALUES (:idMovie, :idGenre);";
 
-                $parameters["idMovie"]=$movie->getIdMovie();
-                $parameters["idGenre"]=$genre->getIdGenre();
+                $parameters["idMovie"]=$idMovie;
+                $parameters["idGenre"]=$idGenre;
 
                 $this->connection = Connection::GetInstance();
 
@@ -74,15 +63,12 @@
 
                 foreach ($resultSet as $row)
                 {   
-
-
                     $movie = new Movie(
                     $row["idMovie"],
                     $row["movieName"],
                     $row["movielanguage"],
                     $row["duration"],
-                    $row["poster_image"],
-                    $this->genreDAO->GetAllGenresByIds($this->genreDAO->GetIdGenreById($row["idMovie"])));
+                    $row["poster_image"]);
 
                     array_push($movieList, $movie);
                 }
@@ -113,8 +99,7 @@
                     $row["movieName"],
                     $row["movielanguage"],
                     $row["duration"],
-                    $row["poster_image"],
-                    $this->genreDAO->GetAllGenresByIds($this->genreDAO->GetIdGenreById($idMovie)));
+                    $row["poster_image"]);
                 }
 
                 return $movie;
@@ -123,6 +108,23 @@
             {
                 throw $ex;
             }
+        }
+
+        public function GetIdGenreById($idMovie){
+            $query= "SELECT MXG.idGenre
+                    FROM ".$this->mxgTable." MXG
+                    WHERE MXG.idMovie = ".$idMovie.";";
+                    
+                    $this->connection = Connection::GetInstance();
+
+                    $resultSet = $this->connection->Execute($query);
+
+                    $genreArray = array();
+                    foreach($resultSet as $row){
+                        array_push($genreArray, $row['idGenre']);
+                    }
+
+            return $genreArray;
         }
 
         public function UpdateAll(){
@@ -151,17 +153,16 @@
 
                 foreach($array as $thing => $movie){
                 
-                    $query = "SELECT idMovie FROM " .$this->tableName." WHERE idMovie = :idMovie";
-                    $parameters["idMovie"]=$movie['id'];
+                    $url_id = $movie['id'];
+                    $query = "SELECT idMovie FROM " .$this->tableName." WHERE idMovie ='$url_id'";
                     $this->connection = Connection::GetInstance();
                     $resultSet= NULL;
-                    $resultSet = $this->connection->Execute($query,$parameters);                
+                    $resultSet = $this->connection->Execute($query);                
                     
-                    $genres=$this->genreDAO->GetAllGenresByIds($movie['genre_ids']);
-
-                    $movies=new Movie($movie['id'],$movie['title'],$movie['original_language'],$this->RetrieveRuntime($movie['id']),$movie['poster_path'], $this->genreDAO->GetAllGenresByIds($movie['genre_ids']));
+                    $movies=new Movie($movie['id'],$movie['title'],$movie['original_language'],$this->RetrieveRuntime($movie['id']),$movie['poster_path']);
                     if($resultSet == NULL){
                         $this->Add($movies);
+                        $this->MXG($movies->getIdMovie(),$movie['genre_ids']);
                     }
                 
                 }

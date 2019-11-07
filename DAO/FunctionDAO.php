@@ -11,9 +11,10 @@
         private $connection;
         private $tableName = "moviefunction";
         private $movieTable ="movie";
+        private $tableRoom = "room";
         private $mxgTable= "movieXgenre";
 
-        public function Add(MovieFunction $movieFunction, $idMovie, $idRoom)
+        public function Add(MovieFunction $movieFunction)
         {
             try
             {
@@ -21,8 +22,8 @@
                 
                 $date = $movieFunction->getDate();
                 $date= $date->format("Y-m-d");
-                $parameters["idMovie"] = $idMovie;
-                $parameters["idRoom"] = $idRoom;
+                $parameters["idMovie"] = $movieFunction->getMovie();
+                $parameters["idRoom"] = $this->GetRoomId($movieFunction);
                 $parameters["function_date"] = $date;
                 $parameters["function_time"] = $movieFunction->getTime();
 
@@ -248,17 +249,18 @@
 
         }
 
-        public function GetRoomId($idFunction){
+    public function GetRoomId(MovieFunction $movieFunction){
         try
         {
-        $query = "SELECT idRoom FROM ".$this->tableName. " WHERE ". $this->tableName .".idMovieFunction ='$idFunction'";
+            $idFunction=$movieFunction->getIdFunction();
+        $query = "SELECT idRoom FROM ".$this->tableRoom." R INNER JOIN ". $this->tableName ." F ON R.idRoom = F.idRoom WHERE F.idMovieFunction = '$idFunction'; ";
         $this->connection = Connection::GetInstance();
         $resultSet = $this->connection->Execute($query);
         $idRoom=NULL;
-            foreach ($resultSet as $row)
-                {               
-                    $idRoom = $row["idRoom"];
-                }
+        foreach ($resultSet as $row)
+            {               
+                $idRoom = $row["idRoom"];
+            }
         return $idRoom;
         }
         catch(Exception $ex)
@@ -266,6 +268,5 @@
            throw $ex;
         }
     }
-
 }
 ?>

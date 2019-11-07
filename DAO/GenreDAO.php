@@ -9,7 +9,6 @@
     {
         private $connection;
         private $tableName = "genre";
-        private $mxgTable = "moviexgenre";
 
         public function Add(Genre $genre)
         {
@@ -120,45 +119,5 @@
                 throw $ex;
             }
         }
-
-        public function GetAllGenresByIds($genres){
-            try
-            {
-                $genreList=array();
-                foreach($genres as $idGenre){
-                    $query = "SELECT * FROM ".$this->tableName. " G
-                                WHERE G.idGenre = :idGenre";
-                    $parameters["idGenre"]=$idGenre;
-                    $this->connection = Connection::GetInstance();
-                    $resultSet = $this->connection->Execute($query,$parameters);
-                    $genre=NULL;
-                    foreach ($resultSet as $row)
-                        {   
-                            $genre = new Genre($row["idGenre"],$row["description"]);
-                        }
-                    array_push($genreList,$genre);
-                }
-                return $genreList;
-            }
-            catch(Exception $ex)
-            {
-                throw $ex;
-            }
-        }
-
-        public function GetIdGenreById($idMovie){
-            $query= "SELECT MXG.idGenre
-                    FROM ".$this->mxgTable." MXG
-                    WHERE MXG.idMovie = ".$idMovie.";";
-                    
-                    $this->connection = Connection::GetInstance();
-                    $resultSet = $this->connection->Execute($query);
-                    $genreArray = array();
-                    foreach($resultSet as $row){
-                        array_push($genreArray, $row['idGenre']);
-                    }
-            return $genreArray;
-        }
-
     }
 ?>
