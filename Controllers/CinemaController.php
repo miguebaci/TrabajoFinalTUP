@@ -26,7 +26,7 @@
 
         public function ShowListView()
         {
-            
+            require_once(VIEWS_PATH."validate-session-admin.php");
             $cinemaList = $this->cinemaDAO->GetAll();
             require_once(VIEWS_PATH."cinema-list.php");
             
