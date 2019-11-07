@@ -66,7 +66,7 @@
                     echo "window.location = '".FRONT_ROOT."User/Login'; </script>";
                 }
             }else{
-                echo "<script> alert('Erro');";
+                echo "<script> alert('Error');";
                 echo "window.location = '".FRONT_ROOT."User/Login'; </script>";
             }
         }
@@ -176,6 +176,7 @@
 
 
         public function LoggedUser(){
+            require_once(VIEWS_PATH."validate-session-admin.php");
             if(isset($_SESSION["loggedUser"]))
                 var_dump($_SESSION["loggedUser"]);
             else
@@ -183,34 +184,17 @@
         }
 
         public function UserProfile(){
-            if(isset($_SESSION["loggedUser"])){
-                if(isset($_SESSION["loggedUser"])){
-                    require_once(VIEWS_PATH."user-profile.php");
-                }else{
-                    echo "<script> alert('You need to be logged in to access this page');";  
-                    echo "window.location = '../index.php'; </script>";
-                }
-            }else{
-                echo "<script> alert('You need to be logged in to access this page');";  
-                echo "window.location = '../index.php'; </script>";
-            }
+            require_once(VIEWS_PATH."validate-session.php");
+            require_once(VIEWS_PATH."user-profile.php");
         }
 
         public function ChangePassword(){
-            if(isset($_SESSION["loggedUser"])){
-                if(isset($_SESSION["loggedUser"])){
-                    require_once(VIEWS_PATH."change-password.php");
-                }else{
-                    echo "<script> alert('You need to be logged in to access this page');";  
-                    echo "window.location = '../index.php'; </script>";
-                }
-            }else{
-                echo "<script> alert('You need to be logged in to access this page');";  
-                echo "window.location = '../index.php'; </script>";
-            }
+            require_once(VIEWS_PATH."validate-session.php");
+            require_once(VIEWS_PATH."change-password.php");
         }
 
         public function ChangePasswordConfirm(){
+            require_once(VIEWS_PATH."validate-session.php");
             if(isset($_POST)){
                 if($_SESSION["loggedUser"]->getPassword()==$_POST["oldPassword"]){
                     if($_POST["newPassword"]==$_POST["newPassword2"]){
@@ -233,20 +217,12 @@
         }
 
         public function ChangeUserProfile(){
-            if(isset($_SESSION["loggedUser"])){
-                if(isset($_SESSION["loggedUser"])){
-                    require_once(VIEWS_PATH."change-user-profile.php");
-                }else{
-                    echo "<script> alert('You need to be logged in to access this page');";  
-                    echo "window.location = '../index.php'; </script>";
-                }
-            }else{
-                echo "<script> alert('You need to be logged in to access this page');";  
-                echo "window.location = '../index.php'; </script>";
-            }
+            require_once(VIEWS_PATH."validate-session.php");
+            equire_once(VIEWS_PATH."change-user-profile.php");
         }
 
         public function changeUserProfileConfirm(){
+            require_once(VIEWS_PATH."validate-session.php");
             if(isset($_POST)){
                 $_SESSION["loggedUser"]->setUserProfile($_POST["lastName"],$_POST["firstName"],$_POST["dni"]);
                 $this->userDAO->setUserNewProfile($_SESSION["loggedUser"]->getUserProfile(),$_SESSION["loggedUser"]->getIdUser());
