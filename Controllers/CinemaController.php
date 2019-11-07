@@ -64,8 +64,9 @@
         {   
             require_once(VIEWS_PATH."validate-session-admin.php");
             if($_POST){
-                $updatedCinema=$_POST;
-                $cinema=$this->cinemaDAO->GetById($updatedCinema["idCinema"]);
+                $cinema=$_POST["cinema"];
+                $array=array()
+                $updatedCinema=new Cinema($cinema->getIdCinema(),$_POST["cinemaName"], $_POST["adress"], $_POST["ticketPrice"], $array);
                 $this->cinemaDAO->Update($cinema, $updatedCinema);
                 $this->ShowListView();
 
@@ -90,8 +91,7 @@
                 }
 
                 if(isset($_POST["edit_button"])){
-                    $idCinema=$_POST["edit_button"];
-                    $cinema=$this->cinemaDAO->GetById($idCinema);
+                    $cinema=$_POST["edit_button"];
                     require_once(VIEWS_PATH."cinema-mod.php");
 
                 }

@@ -26,13 +26,13 @@
                                              <td><?php echo $cinema->getAdress() ?></td>
                                              <td><?php echo $cinema->getTicketPrice() ?></td>
                                              <td> 
-                                                  <button type="submit" class ="btn btn-primary" name ='room_button' value='<?php echo $cinema->getIdCinema(); ?>'> Salas </button>
+                                                  <button type="submit" class ="btn btn-primary" name ='room_button' value='<?php echo $cinema; ?>'> Salas </button>
                                              </td>
                                              <td> 
-                                                  <button type="submit" class ="btn btn-warning" name ='edit_button' value='<?php echo $cinema->getIdCinema(); ?>'> Editar </button>
+                                                  <button type="submit" class ="btn btn-warning" name ='edit_button' value='<?php echo $cinema; ?>'> Editar </button>
                                              </td>
                                              <td> 
-                                                  <button type="submit" class ="btn btn-danger" name ='delete_button' value='<?php echo $cinema->getIdCinema(); ?>'> Eliminar </button>
+                                                  <button type="submit" class ="btn btn-danger" name ='delete_button' value='<?php echo $cinema; ?>'> Eliminar </button>
                                              </td>
                                         </tr>
                                    <?php

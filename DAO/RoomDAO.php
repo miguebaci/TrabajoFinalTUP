@@ -9,6 +9,7 @@
     {
         private $connection;
         private $tableName = "room";
+        private $tableFunction = "moviefunction";
 
         public function Add(CinemaRoom $cinemaRoom, $idCinema)
         {
@@ -52,6 +53,36 @@
                 }
 
                 return $roomList;
+            }
+            catch(Exception $ex)
+            {
+                throw $ex;
+            }
+        }
+
+        public function GetAllFunctions(CinemaRoom $room)
+        {
+            try
+            {
+                $functionList = array();
+                $roomId=$room->getIdCinemaRoom();
+
+                $query = "SELECT idMovieFunction, function_date, function_time FROM ".$this->tableFunction. "F INNER JOIN ".$this->tableName." R  ON F.idRoom = R.idRoom WHERE F.idRoom = '$roomId'" ;
+
+                $this->connection = Connection::GetInstance();
+
+                $resultSet = $this->connection->Execute($query);
+                
+                foreach ($resultSet as $row)
+                {               
+                    $movieFunction = new MovieFunction($row["idMovieFunction"],
+                    $row["function_date"],
+                    $row["function_time"]);
+
+                    array_push($functionList, $movieFunction);
+                }
+
+                return $functionList;
             }
             catch(Exception $ex)
             {
