@@ -15,19 +15,10 @@
         }
 
         public function UpdateGenres(){
-            if(isset($_SESSION["loggedUser"])){
-                if($_SESSION["loggedUser"]->getRole()=="Admin"){
-                    $this->genreDAO->UpdateAll();
-                    echo "<script> alert('Genres Updated');";  
-                    echo "window.location = '../index.php'; </script>";
-                }else{
-                    echo "<script> alert('You need to be admin to access this page');";  
-                    echo "window.location = '../index.php'; </script>";
-            }
-            }else{
-                echo "<script> alert('You need to be admin to access this page');";  
-                echo "window.location = '../index.php'; </script>";
-            }
+            require_once(VIEWS_PATH."validate-session-admin.php");
+            $this->genreDAO->UpdateAll();
+            echo "<script> alert('Genres Updated');";  
+            echo "window.location = '../index.php'; </script>";
         }
     }
 ?>

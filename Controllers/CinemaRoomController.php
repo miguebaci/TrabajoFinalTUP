@@ -29,37 +29,20 @@
 
         public function ShowAddView()
         {
-            if(isset($_SESSION["loggedUser"])){
-                if($_SESSION["loggedUser"]->getRole()=="Admin"){
-                    require_once(VIEWS_PATH."cinemaRoom-add.php");
-                }else{
-                    echo "<script> alert('You need to be admin to access this page');";  
-                    echo "window.location = '../index.php'; </script>";
-                }
-            }else{
-                echo "<script> alert('You need to be admin to access this page');";  
-                echo "window.location = '../index.php'; </script>";
-            }
+            require_once(VIEWS_PATH."validate-session-admin.php");
+            require_once(VIEWS_PATH."cinemaRoom-add.php");
         }
 
         public function ShowListView($idCinema)
         {
-            if(isset($_SESSION["loggedUser"])){
-                if($_SESSION["loggedUser"]->getRole()=="Admin"){
-                    $cinemaRoomList = $this->cinemaRoomDAO->GetAllByCinemaId($idCinema);
-                    require_once(VIEWS_PATH."cinemaRoom-list.php");
-                }else{
-                    echo "<script> alert('You need to be admin to access this page');";  
-                    echo "window.location = '../index.php'; </script>";
-                }
-            }else{
-                echo "<script> alert('You need to be admin to access this page');";  
-                echo "window.location = '../index.php'; </script>";
-            }
+            require_once(VIEWS_PATH."validate-session-admin.php");
+            $cinemaRoomList = $this->cinemaRoomDAO->GetAllByCinemaId($idCinema);
+            require_once(VIEWS_PATH."cinemaRoom-list.php");
         }
 
         public function Add()
         {   
+            require_once(VIEWS_PATH."validate-session-admin.php");
             if($_POST){
                 $idCinema="";
                 $roomName="";
@@ -88,6 +71,7 @@
 
         public function Update()
         {   
+            require_once(VIEWS_PATH."validate-session-admin.php");
             if($_POST){
                 $updatedRoom=$_POST;
                 $idCinema=$this->cinemaRoomDAO->GetCinemaId($updatedRoom["idRoom"]);
@@ -99,6 +83,7 @@
 
         public function Select()
         {   
+            require_once(VIEWS_PATH."validate-session-admin.php");
             if($_POST){
                 if(isset($_POST["add_button"])){
                     $idCinema=$_POST["add_button"];

@@ -29,22 +29,13 @@
 
         public function ShowAddView()
         {
-            if(isset($_SESSION["loggedUser"])){
-                if($_SESSION["loggedUser"]->getRole()=="Admin"){
-                    require_once(VIEWS_PATH."movieFunction-add.php");
-                }else{
-                    echo "<script> alert('You need to be admin to access this page');";  
-                    echo "window.location = '../index.php'; </script>";
-                }
-            }else{
-                echo "<script> alert('You need to be admin to access this page');";  
-                echo "window.location = '../index.php'; </script>";
-            }
-            
+            require_once(VIEWS_PATH."validate-session-admin.php");
+            require_once(VIEWS_PATH."movieFunction-add.php");
         }
 
         public function ShowGenreListView($idGenre)
         {
+            require_once(VIEWS_PATH."validate-session.php");
             $functionDAO = $this->functionDAO;
             $functionList = $functionDAO->GetAllByGenre($idGenre);
             $genreRepo = new GenreDAO();
@@ -54,25 +45,17 @@
 
         public function ShowListView($idRoom)
         {
-            if(isset($_SESSION["loggedUser"])){
-                if($_SESSION["loggedUser"]->getRole()=="Admin"){
-                    $functionDAO = $this->functionDAO;
-                    $functionList = $this->functionDAO->GetAllByRoomId($idRoom);
-                    $genreRepo = new GenreDAO();
-                    $movieDAO= new MovieDAO();
-                    require_once(VIEWS_PATH."movieFunction-list.php");
-                }else{
-                    echo "<script> alert('You need to be admin to access this page');";  
-                    echo "window.location = '../index.php'; </script>";
-                }
-            }else{
-                echo "<script> alert('You need to be admin to access this page');";  
-                echo "window.location = '../index.php'; </script>";
-            }
+            require_once(VIEWS_PATH."validate-session-admin.php");
+            $functionDAO = $this->functionDAO;
+            $functionList = $this->functionDAO->GetAllByRoomId($idRoom);
+            $genreRepo = new GenreDAO();
+            $movieDAO= new MovieDAO();
+            require_once(VIEWS_PATH."movieFunction-list.php");
         }
 
         public function Add()
         {   
+            require_once(VIEWS_PATH."validate-session-admin.php");
             if($_POST){
                 $idMovie="";
                 $idRoom="";
@@ -127,6 +110,7 @@
 
         public function Update()
         {   
+            require_once(VIEWS_PATH."validate-session-admin.php");
             if($_POST){
                 $updatedFunction=$_POST;
                 $idRoom=$this->functionDAO->GetCinemaRoomId($updatedFunction["idFunction"]);
@@ -138,6 +122,7 @@
 
         public function Select()
         {   
+            require_once(VIEWS_PATH."validate-session-admin.php");
             if($_POST){
                 if(isset($_POST["add_button"])){
                     $movieDAO= new MovieDAO();
