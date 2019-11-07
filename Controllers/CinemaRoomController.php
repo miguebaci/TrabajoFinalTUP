@@ -111,7 +111,6 @@
                     $movieDAO = new MovieDAO();
                     $genreRepo = new GenreDAO();
                     $idRoom=$_POST["function_button"];
-                    $room=$this->cinemaRoomDAO->GetById($idRoom);
                     $functionList=$functionDAO->GetAllByRoomId($idRoom);
                     require_once(VIEWS_PATH."moviefunction-list.php");
 

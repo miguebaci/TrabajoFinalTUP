@@ -74,7 +74,8 @@
             }else{
                 echo "<script> alert('Cinema error');";  
             }
-            echo "window.location = '../index.php'; </script>";
+            echo "</script>";
+            $this->ShowListView();
         }
 
         public function Update()
@@ -92,14 +93,18 @@
         {   
             if($_POST){
 
+                if(isset($_POST["add_button"])){
+                    $this->ShowAddView();
+                }
+
                 if(isset($_POST["room_button"])){
                     $idCinema=$_POST["room_button"];
                     $cinemaRoomDAO=new RoomDAO(); 
                     $cinema=$this->cinemaDAO->GetById($idCinema);
                     $cinemaRoomList=$cinemaRoomDAO->GetAllByCinemaId($idCinema);
                     require_once(VIEWS_PATH."cinemaRoom-list.php");
-
                 }
+
                 if(isset($_POST["edit_button"])){
                     $idCinema=$_POST["edit_button"];
                     $cinema=$this->cinemaDAO->GetById($idCinema);
