@@ -32,6 +32,12 @@
             require_once(VIEWS_PATH."validate-session-admin.php");
             require_once(VIEWS_PATH."movieFunction-add.php");
         }
+        public function ShowAddViewError($idRoomBackUp, $idMovieBackUp)
+        {   $idMovie=$idMovieBackUp;
+            $idRoom=$idRoomBackUp;
+            require_once(VIEWS_PATH."validate-session-admin.php");
+            require_once(VIEWS_PATH."movieFunction-add.php");
+        }
 
         public function ShowGenreListView($idGenre)
         {
@@ -81,7 +87,7 @@
                 if($functionDate<=$functionEndDate)
                 {
                     while($functionDate <= $functionEndDate)
-                    {   $exists=$this->functionDAO->FunctionExist($functionDate, $functionTime);
+                    {   $exists=$this->functionDAO->FunctionExist($idRoom,$functionDate, $functionTime);
                         if(!$exists)
                         {
                             $newFunction=new MovieFunction(0,$functionDate,$functionTime);
@@ -98,7 +104,7 @@
                 {
                     echo "<script> alert('Function date incorrect, try a valid date');";
                     echo "</script>";
-                    $this->ShowAddView();
+                    return $this->ShowAddViewError($idRoom, $idMovie);
                 }
             }else{
                 echo "<script> alert('Function error');";  

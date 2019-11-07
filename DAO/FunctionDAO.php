@@ -204,10 +204,10 @@
             }
         }
     
-        public function FunctionExist($date, $time){
+        public function FunctionExist($idRoom, $date, $time){
             try
         {
-        $query = "SELECT function_date, function_time FROM ".$this->tableName;
+        $query = "SELECT function_date, function_time FROM ".$this->tableName." WHERE idRoom ='$idRoom'";
         $this->connection = Connection::GetInstance();
         $resultSet = $this->connection->Execute($query);
         $exists=false;

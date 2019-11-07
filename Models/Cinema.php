@@ -10,12 +10,14 @@
         private $cinemaName;
         private $adress;
         private $ticketPrice;
+        private $cinemaRoomList;
 
-        public function __construct($idCinema,$cinemaName, $adress, $ticketPrice){
+        public function __construct($idCinema,$cinemaName, $adress, $ticketPrice, $cinemaRoomList){
             $this->idCinema=$idCinema;
             $this->cinemaName = $cinemaName;
             $this->adress = $adress;
             $this->ticketPrice = $ticketPrice;
+            $this->cinemaRoomList = $cinemaRoomList;
         }
         
         public function setIdCinema($idCinema){
@@ -55,6 +57,16 @@
         public function setTicketPrice($ticketPrice)
         {
             $this->ticketPrice = $ticketPrice;
+        }
+
+        public function getCinemaRoomList()
+        {
+            return $this->cinemaRoomList;
+        }
+
+        public function setCinemaRoomList($cinemaRoomList)
+        {
+            $this->cinemaRoomList = $cinemaRoomList;
         }
     }
 ?>

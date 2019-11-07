@@ -8,11 +8,13 @@
         private $idFunction;
         private $date;
         private $time;
+        private $movie;
 
-        public function __construct($idFunction, $date , $time){
+        public function __construct($idFunction, $date , $time, $movie){
             $this->idFunction = $idFunction;
             $this->date = $date;
             $this->time = $time;
+            $this->movie = $movie;
         }
 
         public function getIdFunction()
@@ -38,6 +40,16 @@
         public function setTime($time)
         {
             $this->time = $time;
+        }
+
+        public function getMovie()
+        {
+            return $this->movie;
+        }
+
+        public function setMovie($movie)
+        {
+            $this->movie = $movie;
         }
     }
 ?>

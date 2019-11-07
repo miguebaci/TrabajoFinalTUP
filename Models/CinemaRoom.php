@@ -9,11 +9,13 @@
      private $idCinemaRoom;
      private $roomName;
      private $totalCap;
+     private $functionList;
 
-     public function __construct($idCinemaRoom, $roomName, $totalCap){
+     public function __construct($idCinemaRoom, $roomName, $totalCap, $functionList){
          $this->idCinemaRoom=$idCinemaRoom;
          $this->roomName=$roomName;
          $this->totalCap = $totalCap;
+         $this->functionList = $functionList;
      }
      
      public function setIdCinemaRoom($idCinemaRoom){
@@ -43,5 +45,16 @@
      {
          $this->totalCap = $totalCap;
      }
+
+     public function getFunctionList()
+     {
+         return $this->functionList;
+     }
+
+     public function setFunctionList($functionList)
+     {
+         $this->functionList = $functionList;
+     }
+
  }
 ?>
