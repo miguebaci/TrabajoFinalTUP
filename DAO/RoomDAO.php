@@ -117,10 +117,9 @@
                 }
         }
 
-        public function GetById(CinemaRoom $cinemaRoom){
+        public function GetById($idRoom){
             try
             {
-            $idRoom=$cinemaRoom->getIdCinemaRoom();
             $query = "SELECT * FROM ".$this->tableName. " WHERE ". $this->tableName .".idRoom ='$idRoom'";
             $this->connection = Connection::GetInstance();
             $resultSet = $this->connection->Execute($query);

@@ -7,6 +7,6 @@
         function GetAll();
         function Delete(Cinema $cinema);
         function Update(Cinema $cinema, $updatedCinema);
-        function GetById(Cinema $cinema);
+        function GetById($idCinema);
     }
 ?>

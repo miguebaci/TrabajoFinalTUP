@@ -95,7 +95,7 @@
             }
         }
 
-        public function GetById(Movie $movie)
+        public function GetById($idMovie)
         {
             try
             {

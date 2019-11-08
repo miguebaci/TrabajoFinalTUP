@@ -15,7 +15,7 @@
                     </thead>
                     <tbody>
                     <form action="<?php echo FRONT_ROOT ?>CinemaRoom/Select" method="POST">
-                    <button type="submit" class ="btn btn-primary" name ='add_button' value='<?php $cinema; ?>'> Agregar Sala </button>
+                    <button type="submit" class ="btn btn-primary" name ='add_button' value='<?php $cinema->; ?>'> Agregar Sala </button>
                          <?php
                               foreach($cinemaRoomList as $room)
                               {
@@ -24,13 +24,13 @@
                                              <td><?php echo $room->getRoomName() ?></td>
                                              <td><?php echo $room->getTotalCap() ?></td>
                                              <td> 
-                                                  <button type="submit" class ="btn btn-primary" name ='function_button' value='<?php $room; ?>'> Funciones </button>
+                                                  <button type="submit" class ="btn btn-primary" name ='function_button' value='<?php $room->getIdCinemaRoom(); ?>'> Funciones </button>
                                              </td>
                                              <td> 
-                                                  <button type="submit" class ="btn btn-warning" name ='edit_button' value='<?php $room; ?>'> Editar </button>
+                                                  <button type="submit" class ="btn btn-warning" name ='edit_button' value='<?php $room->getIdCinemaRoom(); ?>'> Editar </button>
                                              </td>
                                              <td> 
-                                                  <button type="submit" class ="btn btn-danger" name ='delete_button' value='<?php $room; ?>'> Eliminar </button>
+                                                  <button type="submit" class ="btn btn-danger" name ='delete_button' value='<?php $room->getIdCinemaRoom(); ?>'> Eliminar </button>
                                              </td>
                                         </tr>
                                    <?php

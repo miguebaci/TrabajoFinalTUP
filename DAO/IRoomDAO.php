@@ -8,7 +8,7 @@
         function GetAllByCinemaId(Cinema $cinema);
         function Delete(CinemaRoom $cinemaRoom);
         function Update(CinemaRoom $cinemaRoom, $updatedRoom);
-        function GetById(CinemaRoom $cinemaRoom);
+        function GetById($idRoom);
         function GetCinemaId(CinemaRoom $cinemaRoom);
     }
 ?>

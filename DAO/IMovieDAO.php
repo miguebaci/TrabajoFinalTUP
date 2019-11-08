@@ -6,6 +6,8 @@
         function Add(Movie $movie);
         function MXG(Movie $movie);
         function GetAll();
+        function GetById($idMovie);
         function UpdateAll();
+        function RetrieveRuntime($id);
     }
 ?>
