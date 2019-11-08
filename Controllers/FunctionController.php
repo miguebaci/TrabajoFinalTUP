@@ -7,12 +7,14 @@
 
     use DAO\IRoomDAO as IRoomDAO;
     use DAO\RoomDAO as RoomDAO;
+    //use Models\CinemaRoom as CinemaRoom;
 
     use DAO\IFunctionDAO as IFunctionDAO;
     use DAO\FunctionDAO as FunctionDAO;
     
     use DAO\IGenreDAO as IGenreDAO;
     use DAO\GenreDAO as GenreDAO;
+    //use Models\Genre as Genre
 
     use Date as Date;
 
@@ -32,28 +34,28 @@
             require_once(VIEWS_PATH."validate-session-admin.php");
             require_once(VIEWS_PATH."movieFunction-add.php");
         }
-        public function ShowAddViewError($idRoomBackUp, $idMovieBackUp)
-        {   $idMovie=$idMovieBackUp;
-            $idRoom=$idRoomBackUp;
+        public function ShowAddViewError(CinemaRoom $room, Movie $movie)
+        {   $idRoom=$room->getIdCinemaRoom();
+            $idMovie=$movie->getIdMovie();
             require_once(VIEWS_PATH."validate-session-admin.php");
             require_once(VIEWS_PATH."movieFunction-add.php");
         }
 
-        public function ShowGenreListView($idGenre)
+        public function ShowGenreListView(Genre $genre)
         {
             require_once(VIEWS_PATH."validate-session.php");
             $functionDAO = $this->functionDAO;
-            $functionList = $functionDAO->GetAllByGenre($idGenre);
+            $functionList = $functionDAO->GetAllByGenre($genre);
             $genreRepo = new GenreDAO();
             $movieDAO= new MovieDAO();
             require_once(VIEWS_PATH."movieFunction-genreList.php");
         }
 
-        public function ShowListView($idRoom)
+        public function ShowListView(CinemaRoom $room)
         {
             require_once(VIEWS_PATH."validate-session-admin.php");
             $functionDAO = $this->functionDAO;
-            $functionList = $this->functionDAO->GetAllByRoomId($idRoom);
+            $functionList = $this->functionDAO->GetAllByRoomId($room);
             $genreRepo = new GenreDAO();
             $movieDAO= new MovieDAO();
             require_once(VIEWS_PATH."movieFunction-list.php");
@@ -112,18 +114,6 @@
             echo "</script>";
             $this->ShowListView($idRoom);
 
-        }
-
-        public function Update()
-        {   
-            require_once(VIEWS_PATH."validate-session-admin.php");
-            if($_POST){
-                $updatedFunction=$_POST;
-                $idRoom=$this->functionDAO->GetCinemaRoomId($updatedFunction["idFunction"]);
-                $function=$this->functionDAO->GetById($updatedFunction["idFunction"]);
-                $this->functionDAO->Update($function, $updatedFunction);
-                $this->ShowListView($idRoom);
-            }
         }
 
         public function Select()

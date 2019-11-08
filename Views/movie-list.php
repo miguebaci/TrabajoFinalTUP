@@ -22,9 +22,9 @@
                                              <td><?php echo $movie->getMovieName() ?></td>
                                              <td><?php echo $movie->getLanguage() ?></td>
                                              <td><?php echo $movie->getDuration() ?></td>
-                                             <td><?php $genreArray= $this->movieDAO->GetIdGenreById($movie->getIdMovie());
+                                             <td><?php $genreArray= $movie->getGenre();
                                                   foreach($genreArray as $genres) {
-                                                  echo $genreRepo->GetById($genres)->getDescription();
+                                                       echo $genres->getDescription();
                                                   if(next($genreArray)){
                                                        echo "/";
                                                   } } ?></td>

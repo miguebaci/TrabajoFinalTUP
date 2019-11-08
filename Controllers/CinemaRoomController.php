@@ -108,11 +108,11 @@
 
                 }
                 else if(isset($_POST["delete_button"])){
-                    $idRoom=$_POST["delete_button"];
-                    $idCinema=$this->cinemaRoomDAO->GetCinemaId($idRoom);
-                    $room=$this->cinemaRoomDAO->GetById($idRoom);
+                    $room=$_POST["delete_button"];
+                    $cinema=$this->cinemaRoomDAO->GetCinemaId($room);
+                    $room=$this->cinemaRoomDAO->GetById($room);
                     $this->cinemaRoomDAO->Delete($room);
-                    $this->ShowListView($idCinema);
+                    $this->ShowListView($cinema);
                     
                 }
         }

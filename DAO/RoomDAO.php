@@ -9,15 +9,14 @@
     {
         private $connection;
         private $tableName = "room";
-        private $tableFunction = "moviefunction";
 
-        public function Add(CinemaRoom $cinemaRoom, $idCinema)
+        public function Add(CinemaRoom $cinemaRoom, Cinema $cinema)
         {
             try
             {
                 $query = "INSERT INTO ".$this->tableName." (idCinema, roomName, totalCap) VALUES (:idCinema, :roomName, :totalCap);";
                 
-                $parameters["idCinema"] = $idCinema;
+                $parameters["idCinema"] = $cinema->getIdCinema();
                 $parameters["roomName"] = $cinemaRoom->getRoomName();
                 $parameters["totalCap"] = $cinemaRoom->getTotalCap();
 
@@ -59,43 +58,13 @@
                 throw $ex;
             }
         }
-
-        public function GetAllFunctions(CinemaRoom $room)
-        {
-            try
-            {
-                $functionList = array();
-                $roomId=$room->getIdCinemaRoom();
-
-                $query = "SELECT idMovieFunction, function_date, function_time FROM ".$this->tableFunction. "F INNER JOIN ".$this->tableName." R  ON F.idRoom = R.idRoom WHERE F.idRoom = '$roomId'" ;
-
-                $this->connection = Connection::GetInstance();
-
-                $resultSet = $this->connection->Execute($query);
-                
-                foreach ($resultSet as $row)
-                {               
-                    $movieFunction = new MovieFunction($row["idMovieFunction"],
-                    $row["function_date"],
-                    $row["function_time"]);
-
-                    array_push($functionList, $movieFunction);
-                }
-
-                return $functionList;
-            }
-            catch(Exception $ex)
-            {
-                throw $ex;
-            }
-        }
         
-        public function GetAllByCinemaId($idCinema)
+        public function GetAllByCinemaId(Cinema $cinema)
         {
             try
             {
                 $roomList = array();
-
+                $idCinema = $cinema->getIdCinema();
                 $query = "SELECT * FROM ".$this->tableName. " WHERE ".$this->tableName.".idCinema = ".$idCinema;
 
                 $this->connection = Connection::GetInstance();
@@ -148,9 +117,10 @@
                 }
         }
 
-        public function GetById($idRoom){
+        public function GetById(CinemaRoom $cinemaRoom){
             try
             {
+            $idRoom=$cinemaRoom->getIdCinemaRoom();
             $query = "SELECT * FROM ".$this->tableName. " WHERE ". $this->tableName .".idRoom ='$idRoom'";
             $this->connection = Connection::GetInstance();
             $resultSet = $this->connection->Execute($query);
@@ -170,9 +140,10 @@
         }
     
 
-        public function GetCinemaId($idRoom){
+        public function GetCinemaId(CinemaRoom $cinemaRoom){
         try
         {
+        $idRoom=$cinemaRoom->getIdCinemaRoom();
         $query = "SELECT idCinema FROM ".$this->tableName. " WHERE ". $this->tableName .".idRoom ='$idRoom'";
         $this->connection = Connection::GetInstance();
         $resultSet = $this->connection->Execute($query);

@@ -23,16 +23,16 @@
                                    $movie = $functionDAO->GetMovieByFunctionId($function->getIdFunction());
                                    ?>
                                         <tr>
-                                             <td><?php echo $movie->getMovieName() ?></td>
-                                             <td><?php echo $movie->getLanguage() ?></td>
-                                             <td><?php echo $movie->getDuration() ?></td>
-                                             <td><?php $genreArray= $movieDAO->GetIdGenreById($movie->getIdMovie());
+                                             <td><?php echo $function->movie->getMovieName() ?></td>
+                                             <td><?php echo $function->movie->getLanguage() ?></td>
+                                             <td><?php echo $function->movie->getDuration() ?></td>
+                                             <td><?php $genreArray= $function->movie->getGenre();
                                                   foreach($genreArray as $genres) {
-                                                  echo $genreRepo->GetById($genres)->getDescription();
+                                                  echo $genres->getDescription();
                                                   if(next($genreArray)){
-                                                       echo "/";
+                                                       echo "/ ";
                                                   } } ?></td>
-                                             <td><?php echo "<".POSTER_ROOT . $movie->getImage()." width='180' height='240'>" ?></td>
+                                             <td><?php echo "<".POSTER_ROOT . $function->movie->getImage()." width='180' height='240'>" ?></td>
                                              <td><?php echo $function->getDate() ?></td>
                                              <td><?php echo $function->getTime() ?></td>
                                         </tr>

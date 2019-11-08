@@ -9,7 +9,6 @@
     {
         private $connection;
         private $tableName = "cinema";
-        private $tableRoom = "room";
 
         public function Add(Cinema $cinema)
         {
@@ -60,34 +59,6 @@
                 throw $ex;
             }
         }
-
-        public function GetAllRooms(Cinema $cinema)
-        {
-            try
-            {
-                $roomList = array();
-                $idCinema=$cinema->getIdCinema();
-                $query = "SELECT idRoom, roomName, totalCap FROM ".$this->tableRoom. "R INNER JOIN ".$this->tableName." ON C.idCinema = R.idCinema WHERE C.idCinema = ".$idCinema;
-
-                $this->connection = Connection::GetInstance();
-
-                $resultSet = $this->connection->Execute($query);
-                
-                foreach ($resultSet as $row)
-                {               
-                    $cinemaRoom = new CinemaRoom($row["idRoom"],
-                    $row["roomName"],
-                    $row["totalCap"]);
-
-                    array_push($roomList, $cinemaRoom);
-                }
-                return $roomList;
-            }
-            catch(Exception $ex)
-            {
-                throw $ex;
-            }
-        }
         
         public function Delete(Cinema $cinema)
         {   
@@ -120,9 +91,10 @@
                 }
         }
 
-        public function GetById($idCinema){
+        public function GetById(Cinema $cinema){
             try
             {
+                $idCinema=$cinema->getIdCinema();
             $query = "SELECT * FROM ".$this->tableName. " WHERE ". $this->tableName .".idCinema ='$idCinema'";
             $this->connection = Connection::GetInstance();
             $resultSet = $this->connection->Execute($query);
