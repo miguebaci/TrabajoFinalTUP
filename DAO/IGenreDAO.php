@@ -5,7 +5,9 @@
     {
         function Add(Genre $genre);
         function GetAll();
-        function GetById($idGenre);
         function UpdateAll();
+        function GetById(Genre $genre);
+        function GetAllGenresByIds($genres);
+        function GetIdGenreById($idMovie);
     }
 ?>

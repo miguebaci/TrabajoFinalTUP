@@ -48,8 +48,8 @@
                 if(isset($_POST["ticketPrice"])){
                     $ticketPrice=$_POST["ticketPrice"];
                 }
-        
-                $newCinema=new Cinema(0,$cinemaName,$adress,$ticketPrice);
+                $array=array();
+                $newCinema=new Cinema(0,$cinemaName,$adress,$ticketPrice,$array);
                 $this->cinemaDAO->Add($newCinema);
         
                 echo "<script> alert('Cinema added');";
@@ -94,11 +94,21 @@
 
                 }
                 else if(isset($_POST["delete_button"])){
-                    $cinema=$_POST["delete_button"];
+                    var_dump($_POST["delete_button"]);
+
+                    $cinema =$this->jsonDecode($_POST["delete_button"]);
                     $this->cinemaDAO->Delete($cinema);
                     $this->ShowListView();
                 }
+            }
         }
+
+        public function jsonDecode($json){
+            $arrayJson=json_decode($json, true);
+            foreach ($arrayJson as $value) {
+                $cinema=new Cinema($value["idCinema"], $value["cinemaName"], $value["adress"], $value["ticketPrice"]);
+            }
+            return $cinema;
         }
     }
 ?>
