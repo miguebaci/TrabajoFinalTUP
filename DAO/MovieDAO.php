@@ -3,6 +3,10 @@
 
     use DAO\IMovieDAO as IMovieDAO;
     use Models\Movie as Movie;
+
+    use DAO\GenreDAO as GenreDAO;
+    use Models\Genre as Genre;
+
     use DAO\Connection as Connection;
 
     class MovieDAO implements IMovieDAO
@@ -10,6 +14,11 @@
         private $connection;
         private $tableName = "movie";
         private $mxgTable = "moviexgenre";
+        private $genreDAO;
+
+        public function __construct() {
+            $this->genreDAO=new GenreDAO();
+        }
 
         public function Add(Movie $movie)
         {
@@ -27,6 +36,8 @@
 
                 $this->connection->ExecuteNonQuery($query, $parameters);
 
+                $this->MXG($movie);
+
                 
             }
             catch(Exception $ex)
@@ -36,12 +47,12 @@
         }
 
 
-        public function MXG($idMovie, $genres){
-            foreach($genres as $idGenre){
+        public function MXG(Movie $movie){
+            foreach($movie->getGenre() as $genre){
                 $query = "INSERT INTO ".$this->mxgTable." (idMovie, idGenre) VALUES (:idMovie, :idGenre);";
 
-                $parameters["idMovie"]=$idMovie;
-                $parameters["idGenre"]=$idGenre;
+                $parameters["idMovie"]=$movie->getIdMovie();
+                $parameters["idGenre"]=$genre->getIdGenre();
 
                 $this->connection = Connection::GetInstance();
 
@@ -63,12 +74,15 @@
 
                 foreach ($resultSet as $row)
                 {   
+
+
                     $movie = new Movie(
                     $row["idMovie"],
                     $row["movieName"],
                     $row["movielanguage"],
                     $row["duration"],
-                    $row["poster_image"]);
+                    $row["poster_image"],
+                    $this->genreDAO->GetAllGenresByIds($this->genreDAO->GetIdGenreById($row["idMovie"])));
 
                     array_push($movieList, $movie);
                 }
@@ -81,11 +95,12 @@
             }
         }
 
-        public function GetById($idMovie)
+        public function GetById(Movie $movie)
         {
             try
             {
-
+                $idMovie=$movie->getIdMovie();
+                
                 $query = "SELECT * FROM ".$this->tableName." WHERE idMovie ='$idMovie'";
 
                 $this->connection = Connection::GetInstance();
@@ -99,7 +114,8 @@
                     $row["movieName"],
                     $row["movielanguage"],
                     $row["duration"],
-                    $row["poster_image"]);
+                    $row["poster_image"],
+                    $this->genreDAO->GetAllGenresByIds($this->genreDAO->GetIdGenreById($movie)));
                 }
 
                 return $movie;
@@ -108,23 +124,6 @@
             {
                 throw $ex;
             }
-        }
-
-        public function GetIdGenreById($idMovie){
-            $query= "SELECT MXG.idGenre
-                    FROM ".$this->mxgTable." MXG
-                    WHERE MXG.idMovie = ".$idMovie.";";
-                    
-                    $this->connection = Connection::GetInstance();
-
-                    $resultSet = $this->connection->Execute($query);
-
-                    $genreArray = array();
-                    foreach($resultSet as $row){
-                        array_push($genreArray, $row['idGenre']);
-                    }
-
-            return $genreArray;
         }
 
         public function UpdateAll(){
@@ -153,16 +152,17 @@
 
                 foreach($array as $thing => $movie){
                 
-                    $url_id = $movie['id'];
-                    $query = "SELECT idMovie FROM " .$this->tableName." WHERE idMovie ='$url_id'";
+                    $query = "SELECT idMovie FROM " .$this->tableName." WHERE idMovie = :idMovie";
+                    $parameters["idMovie"]=$movie['id'];
                     $this->connection = Connection::GetInstance();
                     $resultSet= NULL;
-                    $resultSet = $this->connection->Execute($query);                
+                    $resultSet = $this->connection->Execute($query,$parameters);                
                     
-                    $movies=new Movie($movie['id'],$movie['title'],$movie['original_language'],$this->RetrieveRuntime($movie['id']),$movie['poster_path']);
+                    $genres=$this->genreDAO->GetAllGenresByIds($movie['genre_ids']);
+
+                    $movies=new Movie($movie['id'],$movie['title'],$movie['original_language'],$this->RetrieveRuntime($movie['id']),$movie['poster_path'], $this->genreDAO->GetAllGenresByIds($movie['genre_ids']));
                     if($resultSet == NULL){
                         $this->Add($movies);
-                        $this->MXG($movies->getIdMovie(),$movie['genre_ids']);
                     }
                 
                 }
