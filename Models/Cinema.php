@@ -12,12 +12,12 @@
         private $ticketPrice;
         private $cinemaRoomList;
 
-        public function __construct($idCinema,$cinemaName, $adress, $ticketPrice, $cinemaRoomList){
+        public function __construct($idCinema,$cinemaName, $adress, $ticketPrice){
             $this->idCinema=$idCinema;
             $this->cinemaName = $cinemaName;
             $this->adress = $adress;
             $this->ticketPrice = $ticketPrice;
-            $this->cinemaRoomList = $cinemaRoomList;
+            $this->cinemaRoomList = array();
         }
         
         public function setIdCinema($idCinema){

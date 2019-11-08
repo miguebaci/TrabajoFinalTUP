@@ -9,7 +9,7 @@
                     <div class="row">                         
                          <div class="col-lg-4">
                               <div class="form-group">
-                              <input type="hidden" name="room" value="<?php echo $room;?>">
+                              <input type="hidden" name="room" value="<?php $room;?>">
                                    <label for="">Nombre</label>
                                    <input type="text" name="roomName" value="<?php echo $room->getRoomName();?>" class="form-control">
                               </div>

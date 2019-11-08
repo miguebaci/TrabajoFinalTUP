@@ -6,8 +6,8 @@
           <div class="container">
                <h2 class="mb-4">Agregar Funcion</h2>
                <form action="<?php echo FRONT_ROOT ?>Function/Add" method="post" class="bg-light-alpha p-5">
-               <input type="hidden" name="room" value="<?php echo $room;?>">
-               <input type="hidden" name="movie" value="<?php echo $movie;?>">
+               <input type="hidden" name="room" value="<?php $room;?>">
+               <input type="hidden" name="movie" value="<?php $movie;?>">
                     <div class="row">                         
                          <div class="col-lg-4">
                               <div class="form-group">

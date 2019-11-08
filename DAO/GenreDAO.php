@@ -147,10 +147,9 @@
             }
         }
 
-        public function GetIdGenreById(Movie $movie){
+        public function GetIdGenreById($idMovie){
             try
             {
-                $idMovie=$movie->getIdMovie();
                 $query= "SELECT MXG.idGenre FROM ".$this->mxgTable." MXG WHERE MXG.idMovie = ".$idMovie.";";
                 $this->connection = Connection::GetInstance();
                 $resultSet = $this->connection->Execute($query);

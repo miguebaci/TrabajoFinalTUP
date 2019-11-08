@@ -11,11 +11,11 @@
      private $totalCap;
      private $functionList;
 
-     public function __construct($idCinemaRoom, $roomName, $totalCap, $functionList){
+     public function __construct($idCinemaRoom, $roomName, $totalCap){
          $this->idCinemaRoom=$idCinemaRoom;
          $this->roomName=$roomName;
          $this->totalCap = $totalCap;
-         $this->functionList = $functionList;
+         $this->functionList = array();
      }
      
      public function setIdCinemaRoom($idCinemaRoom){
