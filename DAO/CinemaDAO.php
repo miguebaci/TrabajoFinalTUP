@@ -3,6 +3,7 @@
 
     use DAO\ICinemaDAO as ICinemaDAO;
     use Models\Cinema as Cinema;
+    use Models\CinemaRoom as CinemaRoom;
     use DAO\Connection as Connection;
 
     class CinemaDAO implements ICinemaDAO
@@ -43,11 +44,12 @@
                 $resultSet = $this->connection->Execute($query);
                 
                 foreach ($resultSet as $row)
-                {               
+                {   $roomList=$this->GetRoomList($row["idCinema"]);
                     $cinema = new Cinema($row["idCinema"],
                     $row["cinemaName"],
                     $row["adress"],
-                    $row["ticketPrice"]);
+                    $row["ticketPrice"],
+                    $roomList);
 
                     array_push($cinemaList, $cinema);
                 }
@@ -91,20 +93,20 @@
                 }
         }
 
-        public function GetById(Cinema $cinema){
+        public function GetById($idCinema){
             try
             {
-                $idCinema=$cinema->getIdCinema();
             $query = "SELECT * FROM ".$this->tableName. " WHERE ". $this->tableName .".idCinema ='$idCinema'";
             $this->connection = Connection::GetInstance();
             $resultSet = $this->connection->Execute($query);
             $cinema=NULL;
             foreach ($resultSet as $row)
-                {               
+                {   $roomList=$this->GetRoomList($row["idCinema"]);
                     $cinema = new Cinema($row["idCinema"],
                     $row["cinemaName"],
                     $row["adress"],
-                    $row["ticketPrice"]);
+                    $row["ticketPrice"],
+                    $roomList);
                 }
             return $cinema;
             }
@@ -113,5 +115,32 @@
                throw $ex;
             }
         }
+
+        public function GetRoomList($idCinema){
+            try
+            {
+                $roomList = array();
+                $query = "SELECT * FROM room WHERE room.idCinema = ".$idCinema;
+
+                $this->connection = Connection::GetInstance();
+
+                $resultSet = $this->connection->Execute($query);
+                
+                foreach ($resultSet as $row)
+                {               
+                    $cinemaRoom = new CinemaRoom($row["idRoom"],
+                    $row["roomName"],
+                    $row["totalCap"]);
+
+                    array_push($roomList, $cinemaRoom);
+                }
+                return $roomList;
+            }
+            catch(Exception $ex)
+            {
+                throw $ex;
+            }
+        }
+
     }
 ?>

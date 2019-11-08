@@ -65,7 +65,7 @@
             require_once(VIEWS_PATH."validate-session-admin.php");
             if($_POST){
                 $updatedCinema=$_POST;
-                $cinema=$updatedCinema["cinema"];
+                $cinema=$this->cinemaDAO->GetById($_POST["idCinema"]);
                 $this->cinemaDAO->Update($cinema, $updatedCinema);
                 $this->ShowListView();
 
@@ -82,33 +82,30 @@
                 }
 
                 if(isset($_POST["room_button"])){
-                    $cinema=$_POST["room_button"];
-                    $cinemaRoomDAO=new RoomDAO();
-                    $cinemaRoomList=$cinemaRoomDAO->GetAllByCinemaId($cinema);
+                    $cinema=$this->cinemaDAO->GetById($_POST["room_button"]);
+                    $cinemaRoomList=$cinema->cinemaRoomList;
                     require_once(VIEWS_PATH."cinemaRoom-list.php");
                 }
 
                 if(isset($_POST["edit_button"])){
-                    $cinema=$_POST["edit_button"];
+                    $cinema=$this->cinemaDAO->GetById($_POST["edit_button"]);
                     require_once(VIEWS_PATH."cinema-mod.php");
 
                 }
                 else if(isset($_POST["delete_button"])){
-                    var_dump($_POST["delete_button"]);
-
-                    $cinema =$this->jsonDecode($_POST["delete_button"]);
+                    $cinema=$this->cinemaDAO->GetById($_POST["delete_button"]);
                     $this->cinemaDAO->Delete($cinema);
                     $this->ShowListView();
                 }
             }
         }
 
-        public function jsonDecode($json){
+        /*public function jsonDecode($json){
             $arrayJson=json_decode($json, true);
             foreach ($arrayJson as $value) {
                 $cinema=new Cinema($value["idCinema"], $value["cinemaName"], $value["adress"], $value["ticketPrice"]);
             }
             return $cinema;
-        }
+        }*/
     }
 ?>

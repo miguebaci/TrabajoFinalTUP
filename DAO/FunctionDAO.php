@@ -127,11 +127,10 @@
             }
         }
 
-        public function GetMovieByFunctionId(MovieFunction $movieFunction)
+        public function GetMovieByFunctionId($idFunction)
         {
             try
             {
-                $idFunction=$function->getIdFunction();
                 $query = "SELECT M.idMovie, M.movieName, M.movielanguage, M.duration, M.poster_image FROM ".$this->movieTable." M INNER JOIN ".$this->tableName." F ON M.idMovie = F.IdMovie   WHERE F.idMovieFunction = '$idFunction'";
 
                 $this->connection = Connection::GetInstance();
@@ -171,19 +170,19 @@
             }
         }
 
-        public function GetById(MovieFunction $function){
+        public function GetById($idFunction){
             try
             {
-            $idFunction=$function->getIdFunction();
             $query = "SELECT * FROM ".$this->tableName. " WHERE ". $this->tableName .".idMovieFunction ='$idFunction'";
             $this->connection = Connection::GetInstance();
             $resultSet = $this->connection->Execute($query);
             $movieFunction=NULL;
             foreach ($resultSet as $row)
-                {               
+                {   $movie=$this->GetMovieByFunctionId($idFunction);
                     $movieFunction = new MovieFunction($row["idMovieFunction"],
                     $row["function_date"],
-                    $row["function_time"]);
+                    $row["function_time"],
+                    $movie);
                 }
             return $movieFunction;
             }
