@@ -24,13 +24,13 @@
                                              <td><?php echo $room->getRoomName() ?></td>
                                              <td><?php echo $room->getTotalCap() ?></td>
                                              <td> 
-                                                  <button type="submit" class ="btn btn-primary" name ='function_button' value='<?php $room->getIdCinemaRoom(); ?>'> Funciones </button>
+                                                  <button type="submit" class ="btn btn-primary" name ='function_button' value='<?php echo $room->getIdCinemaRoom(); ?>'> Funciones </button>
                                              </td>
                                              <td> 
-                                                  <button type="submit" class ="btn btn-warning" name ='edit_button' value='<?php $room->getIdCinemaRoom(); ?>'> Editar </button>
+                                                  <button type="submit" class ="btn btn-warning" name ='edit_button' value='<?php echo $room->getIdCinemaRoom(); ?>'> Editar </button>
                                              </td>
                                              <td> 
-                                                  <button type="submit" class ="btn btn-danger" name ='delete_button' value='<?php $room->getIdCinemaRoom(); ?>'> Eliminar </button>
+                                                  <button type="submit" class ="btn btn-danger" name ='delete_button' value='<?php echo $room->getIdCinemaRoom(); ?>'> Eliminar </button>
                                              </td>
                                         </tr>
                                    <?php
