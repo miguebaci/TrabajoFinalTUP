@@ -48,9 +48,8 @@
                     $cinema = new Cinema($row["idCinema"],
                     $row["cinemaName"],
                     $row["adress"],
-                    $row["ticketPrice"],
-                    $roomList);
-
+                    $row["ticketPrice"]);
+                    $cinema->setCinemaRoomList($roomList);
                     array_push($cinemaList, $cinema);
                 }
 
@@ -105,8 +104,8 @@
                     $cinema = new Cinema($row["idCinema"],
                     $row["cinemaName"],
                     $row["adress"],
-                    $row["ticketPrice"],
-                    $roomList);
+                    $row["ticketPrice"]);
+                    $cinema->setCinemaRoomList($roomList);
                 }
             return $cinema;
             }

@@ -1,6 +1,7 @@
 <?php
     namespace DAO;
     use Models\CinemaRoom as CinemaRoom;
+    use Models\Cinema as Cinema;
     interface IRoomDAO
     {
         function Add(CinemaRoom $cinemaRoom, Cinema $cinema);
