@@ -4,11 +4,13 @@
     use DAO\IRoomDAO as IRoomDAO;
     use Models\CinemaRoom as CinemaRoom;
     use DAO\Connection as Connection;
+    use Models\Cinema as Cinema;
 
     class RoomDAO implements IRoomDAO
     {
         private $connection;
         private $tableName = "room";
+        private $cinemaTable = "cinema";
 
         public function Add(CinemaRoom $cinemaRoom, Cinema $cinema)
         {
@@ -157,6 +159,27 @@
         {
            throw $ex;
         }
+    }
+        public function GetCinema($idCinema){
+            try
+            {
+            $query = "SELECT * FROM ". $this->cinemaTable. " C WHERE C.idCinema = ".$idCinema."";
+            $this->connection = Connection::GetInstance();
+            $resultSet = $this->connection->Execute($query);
+            $cinema=NULL;
+            foreach ($resultSet as $row)
+                {   $cinema = new Cinema($row["idCinema"],
+                    $row["cinemaName"],
+                    $row["adress"],
+                    $row["ticketPrice"]);
+                }
+                var_dump($cinema);
+            return $cinema;
+            }
+            catch(Exception $ex)
+            {
+               throw $ex;
+            }
     }
 }
 ?>

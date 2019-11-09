@@ -9,7 +9,7 @@
                     <div class="row">                         
                          <div class="col-lg-4">
                               <div class="form-group">
-                              <input type="hidden" name="idCinema" value="<?php $cinema->getIdCinema();?>">
+                              <input type="hidden" name="idCinema" value="<?php echo $cinema->getIdCinema();?>">
                                    <label for="">Nombre</label>
                                    <input type="text" name="cinemaName" value="<?php echo $cinema->getCinemaName();?>" class="form-control">
                               </div>

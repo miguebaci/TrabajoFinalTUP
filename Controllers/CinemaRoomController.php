@@ -87,6 +87,7 @@
             if($_POST){
                 if(isset($_POST["add_button"])){
                     $idCinema=$_POST["add_button"];
+                    $cinema=$this->cinemaRoomDAO->GetCinema($idCinema);
                     require_once(VIEWS_PATH."cinemaRoom-add.php");
 
                 }
