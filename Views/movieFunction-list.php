@@ -18,7 +18,7 @@
                     </thead>
                     <tbody>
                     <form action="<?php echo FRONT_ROOT ?>Function/Select" method="POST">
-                    <button type="submit" class ="btn btn-primary" name ='add_button' value='<?php echo $room; ?>'> Agregar Funcion </button>
+                    <button type="submit" class ="btn btn-primary" name ='add_button' value='<?php echo $room->getIdCinemaRoom(); ?>'> Agregar Funcion </button>
                          <?php 
                               foreach($functionList as $function)
                               {   

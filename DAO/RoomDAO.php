@@ -61,12 +61,11 @@
             }
         }
         
-        public function GetAllByCinemaId(Cinema $cinema)
+        public function GetAllByCinemaId($idCinema)
         {
             try
             {
                 $roomList = array();
-                $idCinema = $cinema->getIdCinema();
                 $query = "SELECT * FROM ".$this->tableName. " WHERE ".$this->tableName.".idCinema = ".$idCinema;
 
                 $this->connection = Connection::GetInstance();
@@ -159,11 +158,12 @@
         {
            throw $ex;
         }
-    }
-        public function GetCinema($idCinema){
+    } 
+
+        public function GetCinemaById($idCinema){
             try
             {
-            $query = "SELECT * FROM ". $this->cinemaTable. " C WHERE C.idCinema = ".$idCinema."";
+            $query = "SELECT * FROM ".$this->cinemaTable." WHERE ". $this->cinemaTable .".idCinema ='$idCinema'";
             $this->connection = Connection::GetInstance();
             $resultSet = $this->connection->Execute($query);
             $cinema=NULL;
@@ -173,13 +173,13 @@
                     $row["adress"],
                     $row["ticketPrice"]);
                 }
-                var_dump($cinema);
+
             return $cinema;
             }
             catch(Exception $ex)
             {
                throw $ex;
             }
-    }
+        }
 }
 ?>
