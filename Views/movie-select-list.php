@@ -16,19 +16,19 @@
                     </thead>
                     <tbody>
                     <form action="<?php echo FRONT_ROOT ?>Function/Select" method="post" class="bg-light-alpha p-5">
-                    <input type="hidden" name="room" value="<?php echo $room;?>">
+                    <input type="hidden" name="idRoom" value="<?php echo $idRoom;?>">
                          <?php
                               foreach($movieList as $movie)
                               {
                                    ?>
                                         <tr>
-                                             <td><button type="submit" name="select_movie" value="<?php $movie?>" class="btn btn-dark ml-auto d-block">Elegir</button></td>
+                                             <td><button type="submit" name="select_movie" value="<?php echo $movie->getIdMovie();?>" class="btn btn-dark ml-auto d-block">Elegir</button></td>
                                              <td><?php echo $movie->getMovieName()  ?></td>
                                              <td><?php echo $movie->getLanguage() ?></td>
                                              <td><?php echo $movie->getDuration() ?></td>
-                                             <td><?php $genreArray= $movieDAO->GetIdGenreById($movie);
+                                             <td><?php $genreArray= $movie->getGenre();
                                                   foreach($genreArray as $genres) {
-                                                  echo $genreRepo->GetById($genres)->getDescription();
+                                                       echo $genres->getDescription();
                                                   if(next($genreArray)){
                                                        echo "/";
                                                   } } ?></td>

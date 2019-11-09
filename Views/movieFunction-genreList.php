@@ -20,19 +20,19 @@
                          <?php 
                               foreach($functionList as $function)
                               {   
-                                   $movie = $functionDAO->GetMovieByFunctionId($function->getIdFunction());
+                                   $movie=$function->getMovie();
                                    ?>
                                         <tr>
-                                             <td><?php echo $function->movie->getMovieName() ?></td>
-                                             <td><?php echo $function->movie->getLanguage() ?></td>
-                                             <td><?php echo $function->movie->getDuration() ?></td>
-                                             <td><?php $genreArray= $function->movie->getGenre();
+                                        <td><?php echo $movie->getMovieName() ?></td>
+                                             <td><?php echo $movie->getLanguage() ?></td>
+                                             <td><?php echo $movie->getDuration() ?></td>
+                                             <td><?php $genreArray= $movie->getGenre();
                                                   foreach($genreArray as $genres) {
                                                   echo $genres->getDescription();
                                                   if(next($genreArray)){
                                                        echo "/ ";
                                                   } } ?></td>
-                                             <td><?php echo "<".POSTER_ROOT . $function->movie->getImage()." width='180' height='240'>" ?></td>
+                                             <td><?php echo "<".POSTER_ROOT . $movie->getImage()." width='180' height='240'>" ?></td>
                                              <td><?php echo $function->getDate() ?></td>
                                              <td><?php echo $function->getTime() ?></td>
                                         </tr>

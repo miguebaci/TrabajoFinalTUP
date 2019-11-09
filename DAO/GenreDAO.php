@@ -102,10 +102,9 @@
             }
         }
 
-        public function GetById(Genre $genre){
+        public function GetById($idGenre){
             try
             {   
-                $idGenre = $genre->getIdGenre();
                 $query = "SELECT * FROM ".$this->tableName. " WHERE ". $this->tableName .".idGenre ='$idGenre'";
                 $this->connection = Connection::GetInstance();
                 $resultSet = $this->connection->Execute($query);

@@ -98,9 +98,7 @@
         public function GetById($idMovie)
         {
             try
-            {
-                $idMovie=$movie->getIdMovie();
-                
+            {                
                 $query = "SELECT * FROM ".$this->tableName." WHERE idMovie ='$idMovie'";
 
                 $this->connection = Connection::GetInstance();
@@ -115,7 +113,7 @@
                     $row["movielanguage"],
                     $row["duration"],
                     $row["poster_image"],
-                    $this->genreDAO->GetAllGenresByIds($this->genreDAO->GetIdGenreById($movie)));
+                    $this->genreDAO->GetAllGenresByIds($this->genreDAO->GetIdGenreById($row["idMovie"])));
                 }
 
                 return $movie;

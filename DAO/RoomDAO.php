@@ -12,12 +12,12 @@
         private $tableName = "room";
         private $cinemaTable = "cinema";
 
-        public function Add(CinemaRoom $cinemaRoom, Cinema $cinema)
+        public function Add(CinemaRoom $cinemaRoom)
         {
             try
             {
                 $query = "INSERT INTO ".$this->tableName." (idCinema, roomName, totalCap) VALUES (:idCinema, :roomName, :totalCap);";
-                
+                $cinema=$cinemaRoom->getCinema();
                 $parameters["idCinema"] = $cinema->getIdCinema();
                 $parameters["roomName"] = $cinemaRoom->getRoomName();
                 $parameters["totalCap"] = $cinemaRoom->getTotalCap();
@@ -49,7 +49,8 @@
                     $cinemaRoom = new CinemaRoom($row["idRoom"],
                     $row["roomName"],
                     $row["totalCap"]);
-
+                    $id=$this->GetCinemaId($cinemaRoom);
+                    $cinemaRoom->setCinema($this->GetCinemaById($id));
                     array_push($roomList, $cinemaRoom);
                 }
 
@@ -77,7 +78,7 @@
                     $cinemaRoom = new CinemaRoom($row["idRoom"],
                     $row["roomName"],
                     $row["totalCap"]);
-
+                    $cinemaRoom->setCinema($this->GetCinemaById($idCinema));
                     array_push($roomList, $cinemaRoom);
                 }
                 return $roomList;
@@ -93,9 +94,11 @@
             try
             {
             $idRoom=$cinemaRoom->getIdCinemaRoom();
+            $cinema=$cinemaRoom->getCinema();
             $query = "DELETE FROM ". $this->tableName . " WHERE ". $this->tableName . ".idRoom ='$idRoom'";
                 $this->connection = Connection::GetInstance();
                 $this->connection->ExecuteNonQuery($query);
+                return $cinema;
             }
             catch(Exception $ex)
             {
@@ -131,6 +134,9 @@
                     $row["roomName"],
                     $row["totalCap"]);
                 }
+                var_dump($cinemaRoom);
+                    $id=$this->GetCinemaId($cinemaRoom);
+                    $cinemaRoom->setCinema($this->GetCinemaById($id));
             return $cinemaRoom;
             }
             catch(Exception $ex)
@@ -175,6 +181,24 @@
                 }
 
             return $cinema;
+            }
+            catch(Exception $ex)
+            {
+               throw $ex;
+            }
+        }
+
+        public function CinemaExist($idCinema){
+            try
+            {
+            $query = "SELECT idCinema FROM ".$this->cinemaTable." WHERE ". $this->cinemaTable .".idCinema ='$idCinema'";
+            $this->connection = Connection::GetInstance();
+            $resultSet = $this->connection->Execute($query);
+            $exist=false;
+            if($resultSet["idCinema"]=$idCinema){
+                $exist=true;
+            }
+            return $exist;
             }
             catch(Exception $ex)
             {

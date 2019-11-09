@@ -18,22 +18,22 @@
                     </thead>
                     <tbody>
                     <form action="<?php echo FRONT_ROOT ?>Function/Select" method="POST">
-                    <button type="submit" class ="btn btn-primary" name ='add_button' value='<?php echo $room->getIdCinemaRoom(); ?>'> Agregar Funcion </button>
+                    <button type="submit" class ="btn btn-primary" name ='add_button' value='<?php echo $idRoom; ?>'> Agregar Funcion </button>
                          <?php 
                               foreach($functionList as $function)
-                              {   
+                              {   $movie=$function->getMovie();
                                    ?>
                                         <tr>
-                                             <td><?php echo $function->movie->getMovieName() ?></td>
-                                             <td><?php echo $function->movie->getLanguage() ?></td>
-                                             <td><?php echo $function->movie->getDuration() ?></td>
-                                             <td><?php $genreArray= $function->movie->getGenre();
+                                             <td><?php echo $movie->getMovieName() ?></td>
+                                             <td><?php echo $movie->getLanguage() ?></td>
+                                             <td><?php echo $movie->getDuration() ?></td>
+                                             <td><?php $genreArray= $movie->getGenre();
                                                   foreach($genreArray as $genres) {
                                                   echo $genres->getDescription();
                                                   if(next($genreArray)){
                                                        echo "/ ";
                                                   } } ?></td>
-                                             <td><?php echo "<".POSTER_ROOT . $function->movie->getImage()." width='180' height='240'>" ?></td>
+                                             <td><?php echo "<".POSTER_ROOT . $movie->getImage()." width='180' height='240'>" ?></td>
                                              <td><?php echo $function->getDate() ?></td>
                                              <td><?php echo $function->getTime() ?></td>
                                              <td> 
