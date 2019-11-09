@@ -98,13 +98,5 @@
                 }
             }
         }
-
-        /*public function jsonDecode($json){
-            $arrayJson=json_decode($json, true);
-            foreach ($arrayJson as $value) {
-                $cinema=new Cinema($value["idCinema"], $value["cinemaName"], $value["adress"], $value["ticketPrice"]);
-            }
-            return $cinema;
-        }*/
     }
 ?>

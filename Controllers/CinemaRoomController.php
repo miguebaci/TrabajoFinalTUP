@@ -59,7 +59,8 @@
                 }
                 $cinema=$this->cinemaRoomDAO->GetCinemaById($idCinema);
                 $newRoom=new CinemaRoom(0,$roomName,$totalCap);
-                $this->cinemaRoomDAO->Add($newRoom, $cinema);
+                $newRoom->setCinema($cinema);
+                $this->cinemaRoomDAO->Add($newRoom);
         
                 echo "<script> alert('Room added');";
             }else{
@@ -76,8 +77,8 @@
             if($_POST){
                 $updatedRoom=$_POST;
                 $room=$this->cinemaRoomDAO->GetById($updatedRoom["idRoom"]);
-                $cinema=$this->cinemaRoomDAO->GetCinemaById($this->cinemaRoomDAO->GetCinemaId($room));
                 $this->cinemaRoomDAO->Update($room, $updatedRoom);
+                $cinema=$room->getCinema();
                 $this->ShowListView($cinema);
             }
         }
@@ -95,6 +96,9 @@
                 if(isset($_POST["function_button"])){
                     
                     $room=$this->cinemaRoomDAO->GetById($_POST["function_button"]);
+                    $idRoom=$room->getIdCinemaRoom();
+                    $functionDAO=new FunctionDAO();
+                    $room->setFunctionList($functionDAO->GetAllByRoomId($room));
                     $functionList=$room->getFunctionList();
                     require_once(VIEWS_PATH."moviefunction-list.php");
 
@@ -108,8 +112,7 @@
                 else if(isset($_POST["delete_button"])){
                     $idRoom=$_POST["delete_button"];
                     $room=$this->cinemaRoomDAO->GetById($idRoom);
-                    $cinema=$this->cinemaRoomDAO->GetCinemaById($this->cinemaRoomDAO->GetCinemaId($room));
-                    $this->cinemaRoomDAO->Delete($room);
+                    $cinema=$this->cinemaRoomDAO->Delete($room);
                     $this->ShowListView($cinema);
                     
                 }

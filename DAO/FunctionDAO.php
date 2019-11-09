@@ -5,6 +5,7 @@
     use Models\MovieFunction as MovieFunction;
     use Models\Movie as Movie;
     use Models\CinemaRoom as CinemaRoom;
+    use DAO\GenreDAO as GenreDAO;
     use DAO\Connection as Connection;
 
     class FunctionDAO implements IFunctionDAO
@@ -14,7 +15,7 @@
         private $movieTable ="movie";
         private $mxgTable= "movieXgenre";
 
-        public function Add(MovieFunction $movieFunction, CinemaRoom $room)
+        public function Add(MovieFunction $movieFunction)
         {
             try
             {
@@ -22,8 +23,10 @@
                 
                 $movie = $movieFunction->getMovie();
                 $date = $movieFunction->getDate();
+                $movie = $movieFunction->getMovie();
+                $room = $movieFunction->getRoom();
                 $date= $date->format("Y-m-d");
-                $parameters["idMovie"] = $movie->getMovieId();
+                $parameters["idMovie"] = $movie->getidMovie();
                 $parameters["idRoom"] = $room->getIdCinemaRoom();
                 $parameters["function_date"] = $date;
                 $parameters["function_time"] = $movieFunction->getTime();
@@ -53,9 +56,10 @@
                 
                 foreach ($resultSet as $row)
                 {               
-                    $movieFunction = new MovieFunction($row["idMovieFunction"],
-                    $row["function_date"],
-                    $row["function_time"]);
+                    $movieFunction = new MovieFunction($row["idMovieFunction"], $row["function_date"], $row["function_time"], $this->GetMovieByFunctionId($row["idMovieFunction"]));
+                    $roomDAO=new RoomDAO();
+                    $room=$roomDAO->GetById($movieFunction);
+                    $movieFunction->setRoom($room);
 
                     array_push($functionList, $movieFunction);
                 }
@@ -86,8 +90,10 @@
                 {               
                     $movieFunction = new MovieFunction($row["idMovieFunction"],
                     $row["function_date"],
-                    $row["function_time"]);
-
+                    $row["function_time"],
+                    $this->GetMovieByFunctionId($row["idMovieFunction"]));
+                    $movieFunction->setRoom($room);
+                    
                     array_push($functionList, $movieFunction);
                 }
                 return $functionList;
@@ -114,7 +120,11 @@
                 {               
                     $movieFunction = new MovieFunction($row["idMovieFunction"],
                     $row["function_date"],
-                    $row["function_time"]);
+                    $row["function_time"],
+                    $this->GetMovieByFunctionId($row["idMovieFunction"]));
+                    $roomDAO=new RoomDAO();
+                    $room=$roomDAO->GetById($movieFunction);
+                    $movieFunction->setRoom($room);
 
                     array_push($functionList, $movieFunction);
                 }
@@ -136,7 +146,7 @@
                 $this->connection = Connection::GetInstance();
 
                 $resultSet = $this->connection->Execute($query);
-                
+                $genreDAO=new GenreDAO();
                 foreach ($resultSet as $row)
                 {               
                     $movie = new Movie(
@@ -144,7 +154,9 @@
                         $row["movieName"],
                         $row["movielanguage"],
                         $row["duration"],
-                        $row["poster_image"]);
+                        $row["poster_image"],
+                        $genreDAO->GetAllGenresByIds($genreDAO->GetIdGenreById($row["idMovie"]))
+                        );
                 }
                 return $movie;
             }
@@ -216,24 +228,24 @@
         }
         }
         public function GetRoomId(MovieFunction $movieFunction){
-        try
-        {
-            $idFunction= $movieFunction->getIdFunction();
-        $query = "SELECT idRoom FROM ".$this->tableName. " WHERE ". $this->tableName .".idMovieFunction ='$idFunction'";
-        $this->connection = Connection::GetInstance();
-        $resultSet = $this->connection->Execute($query);
-        $idRoom=NULL;
-            foreach ($resultSet as $row)
-                {               
-                    $idRoom = $row["idRoom"];
-                }
-        return $idRoom;
+            try
+            {
+                $idFunction= $movieFunction->getIdFunction();
+            $query = "SELECT idRoom FROM ".$this->tableName. " WHERE ". $this->tableName .".idMovieFunction ='$idFunction'";
+            $this->connection = Connection::GetInstance();
+            $resultSet = $this->connection->Execute($query);
+            $idRoom=NULL;
+                foreach ($resultSet as $row)
+                    {               
+                        $idRoom = $row["idRoom"];
+                    }
+            return $idRoom;
+            }
+            catch(Exception $ex)
+            {
+            throw $ex;
+            }
         }
-        catch(Exception $ex)
-        {
-           throw $ex;
-        }
-    }
 
 }
 ?>

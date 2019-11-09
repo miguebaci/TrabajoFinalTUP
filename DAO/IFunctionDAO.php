@@ -1,9 +1,10 @@
 <?php
     namespace DAO;
     use Models\MovieFunction as MovieFunction;
+    use Models\CinemaRoom as CinemaRoom;
     interface IFunctionDAO
     {
-        function Add(MovieFunction $movieFunction, CinemaRoom $room);
+        function Add(MovieFunction $movieFunction);
         function GetAll();
         function GetAllByRoomId(CinemaRoom $room);
         function GetAllByGenre($idGenre);

@@ -4,7 +4,7 @@
     use Models\Cinema as Cinema;
     interface IRoomDAO
     {
-        function Add(CinemaRoom $cinemaRoom, Cinema $cinema);
+        function Add(CinemaRoom $cinemaRoom);
         function GetAll();
         function GetAllByCinemaId(Cinema $cinema);
         function Delete(CinemaRoom $cinemaRoom);

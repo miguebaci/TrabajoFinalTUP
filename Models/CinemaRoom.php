@@ -10,12 +10,14 @@
      private $roomName;
      private $totalCap;
      private $functionList;
+     private $cinema;
 
      public function __construct($idCinemaRoom, $roomName, $totalCap){
          $this->idCinemaRoom=$idCinemaRoom;
          $this->roomName=$roomName;
          $this->totalCap = $totalCap;
          $this->functionList = array();
+         $this->cinema= NULL;
      }
      
      public function setIdCinemaRoom($idCinemaRoom){
@@ -54,6 +56,16 @@
      public function setFunctionList($functionList)
      {
          $this->functionList = $functionList;
+     }
+
+     public function getCinema()
+     {
+         return $this->cinema;
+     }
+
+     public function setCinema($cinema)
+     {
+         $this->cinema = $cinema;
      }
 
  }
