@@ -7,6 +7,7 @@
     {
         private $QR;
         private $ticketNumber;
+        private $movieFunction;
 
         public function getQR()
         {
@@ -26,6 +27,14 @@
         public function setTicketNumber($ticketNumber)
         {
             $this->ticketNumber = $ticketNumber;
+        }
+
+        public function getMovieFunction(){
+            return $this->movieFunction;
+        }
+
+        public function setMovieFunction($movieFunction){
+            $this->movieFunction=$movieFunction;
         }
     }
 ?>

@@ -4,14 +4,17 @@
     use DAO\IUserDAO as IUserDAO;
     use DAO\UserDAO as UserDAO;
     use Models\User as User;
+    use DAO\PurchaseDAO as PurchaseDAO;
     use Facebook\Facebook as Facebook;
 
     class UserController
     {
         private $userDAO;
+        private $purchaseDAO;
 
         public function __construct()
-        {
+        {   
+            $this->purchaseDAO= new PurchaseDAO();
             $this->userDAO = new UserDAO();
         }
 
@@ -232,6 +235,11 @@
                 echo "<script> alert('Error');";
                 echo "window.location = '".FRONT_ROOT."index.php'; </script>";
             }
+        }
+
+        public function ShowUserPurchases(){
+            $purchaseList=$this->purchaseDAO->bringUserPurchases($_SESSION["loggedUser"]);
+            require_once(VIEWS_PATH."show-user-purchases.php");
         }
 
     }
