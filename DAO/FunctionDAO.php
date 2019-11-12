@@ -109,7 +109,7 @@
             try
             {
                 $functionList = array();
-
+                
                 $query = "SELECT * FROM ".$this->tableName." F INNER JOIN ".$this->mxgTable." MXG ON F.idMovie = MXG.idMovie  WHERE MXG.idGenre = ".$idGenre;
 
                 $this->connection = Connection::GetInstance();
@@ -123,7 +123,8 @@
                     $row["function_time"],
                     $this->GetMovieByFunctionId($row["idMovieFunction"]));
                     $roomDAO=new RoomDAO();
-                    $room=$roomDAO->GetById($movieFunction);
+                    $idRoom=$this->GetRoomId($movieFunction);
+                    $room=$roomDAO->GetById($idRoom);
                     $movieFunction->setRoom($room);
 
                     array_push($functionList, $movieFunction);

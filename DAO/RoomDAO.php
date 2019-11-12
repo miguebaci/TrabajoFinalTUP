@@ -134,7 +134,7 @@
                     $row["roomName"],
                     $row["totalCap"]);
                 }
-                var_dump($cinemaRoom);
+                
                     $id=$this->GetCinemaId($cinemaRoom);
                     $cinemaRoom->setCinema($this->GetCinemaById($id));
             return $cinemaRoom;
