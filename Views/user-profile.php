@@ -39,6 +39,10 @@
                <form>
                     <input type="button" class="btn btn-dark mr-auto d-block" value="Change Info" onclick="window.location.href='<?php echo FRONT_ROOT."User/ChangeUserProfile" ?> '" />
                </form> 
+
+               <form>
+                    <input type="button" class="btn btn-dark mr-auto d-block" value="Show My Purchases" onclick="window.location.href='<?php echo FRONT_ROOT."User/ShowUserPurchases" ?> '" />
+               </form> 
           </div>
      </section>
 </main>

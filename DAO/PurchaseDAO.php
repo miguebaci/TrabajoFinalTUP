@@ -5,15 +5,21 @@
     use Models\Purchase as Purchase;
     use Models\Ticket as Ticket;
     use DAO\Connection as Connection;
+    use DAO\FunctionDAO as FunctionDAO;
 
     class PurchaseDAO // implements IPurchaseDAO
     {
         private $connection;
         private $tableName="purchase";
         private $ticketTable="ticket";
+        private $functionDAO;
+
+        public function __construct(){
+            $this->functionDAO=new FunctionDAO();
+        }
 
         public function Buy($cinema,$discount,$quantity){
-            $purchase=new Purchase(date("Y-m-d h:i:sa"),$cinema->getTicketPrice()*$quantity,$quantity,$discount);
+            $purchase=new Purchase(date("Y-m-d H:i:s"),$cinema->getTicketPrice()*$quantity,$quantity,$discount);
             $purchase->setTicket($this->CreateTicket($purchase,$cinema));
             $purchase->setIdPurchase($this->Add($purchase));
             return $purchase;
@@ -23,7 +29,8 @@
         public function CreateTicket($purchase,$cinema){
             $ticket= new Ticket();
             $ticket->setQR($this->CreateQR($cinema));
-            $ticket->setTicketNumber($this->AddTicket($ticket,$cinema->getCinemaRoomList()[0]->getFunctionList()[0]));
+            $ticket->setMovieFunction($cinema->getCinemaRoomList()[0]->getFunctionList()[0]);
+            $ticket->setTicketNumber($this->AddTicket($ticket));
             return $ticket;
         }
 
@@ -68,13 +75,14 @@
             }
         }
 
-        public function AddTicket($ticket,$function){
+        public function AddTicket($ticket){
             try
             {
                 $query = "INSERT INTO ".$this->ticketTable." (idMovieFunction, QR) 
                             VALUES (:idMovieFunction, :QR);";
                 
-                $parameters["idMovieFunction"]=$function->getIdFunction();
+
+                $parameters["idMovieFunction"]=$ticket->getMovieFunction()->getIdFunction();
                 $parameters["QR"]=$ticket->getQR();
 
                 $this->connection = Connection::GetInstance();
@@ -95,6 +103,42 @@
                 throw $ex;
             }
         }        
+
+        public function bringUserPurchases($user){
+            try
+            {
+                $query="SELECT * 
+                FROM ".$this->tableName." P 
+                JOIN ".$this->ticketTable." T 
+                ON P.idTicket=T.idTicket 
+                WHERE P.idUser= :idUser";
+
+                $parameters["idUser"]=$user->getIdUser();
+
+                $this->connection = Connection::GetInstance();
+
+                $resultSet=$this->connection->Execute($query, $parameters);
+
+                $purchaseList=array();
+
+                foreach ($resultSet as $row ) {
+                    $purchase=new Purchase($row["purchaseDate"], $row["total"], $row["ticketQuantity"], $row["discount"]);
+                    $purchase->setIdPurchase($row["idPurchase"]);
+                    $ticket=new Ticket();
+                    $ticket->setTicketNumber($row["idTicket"]);
+                    $ticket->setQR($row["QR"]);
+                    $ticket->setMovieFunction($this->functionDAO->getById($row["idMovieFunction"]));
+                    $purchase->setTicket($ticket);
+                    array_push($purchaseList,$purchase);
+                }
+
+                return $purchaseList;
+            }
+            catch(Exception $ex)
+            {
+                throw $ex;
+            }
+        }
 
     }
 ?>
