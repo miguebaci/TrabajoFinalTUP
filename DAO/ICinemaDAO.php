@@ -8,5 +8,6 @@
         function Delete(Cinema $cinema);
         function Update(Cinema $cinema, $updatedCinema);
         function GetById($idCinema);
+        function GetRoomList($idCinema);
     }
 ?>

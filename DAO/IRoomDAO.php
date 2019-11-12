@@ -6,10 +6,12 @@
     {
         function Add(CinemaRoom $cinemaRoom);
         function GetAll();
-        function GetAllByCinemaId(Cinema $cinema);
+        function GetAllByCinemaId($idCinema);
         function Delete(CinemaRoom $cinemaRoom);
         function Update(CinemaRoom $cinemaRoom, $updatedRoom);
         function GetById($idRoom);
         function GetCinemaId(CinemaRoom $cinemaRoom);
+        function GetCinemaById($idCinema);
+        function CinemaExist($idCinema);
     }
 ?>
