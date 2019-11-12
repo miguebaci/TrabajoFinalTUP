@@ -124,10 +124,10 @@
 
         public function Select()
         {   
-            require_once(VIEWS_PATH."validate-session-admin.php");
             if($_POST){
                 $roomDAO= new RoomDAO();
                 if(isset($_POST["add_button"])){
+                    require_once(VIEWS_PATH."validate-session-admin.php");
                     $movieDAO= new MovieDAO();
                     $movieList= $movieDAO->GetAll();
                     $idRoom=$_POST["add_button"];
@@ -151,11 +151,13 @@
                 }
 
                 if(isset($_POST["list_button"])){
+                    require_once(VIEWS_PATH."validate-session-admin.php");
                     $idRoom=$_POST["list_button"];
                     $this->ShowListView($idRoom);
 
                 }
                 else if(isset($_POST["delete_button"])){
+                    require_once(VIEWS_PATH."validate-session-admin.php");
                     $idFunction=$_POST["delete_button"];
                     $function=$this->functionDAO->GetById($idFunction);
                     $idRoom=$this->functionDAO->GetRoomId($function);
