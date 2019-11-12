@@ -5,16 +5,28 @@ namespace Models;
 
     class Purchase
     {
+        private $idPurchase;
         private $purchase_date;
         private $ticketQuantity;
         private $total;
         private $discount;
+        private $ticket;
 
         public function __construct($purchase_date, $total, $ticketQuantity, $discount){
             $this->purchase_date = $purchase_date;
             $this->ticketQuantity = $ticketQuantity;
             $this->total = $total;
             $this->discount = $discount;
+        }
+
+        public function getIdPurchase()
+        {
+            return $this->idPurchase;
+        }
+
+        public function setIdPurchase($idPurchase)
+        {
+            $this->idPurchase = $idPurchase;
         }
 
         public function getPurchase_date()
@@ -56,6 +68,16 @@ namespace Models;
         {
             $this->discount = $discount;
         }
-    }
 
-    ?>
+        public function getTicket()
+        {
+            return $this->ticket;
+        }
+
+        public function setTicket($ticket)
+        {
+            $this->ticket = $ticket;
+        }
+
+    }
+?>

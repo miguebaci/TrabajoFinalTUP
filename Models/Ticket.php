@@ -8,11 +8,6 @@
         private $QR;
         private $ticketNumber;
 
-        public function __construct($QR, $ticketNumber){
-            $this->QR = $QR;
-            $this->ticketNumber = $ticketNumber;
-        }
-
         public function getQR()
         {
             return $this->QR;

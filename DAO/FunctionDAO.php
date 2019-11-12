@@ -5,6 +5,7 @@
     use Models\MovieFunction as MovieFunction;
     use Models\Movie as Movie;
     use Models\CinemaRoom as CinemaRoom;
+    use Models\Cinema as Cinema;
     use DAO\GenreDAO as GenreDAO;
     use DAO\Connection as Connection;
 
@@ -245,6 +246,39 @@
             catch(Exception $ex)
             {
             throw $ex;
+            }
+        }
+
+        public function GetCinemaByFunction(MovieFunction $movieFunction){
+            try
+            {
+                $idFunction= $movieFunction->getIdFunction();
+                $query = "SELECT *
+                            FROM ".$this->tableName. " MF 
+                            JOIN room R
+                            ON R.idRoom = MF.idRoom 
+                            JOIN cinema C
+                            ON C.idCinema=R.idCinema 
+                            WHERE MF.idMovieFunction = :idMovieFunction";
+
+                $parameters["idMovieFunction"]=$movieFunction->getIdFunction();
+
+                $this->connection = Connection::GetInstance();
+
+                $resultSet = $this->connection->Execute($query,$parameters);
+            
+
+                $cinema=new Cinema($resultSet[0]["idCinema"],$resultSet[0]["cinemaName"], $resultSet[0]["adress"], $resultSet[0]["ticketPrice"]);
+                $room=array(new CinemaRoom($resultSet[0]["idRoom"], $resultSet[0]["roomName"], $resultSet[0]["totalCap"]));
+                $cinema->setCinemaRoomList($room);
+                $mf=array();
+                array_push($mf,$movieFunction);
+                $cinema->getCinemaRoomList()[0]->setFunctionList($mf);
+                return $cinema;
+            }
+            catch(Exception $ex)
+            {
+                throw $ex;
             }
         }
 
