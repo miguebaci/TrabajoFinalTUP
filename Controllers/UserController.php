@@ -218,7 +218,7 @@
 
         public function ChangeUserProfile(){
             require_once(VIEWS_PATH."validate-session.php");
-            equire_once(VIEWS_PATH."change-user-profile.php");
+            require_once(VIEWS_PATH."change-user-profile.php");
         }
 
         public function changeUserProfileConfirm(){
