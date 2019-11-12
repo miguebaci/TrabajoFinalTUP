@@ -12,8 +12,8 @@
         private $tableName="purchase";
         private $ticketTable="ticket";
 
-        public function Buy($cinema,$quantity,$discount){
-            $purchase=new Purchase(date("Y-m-d h:i:sa"),$quantity,$cinema->getTicketPrice()*$quantity,$discount);
+        public function Buy($cinema,$discount,$quantity){
+            $purchase=new Purchase(date("Y-m-d h:i:sa"),$cinema->getTicketPrice()*$quantity,$quantity,$discount);
             $purchase->setTicket($this->CreateTicket($purchase,$cinema));
             $purchase->setIdPurchase($this->Add($purchase));
             return $purchase;
