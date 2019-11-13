@@ -1,8 +1,6 @@
 <?php
     namespace Models;
 
-    use Models\MovieFunction as MovieFunction;
-
     class MovieFunction
     {   
         private $idFunction;

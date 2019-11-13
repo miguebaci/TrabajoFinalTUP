@@ -133,10 +133,9 @@
                     $cinemaRoom = new CinemaRoom($row["idRoom"],
                     $row["roomName"],
                     $row["totalCap"]);
-                }
-                
                     $id=$this->GetCinemaId($cinemaRoom);
                     $cinemaRoom->setCinema($this->GetCinemaById($id));
+                }
             return $cinemaRoom;
             }
             catch(Exception $ex)

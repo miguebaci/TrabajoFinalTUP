@@ -18,10 +18,23 @@
             $this->functionDAO = new FunctionDAO();
         }
 
+        public function ShowBuyView(){
+            if($_POST){
+                $idFunction=$_POST["buy_button"];
+                require_once(VIEWS_PATH."buy-select.php");
+            }
+        }
+
         public function Buy(){
             if($_POST){
-                $cinema=$this->functionDAO->GetCinemaByFunction($this->functionDAO->GetById($_POST["idMovieFunction"]));
-                $purchase=$this->purchaseDAO->Buy($cinema,$_POST["discount"],$_POST["quantity"]);
+                $discount=0;
+                $cinema=$this->functionDAO->GetCinemaByFunction($this->functionDAO->GetById($_POST["buy_button"]));
+                if(isset($_POST["discount"])){
+                    if($_POST["discount"] == "BADU"){
+                        $discount=10;
+                    }
+                }
+                $purchase=$this->purchaseDAO->Buy($cinema,$discount,$_POST["quantity"]);
                 require_once(VIEWS_PATH."show-qr.php");
             }
         }

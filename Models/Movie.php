@@ -1,8 +1,6 @@
 <?php
 namespace Models;
 
-use Models\Movie as Movie;
-
 class Movie
 {  
     private $idMovie;
