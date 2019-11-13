@@ -5,7 +5,9 @@
     use Models\MovieFunction as MovieFunction;
     use Models\Movie as Movie;
     use Models\CinemaRoom as CinemaRoom;
+    use DAO\RoomDAO as RoomDAO;
     use Models\Cinema as Cinema;
+    use DAO\CinemaDAO as CinemaDAO;
     use DAO\GenreDAO as GenreDAO;
     use DAO\Connection as Connection;
 
@@ -13,6 +15,8 @@
     {
         private $connection;
         private $tableName = "moviefunction";
+        private $roomTable ="room";
+        private $cinemaTable ="cinema";
         private $movieTable ="movie";
         private $mxgTable= "movieXgenre";
 
@@ -59,7 +63,7 @@
                 {               
                     $movieFunction = new MovieFunction($row["idMovieFunction"], $row["function_date"], $row["function_time"], $this->GetMovieByFunctionId($row["idMovieFunction"]));
                     $roomDAO=new RoomDAO();
-                    $room=$roomDAO->GetById($movieFunction);
+                    $room=$roomDAO->GetById($movieFunction->getIdFunction());
                     $movieFunction->setRoom($room);
 
                     array_push($functionList, $movieFunction);
@@ -275,6 +279,33 @@
                 array_push($mf,$movieFunction);
                 $cinema->getCinemaRoomList()[0]->setFunctionList($mf);
                 return $cinema;
+            }
+            catch(Exception $ex)
+            {
+                throw $ex;
+            }
+        }
+
+        public function GetAllCinemasData(){
+            try
+            {
+                $cinemaDAO = new CinemaDAO();
+                $roomDAO = new RoomDAO();
+                $cinemaArray=array();
+                $roomArray=array();
+                $functionArray = array();
+
+                $cinemaList=$cinemaDAO->GetAll();
+                foreach ($cinemaList as $cinema) {
+                    $roomArray = $roomDAO->GetAllByCinemaId($cinema->getIdCinema());
+                    foreach ($roomArray as $room) {
+                        $functionArray = $this->GetAllByRoomId($room);
+                        $room->setFunctionList($functionArray);
+                    }
+                    $cinema->setCinemaRoomList($roomArray);
+                }
+            
+                return $cinemaList;
             }
             catch(Exception $ex)
             {

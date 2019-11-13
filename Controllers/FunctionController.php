@@ -122,6 +122,12 @@
 
         }
 
+        public function getall(){
+            $list=array();
+            $list = $this->functionDAO->GetAllCinemasData();
+            var_dump($list);
+        }
+
         public function Select()
         {   
             if($_POST){
