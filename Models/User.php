@@ -1,8 +1,6 @@
 <?php
     namespace Models;
-
-    use Models\User as User;
-    use Models\Role as Role;
+    
     use Models\UserProfile as UserProfile;
 
     class User

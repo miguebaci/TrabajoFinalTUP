@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg  navbar-dark bg-dark">
      <span class="navbar-text">
-          <strong>TP BACIGALUPPI || DUCAMP</strong>
+          <a href="<?php echo FRONT_ROOT?>index.php"><strong>TP BACIGALUPPI || DUCAMP</strong></a>
      </span>
      <div class="collapse navbar-collapse" id="navbarNavDropdown">
           <ul class="navbar-nav ml-auto">

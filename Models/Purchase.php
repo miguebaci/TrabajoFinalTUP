@@ -1,8 +1,6 @@
 <?php
 namespace Models;
 
-    use Models\Purchase as Purchase;
-
     class Purchase
     {
         private $idPurchase;

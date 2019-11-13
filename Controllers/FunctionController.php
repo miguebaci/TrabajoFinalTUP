@@ -1,7 +1,8 @@
 <?php
     namespace Controllers;
 
-    use DAO\MovieDAO as MovieDAO;
+use DAO\CinemaDAO;
+use DAO\MovieDAO as MovieDAO;
     use DAO\IMovieDAO as IMovieDAO;
     use Models\Movie as Movie;
 
@@ -162,6 +163,13 @@
                     $this->ShowListView($idRoom);
 
                 }
+                if(isset($_POST["idMovie_Selected"]))
+                {
+                    $functionList=$this->functionDAO->GetByMovieId($_POST["idMovie_Selected"]);
+                    require_once(VIEWS_PATH."validate-session.php");
+                    require_once(VIEWS_PATH."movieFunction-select.php");
+                }
+
                 else if(isset($_POST["delete_button"])){
                     require_once(VIEWS_PATH."validate-session-admin.php");
                     $idFunction=$_POST["delete_button"];

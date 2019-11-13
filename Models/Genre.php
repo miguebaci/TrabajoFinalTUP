@@ -1,8 +1,6 @@
 <?php
     namespace Models;
 
-    use Models\Genre as Genre;
-
     class Genre
     {   
         private $idGenre;

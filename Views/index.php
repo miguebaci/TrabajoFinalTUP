@@ -1,101 +1,95 @@
 <?php
-    require_once('nav.php');
-    require_once('get-functions.php');
+require_once('nav.php');
+
+use DAO\FunctionDAO as FunctionDAO;
+
+$functionDAO = new FunctionDAO;
+$functionList = $functionDAO->GetAll();
+$movieList = array();
+foreach ($functionList as $function) {
+     $movie = $functionDAO->GetMovieByFunctionId($function->getIdFunction());
+     if (!in_array($movie, $movieList)) {
+          array_push($movieList, $movie);
+     }
+}
 ?>
 
-<!DOCTYPE html>
-<html>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<body>
-<!-- Container for the image gallery -->
-<div class="container">
-<?php
-foreach ($movieList as $movie) {
-     
-?>
-  <!-- Full-width images with number text -->
-  <div class="mySlides">
-    <div class="numbertext"></div>
-      <img src="<?php $movie->getImage()?>" style="width='180' height='240'">
-  </div>
-  <?php
-  }
-  ?>
-  <!-- Next and previous buttons -->
-  <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-  <a class="next" onclick="plusSlides(1)">&#10095;</a>
+<main class="py-5">
+     <div class="slideshow-container">
+          <form action="<?php echo FRONT_ROOT ?>Function/Select" method="post" class="bg-light-alpha p-5">
+               <?php
 
-  <!-- Image text -->
-  <div class="caption-container">
-    <p id="caption"></p>
-  </div>
+               foreach ($movieList as $movie) {
+                    ?>
+                    <article>
 
-  <!-- Thumbnail images -->
-  <div class="row">
-    <div class="column">
-      <img class="demo cursor" src="img_woods.jpg" style="width:100%" onclick="currentSlide(1)" alt="The Woods">
-    </div>
-    <div class="column">
-      <img class="demo cursor" src="img_5terre.jpg" style="width:100%" onclick="currentSlide(2)" alt="Cinque Terre">
-    </div>
-    <div class="column">
-      <img class="demo cursor" src="img_mountains.jpg" style="width:100%" onclick="currentSlide(3)" alt="Mountains and fjords">
-    </div>
-    <div class="column">
-      <img class="demo cursor" src="img_lights.jpg" style="width:100%" onclick="currentSlide(4)" alt="Northern Lights">
-    </div>
-    <div class="column">
-      <img class="demo cursor" src="img_nature.jpg" style="width:100%" onclick="currentSlide(5)" alt="Nature and sunrise">
-    </div>
-    <div class="column">
-      <img class="demo cursor" src="img_snow.jpg" style="width:100%" onclick="currentSlide(6)" alt="Snowy Mountains">
-    </div>
-  </div>
-</div>
-<script>
-var slideIndex = 1;
-showSlides(slideIndex);
+                         <div class="container">
+                              <div class="mySlides">
+                                   <div class="row" style="margin-bottom:50px">
+                                        <h2>Now Screening</h2>
+                                   </div>
+                                   <div class="row">
+                                        <div class="column">
+                                             <button type="sumbit" class="btn" name="idMovie_Selected" value="<?php echo $movie->getIdMovie(); ?>"><?php echo "<" . POSTER_ROOT . $movie->getImage() . " width='180' height='240'>" ?></button>
+                                        </div>
+                                        <div class="column"></div>
+                                        <div class="column" style="margin-left:50px">
+                                             <h5><?php echo $movie->getMovieName() ?></h5>
+                                             <br><br>
+                                             <h5>Duration: <?php echo $movie->getDuration() ?> min </h5>
+                                             <br><br>
+                                             <h5>Genres: <?php $genreArray = $movie->getGenre();
+                                                                 foreach ($genreArray as $genres) {
+                                                                      echo $genres->getDescription();
+                                                                      if (next($genreArray)) {
+                                                                           echo "/";
+                                                                      }
+                                                                 } ?></h5>
+                                        </div>
+                                   </div>
+                              </div>
+                         </div>
+                    </article>
+               <?php } ?>
+          </form>
 
-function plusSlides(n) {
-  showSlides(slideIndex += n);
-}
 
-function currentSlide(n) {
-  showSlides(slideIndex = n);
-}
+          <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+          <a class="next" onclick="plusSlides(1)">&#10095;</a>
 
-function showSlides(n) {
-  var i;
-  var slides = document.getElementsByClassName("mySlides");
-  var dots = document.getElementsByClassName("demo");
-  var captionText = document.getElementById("caption");
-  if (n > slides.length) {slideIndex = 1}
-  if (n < 1) {slideIndex = slides.length}
-  for (i = 0; i < slides.length; i++) {
-      slides[i].style.display = "none";
-  }
-  for (i = 0; i < dots.length; i++) {
-      dots[i].className = dots[i].className.replace(" active", "");
-  }
-  slides[slideIndex-1].style.display = "block";
-  dots[slideIndex-1].className += " active";
-  captionText.innerHTML = dots[slideIndex-1].alt;
-}
-</script>
+     </div>
+     <br>
 
-</body>
-</html>
+     <script>
+          var slideIndex = 1;
+          showSlides(slideIndex);
 
-<!--<main class="py-5">
-     <section id="listado" class="mb-5">
-          <div class="container">
-               <h1>Index</h1>
-               <form action="Purchase/Buy" method="POST">
-                    <input type="number" name="idMovieFunction" placeholder="ID MOVIE FUNCTION" id="" required>
-                    <input type="number" name="discount" placeholder="Discount" id="" required>
-                    <input type="number" name="quantity" placeholder="Quantity" id="" required>
-                    <input type="submit" value="submit">
-               </form>
-          </div>
-     </section>
-</main>-->
+          function plusSlides(n) {
+               showSlides(slideIndex += n);
+          }
+
+          function currentSlide(n) {
+               showSlides(slideIndex = n);
+          }
+
+          function showSlides(n) {
+               var i;
+               var slides = document.getElementsByClassName("mySlides");
+               var dots = document.getElementsByClassName("dot");
+               if (n > slides.length) {
+                    slideIndex = 1
+               }
+               if (n < 1) {
+                    slideIndex = slides.length
+               }
+               for (i = 0; i < slides.length; i++) {
+                    slides[i].style.display = "none";
+               }
+               for (i = 0; i < dots.length; i++) {
+                    dots[i].className = dots[i].className.replace(" active", "");
+               }
+               slides[slideIndex - 1].style.display = "block";
+               dots[slideIndex - 1].className += " active";
+          }
+     </script>
+</main>
