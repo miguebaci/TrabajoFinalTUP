@@ -20,6 +20,7 @@
 
         public function ShowBuyView(){
             if($_POST){
+                require_once(VIEWS_PATH."validate-session.php");
                 $idFunction=$_POST["buy_button"];
                 require_once(VIEWS_PATH."buy-select.php");
             }

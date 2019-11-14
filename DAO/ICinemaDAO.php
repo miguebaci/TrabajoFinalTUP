@@ -10,4 +10,3 @@
         function GetById($idCinema);
         function GetRoomList($idCinema);
     }
-?>

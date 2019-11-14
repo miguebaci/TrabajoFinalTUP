@@ -166,7 +166,6 @@ use DAO\MovieDAO as MovieDAO;
                 if(isset($_POST["idMovie_Selected"]))
                 {
                     $functionList=$this->functionDAO->GetByMovieId($_POST["idMovie_Selected"]);
-                    require_once(VIEWS_PATH."validate-session.php");
                     require_once(VIEWS_PATH."movieFunction-select.php");
                 }
 

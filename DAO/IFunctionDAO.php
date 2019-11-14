@@ -14,4 +14,3 @@
         function FunctionExist(CinemaRoom $room, $date, $time);
         function GetRoomId(MovieFunction $movieFunction);
     }
-?>

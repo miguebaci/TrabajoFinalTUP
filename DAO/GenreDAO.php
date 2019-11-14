@@ -166,4 +166,11 @@
         }
 
     }
-?>
+
+    /*SELECT idMovieFunction
+    FROM moviefunction MF 
+    JOIN movie M 
+    ON M.idMovie = MF.idMovie
+    JOIN moviexgenre MXG 
+    ON MXG.idMovie = M.idMovie
+    WHERE MXG.idGenre = 28*/
