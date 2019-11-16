@@ -27,6 +27,7 @@
         }
 
         public function Buy(){
+            require_once(VIEWS_PATH."validate-session.php");
             if($_POST){
                 $discount=0;
                 $cinema=$this->functionDAO->GetCinemaByFunction($this->functionDAO->GetById($_POST["buy_button"]));

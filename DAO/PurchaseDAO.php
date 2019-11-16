@@ -18,38 +18,61 @@
             $this->functionDAO=new FunctionDAO();
         }
 
+        /*
+         * Recieves a Cinema with its Room, Function, and Movie
+         * Generates the Purchase with its Ticket, and adds them both to the Database
+         * Returns the Purchase object
+         */
+
         public function Buy($cinema,$discount,$quantity){
             $purchase=new Purchase(date("Y-m-d H:i:s"),$cinema->getTicketPrice()*$quantity,$quantity,$discount);
             $purchase->setTicket($this->CreateTicket($purchase,$cinema));
-            $purchase->setIdPurchase($this->Add($purchase));
+            $purchase->setIdPurchase($this->Add($purchase,$_SESSION["loggedUser"]));
             return $purchase;
-
         }
+
+        /*
+         * Recieves the Purchase info and the Cinema with its Room, Function, and Movie
+         * Generates a Ticket and adds it to the Database
+         * And returns the Ticket
+         */
 
         public function CreateTicket($purchase,$cinema){
             $ticket= new Ticket();
-            $ticket->setQR($this->CreateQR($cinema));
+            $ticket->setQR($this->CreateQR($cinema,$purchase->getTicketQuantity()));
             $ticket->setMovieFunction($cinema->getCinemaRoomList()[0]->getFunctionList()[0]);
             $ticket->setTicketNumber($this->AddTicket($ticket));
             return $ticket;
         }
 
-        public function CreateQR($cinema){
+        /*
+         * Recieves the Cinema with its Room, Function, and Movie, and the quantity of Tickets.
+         * Generates the link to the image of the QR code
+         * Returns the QR
+         */
+
+        public function CreateQR($cinema,$quantity){
             $room=$cinema->getCinemaRoomList()[0];
             $function=$room->getFunctionList()[0];
             $movie=$function->getMovie();
-            $QR="https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=".$cinema->getCinemaName()."-".$cinema->getIdCinema()."-".$room->getRoomName()."-".$room->getIdCinemaRoom()."-".$function->getIdFunction()."-".$function->getDate()."-".$function->getTime()."-".$movie->getMovieName()."-".$movie->getIdMovie()."&choe=UTF-8";
-            $QR=str_replace(" ","",$QR);
+            $QR="https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=".$cinema->getCinemaName()."/".$cinema->getIdCinema()."/".$room->getRoomName()."/".$room->getIdCinemaRoom()."/".$function->getIdFunction()."/".$function->getDate()."/".$function->getTime()."/".$quantity."/".$movie->getMovieName()."/".$movie->getIdMovie()."&choe=UTF-8";
+            $QR=str_replace(" ","-",$QR);
             return $QR;
         }
 
-        public function Add($purchase){
+        /*
+         * Recieves the Purchase Info with its Ticket
+         * Adds the Purchase to the Database
+         * Returns the ID in the Database of the Purchase
+         */
+
+        public function Add($purchase,$user){
             try
             {
                 $query = "INSERT INTO ".$this->tableName." (idUser, idTicket, ticketQuantity, total, discount, purchaseDate) 
                             VALUES (:idUser, :idTicket, :ticketQuantity, :total, :discount, :purchaseDate);";
                 
-                $parameters["idUser"]=$_SESSION["loggedUser"]->getIdUser();
+                $parameters["idUser"]=$user->getIdUser();
                 $parameters["idTicket"]=$purchase->getTicket()->getTicketNumber();
                 $parameters["ticketQuantity"]=$purchase->getTicketQuantity();
                 $parameters["total"]=$purchase->getTotal();
@@ -60,7 +83,6 @@
 
                 $this->connection->ExecuteNonQuery($query, $parameters);
 
-                //$query="SELECT idPurchase FROM ".$this->tableName." WHERE idTicket = :idTicket";
                 $query="SELECT LAST_INSERT_ID()";
 
                 $this->connection = Connection::GetInstance();
@@ -74,6 +96,12 @@
                 throw $ex;
             }
         }
+
+        /*
+         * Recieves a Ticket
+         * Adds it to the Database
+         * Returns its ID in the Database
+         */
 
         public function AddTicket($ticket){
             try
@@ -103,6 +131,12 @@
                 throw $ex;
             }
         }        
+
+        /*
+         * Recieves an User
+         * Checks the purchases in the Database
+         * And returns the purchase list
+         */
 
         public function bringUserPurchases($user){
             try
