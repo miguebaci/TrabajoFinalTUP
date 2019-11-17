@@ -1,16 +1,14 @@
 <?php
     namespace Helper;
+    //implementar en Controller y daos
 
     use DAO\RoomDAO as RoomDAO;
-    use DAO\IRoomDAO as IRoomDAO;
     use Models\CinemaRoom as CinemaRoom;
 
     use DAO\MovieDAO as MovieDAO;
-    use DAO\IMovieDAO as IMovieDAO;
     use Models\Movie as Movie;
     
     use DAO\GenreDAO as GenreDAO;
-    use DAO\IGenreDAO as IGenreDAO;
     use Models\Genre as Genre;
 
     use Date as Date;
