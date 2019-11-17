@@ -1,5 +1,5 @@
 <?php
-    namespace Helpers;
+    namespace Helper;
 
     use DAO\RoomDAO as RoomDAO;
     use DAO\IRoomDAO as IRoomDAO;

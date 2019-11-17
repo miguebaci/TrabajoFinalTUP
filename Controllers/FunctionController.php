@@ -4,7 +4,7 @@
     use Models\CinemaRoom as CinemaRoom;
     use DAO\IFunctionDAO as IFunctionDAO;
     use DAO\FunctionDAO as FunctionDAO;
-    use Helpers\FunctionHelper as FunctionHelper;
+    use Helper\FunctionHelper as FunctionHelper;
     use Models\Genre as Genre;
 
 

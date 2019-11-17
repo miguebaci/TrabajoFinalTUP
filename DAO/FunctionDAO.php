@@ -50,7 +50,10 @@ class FunctionDAO implements IFunctionDAO
         try {
             $functionList = array();
 
-            $query = "SELECT * FROM " . $this->tableName . " WHERE function_date > CURDATE() OR function_time > CURTIME()";
+            $query = "SELECT * FROM 
+            (SELECT * FROM " . $this->tableName ." F WHERE F.function_date >= CURDATE()) A 
+            WHERE A.idMovieFunction NOT IN (SELECT idMovieFunction FROM moviefunction F WHERE F.function_date = CURDATE() AND F.function_time < CURTIME()) 
+            GROUP BY A.idMovieFunction ORDER BY A.function_date";
 
             $this->connection = Connection::GetInstance();
 
@@ -78,7 +81,11 @@ class FunctionDAO implements IFunctionDAO
             $idRoom = $room->getIdCinemaRoom();
             $functionList = array();
 
-            $query = "SELECT * FROM (SELECT * FROM " . $this->tableName ." F WHERE F.function_date > CURDATE() OR F.function_time > CURTIME()) A  WHERE A.idRoom = " . $idRoom;
+            $query ="SELECT * FROM 
+            (SELECT * FROM " . $this->tableName ." F WHERE F.function_date >= CURDATE()) A 
+            WHERE A.idRoom = " . $idRoom. " 
+            AND A.idMovieFunction NOT IN (SELECT idMovieFunction FROM moviefunction F WHERE F.function_date = CURDATE() AND F.function_time < CURTIME()) 
+            GROUP BY A.idMovieFunction ORDER BY A.function_date";
             
             $this->connection = Connection::GetInstance();
 
@@ -174,9 +181,22 @@ class FunctionDAO implements IFunctionDAO
     public function DeleteOldFunctions()
     {
         try {
-            $query = "DELETE FROM " . $this->tableName . " WHERE function_date <= CURDATE() AND function_time <= CURTIME()";
+            $idArray=array();
+            $query = "SELECT idMovieFunction FROM (SELECT * FROM " . $this->tableName . " F 
+            WHERE F.function_date <= CURDATE()) A 
+            WHERE A.idMovieFunction NOT IN (SELECT idMovieFunction FROM " . $this->tableName . " F WHERE F.function_date = CURDATE() AND F.function_time > CURTIME())";
+            $this->connection = Connection::GetInstance();
+            $resultSet = $this->connection->Execute($query);
+
+            foreach ($resultSet as $row) {
+                array_push($idArray, $row["idMovieFunction"]);
+            }
+
+            foreach ($idArray as $idFunction) {
+            $query = "DELETE FROM " . $this->tableName . " WHERE " . $this->tableName . ".idMovieFunction ='$idFunction'";
             $this->connection = Connection::GetInstance();
             $this->connection->ExecuteNonQuery($query);
+            }
         } catch (Exception $ex) {
             throw $ex;
         }
