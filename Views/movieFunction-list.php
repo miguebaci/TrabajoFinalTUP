@@ -18,7 +18,8 @@
                     </thead>
                     <tbody>
                     <form action="<?php echo FRONT_ROOT ?>Function/Select" method="POST">
-                    <button type="submit" class ="btn btn-primary" name ='add_button' value='<?php echo $idRoom; ?>'> Agregar Funcion </button>
+                    <button type="submit" class ="btn btn-primary" name ='add_button' value='<?php echo $idRoom; ?>'> Add Function/s </button>
+                    <button type="submit" class ="btn btn-danger" name ='delete_old' value='<?php echo $idRoom; ?>'> Delete all old functions </button>
                          <?php 
                               foreach($functionList as $function)
                               {   $movie=$function->getMovie();

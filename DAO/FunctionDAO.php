@@ -50,7 +50,7 @@ class FunctionDAO implements IFunctionDAO
         try {
             $functionList = array();
 
-            $query = "SELECT * FROM " . $this->tableName;
+            $query = "SELECT * FROM " . $this->tableName . " WHERE function_date > CURDATE() OR function_time > CURTIME()";
 
             $this->connection = Connection::GetInstance();
 
@@ -78,8 +78,8 @@ class FunctionDAO implements IFunctionDAO
             $idRoom = $room->getIdCinemaRoom();
             $functionList = array();
 
-            $query = "SELECT * FROM " . $this->tableName . " WHERE " . $this->tableName . ".idRoom = " . $idRoom;
-
+            $query = "SELECT * FROM (SELECT * FROM " . $this->tableName ." F WHERE F.function_date > CURDATE() OR F.function_time > CURTIME()) A  WHERE A.idRoom = " . $idRoom;
+            
             $this->connection = Connection::GetInstance();
 
             $resultSet = $this->connection->Execute($query);
@@ -106,7 +106,7 @@ class FunctionDAO implements IFunctionDAO
         try {
             $functionList = array();
 
-            $query = "SELECT * FROM " . $this->tableName . " F INNER JOIN " . $this->mxgTable . " MXG ON F.idMovie = MXG.idMovie  WHERE MXG.idGenre LIKE " . $idGenre;
+            $query = "SELECT * FROM " . $this->tableName . " F INNER JOIN " . $this->mxgTable . " MXG ON F.idMovie = MXG.idMovie  WHERE MXG.idGenre LIKE " . $idGenre . " AND F.function_date > CURDATE()";
 
             $this->connection = Connection::GetInstance();
 
@@ -164,6 +164,17 @@ class FunctionDAO implements IFunctionDAO
         try {
             $idFunction = $movieFunction->getIdFunction();
             $query = "DELETE FROM " . $this->tableName . " WHERE " . $this->tableName . ".idMovieFunction ='$idFunction'";
+            $this->connection = Connection::GetInstance();
+            $this->connection->ExecuteNonQuery($query);
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    public function DeleteOldFunctions()
+    {
+        try {
+            $query = "DELETE FROM " . $this->tableName . " WHERE function_date <= CURDATE() AND function_time <= CURTIME()";
             $this->connection = Connection::GetInstance();
             $this->connection->ExecuteNonQuery($query);
         } catch (Exception $ex) {
