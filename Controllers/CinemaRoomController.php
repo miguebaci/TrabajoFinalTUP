@@ -98,7 +98,7 @@
                     $room=$this->cinemaRoomDAO->GetById($_POST["function_button"]);
                     $idRoom=$room->getIdCinemaRoom();
                     $functionDAO=new FunctionDAO();
-                    $room->setFunctionList($functionDAO->GetAllByRoomId($room));
+                    $room->setFunctionList($functionDAO->GetAllByRoomIdAdmin($room));
                     $functionList=$room->getFunctionList();
                     require_once(VIEWS_PATH."moviefunction-list.php");
 

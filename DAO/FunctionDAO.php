@@ -77,6 +77,40 @@ class FunctionDAO implements IFunctionDAO
     }
 
 
+    public function GetAllByRoomIdAdmin(CinemaRoom $room)
+    {
+        try {
+            $idRoom = $room->getIdCinemaRoom();
+            $functionList = array();
+
+            $query = "SELECT * FROM 
+            (SELECT * FROM " . $this->tableName . " F WHERE F.function_date >= CURDATE()) A 
+            WHERE A.idRoom = " . $idRoom . "
+            AND A.idMovieFunction NOT IN (SELECT idMovieFunction FROM moviefunction F WHERE F.function_date = CURDATE() AND F.function_time < CURTIME()) 
+            GROUP BY A.idMovieFunction ORDER BY A.function_date";
+
+            $this->connection = Connection::GetInstance();
+
+            $resultSet = $this->connection->Execute($query);
+
+            foreach ($resultSet as $row) {
+                $movieFunction = new MovieFunction(
+                    $row["idMovieFunction"],
+                    $row["function_date"],
+                    $row["function_time"],
+                    $this->GetMovieByFunctionId($row["idMovieFunction"])
+                );
+                $movieFunction->setRoom($room);
+
+                array_push($functionList, $movieFunction);
+            }
+            return $functionList;
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+    }
+
+
     public function GetAllByRoomId(CinemaRoom $room)
     {
         try {
@@ -86,6 +120,7 @@ class FunctionDAO implements IFunctionDAO
             $query = "SELECT * FROM 
             (SELECT * FROM " . $this->tableName . " F WHERE F.function_date >= CURDATE()) A 
             WHERE A.idRoom = " . $idRoom . " 
+            AND  A.function_date BETWEEN CURDATE() AND CURDATE() + INTERVAL 3 DAY
             AND A.idMovieFunction NOT IN (SELECT idMovieFunction FROM moviefunction F WHERE F.function_date = CURDATE() AND F.function_time < CURTIME()) 
             GROUP BY A.idMovieFunction ORDER BY A.function_date";
 
@@ -195,9 +230,9 @@ class FunctionDAO implements IFunctionDAO
             }
 
             foreach ($idArray as $idFunction) {
-                $query = "DELETE FROM " . $this->tableName . " WHERE " . $this->tableName . ".idMovieFunction ='$idFunction'";
+                $query2 = "DELETE FROM " . $this->tableName . " WHERE " . $this->tableName . ".idMovieFunction ='$idFunction'";
                 $this->connection = Connection::GetInstance();
-                $this->connection->ExecuteNonQuery($query);
+                $this->connection->ExecuteNonQuery($query2);
             }
         } catch (Exception $ex) {
             throw $ex;

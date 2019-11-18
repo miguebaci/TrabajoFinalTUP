@@ -193,7 +193,6 @@
                     $room=$this->helper->helpGetRoom ($idRoom);
                     $this->functionDAO->Delete($function);
                     $this->ShowListView($room);
-                    require_once(VIEWS_PATH."validate-post.php");
                     
                 }
             }
