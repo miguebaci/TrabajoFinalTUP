@@ -2,6 +2,9 @@
     namespace Helper;
     //implementar en Controller y daos
 
+    use DAO\CinemaDAO as CinemaDAO;
+    use Models\Cinema as Cinema;
+
     use DAO\RoomDAO as RoomDAO;
     use Models\CinemaRoom as CinemaRoom;
 
@@ -15,26 +18,46 @@
 
     class FunctionHelper{
 
+        private $cinemaDAO;
         private $roomDAO;
         private $movieDAO;
         private $genreDAO;
 
         public function __construct()
         {   
+            $this->cinemaDAO = new CinemaDAO();
             $this->roomDAO = new RoomDAO();
             $this->movieDAO = new MovieDAO();
             $this->genreDAO = new GenreDAO();
         }
 
-        function helpMovieList (){
+        function helpMovieList(){
             return $this->movieDAO->GetAll();
         }
 
-        function helpGetRoom ($idRoom){
+        function helpGetCinemas(){
+            return $this->cinemaDAO->GetAll();
+        }
+
+        function helpGetCinemasByMovie(Movie $movie){
+            return $this->cinemaDAO->GetByMovie($movie);
+        }
+
+        function helpGetRoomsByCinema(Cinema $cinema){
+            
+            return $this->roomDAO->GetAllByCinemaId($cinema->getIdCinema());
+        
+        }
+     
+        function helpMovieById($idMovie){
+            return $movie=$this->movieDAO->GetById($idMovie);
+        }
+
+        function helpGetRoom($idRoom){
             return $this->roomDAO->GetById($idRoom);
         }
 
-        function helpGetGenre ($idGenre){
+        function helpGetGenre($idGenre){
             return $this->genreDAO->GetById($idGenre);
         }
 

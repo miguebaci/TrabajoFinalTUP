@@ -2,7 +2,7 @@
     namespace Controllers;
     
     use Models\CinemaRoom as CinemaRoom;
-    use DAO\IFunctionDAO as IFunctionDAO;
+    use Models\Movie as Movie;
     use DAO\FunctionDAO as FunctionDAO;
     use Helper\FunctionHelper as FunctionHelper;
     use Models\Genre as Genre;
@@ -64,13 +64,11 @@
 
                 if(isset($_POST["idMovie"])){
                     $idMovie=$_POST["idMovie"];
-                    $movieDAO= $this->helper->getMovieDAO();
-                    $movie = $movieDAO->GetById($idMovie);
+                    $movie= $this->helper->helpMovieById($idMovie);
                 }
                 if(isset($_POST["idRoom"])){
                     $idRoom = $_POST["idRoom"];
-                    $roomDAO = $this->helper->getRoomDAO();
-                    $room = $roomDAO->GetById($idRoom);
+                    $room = $this->helper->helpGetRoom($idRoom);
                 }
                 if(isset($_POST["function_date_start"]) && isset($_POST["function_date_end"])){
                     $functionStartDate = $_POST["function_date_start"];
@@ -114,10 +112,31 @@
 
         }
 
-        public function getall(){
-            $list=array();
-            $list = $this->functionDAO->GetAllCinemasData();
-            var_dump($list);
+        public function GetAllCinemasByMovie(Movie $movie)
+        {
+            $cinemaArray = $this->helper->helpGetCinemasByMovie($movie);
+            $functionList = array();
+
+            foreach ($cinemaArray as $cinema) {
+                $roomArray = $this->helper->helpGetRoomsByCinema($cinema);
+
+                foreach ($roomArray as $room) {
+                    $functionArray = $this->functionDAO->GetAllByRoomId($room);
+
+                    foreach ($functionArray as $function) {
+                        $movieAux = $function->getMovie();
+                        $functionMovieId = $movieAux->getIdMovie();
+
+                        if ($movie->getIdMovie() == $functionMovieId) {
+                            array_push($functionList, $function);
+                        }
+                    }
+                    $room->setFunctionList($functionList);
+                    
+                }
+                $cinema->setCinemaRoomList($roomArray);
+            }
+            return $cinemaArray;
         }
 
         public function Select()
@@ -155,7 +174,8 @@
 
                 if(isset($_POST["idMovie_Selected"]))
                 {
-                    $functionList=$this->functionDAO->GetByMovieId($_POST["idMovie_Selected"]);
+                    $movie = $this->helper->helpMovieById($_POST["idMovie_Selected"]);
+                    $cinemaList =  $this->GetAllCinemasByMovie($movie);
                     require_once(VIEWS_PATH."movieFunction-select.php");
                 }
 
