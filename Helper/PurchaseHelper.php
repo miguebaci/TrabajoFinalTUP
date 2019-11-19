@@ -17,7 +17,7 @@
         }
 
         function helpFunctionById($idFunction){
-            $this->functionDAO->getById($idFunction);
+            return $this->functionDAO->getById($idFunction);
         }
 
         function helpCinemaByFunction($movieFunction){
