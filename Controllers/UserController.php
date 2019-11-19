@@ -6,16 +6,19 @@
     use Models\User as User;
     use DAO\PurchaseDAO as PurchaseDAO;
     use Facebook\Facebook as Facebook;
+    use Helper\UserHelper as Helper;
 
     class UserController
     {
         private $userDAO;
         private $purchaseDAO;
+        private $helper;
 
         public function __construct()
         {   
             $this->purchaseDAO= new PurchaseDAO();
             $this->userDAO = new UserDAO();
+            $this->helper= new Helper();
         }
 
         public function Register()
@@ -238,8 +241,37 @@
         }
 
         public function ShowUserPurchases(){
+            require_once(VIEWS_PATH."validate-session.php");
             $purchaseList=$this->purchaseDAO->bringUserPurchases($_SESSION["loggedUser"]);
             require_once(VIEWS_PATH."show-user-purchases.php");
+        }
+
+        public function ShowAnalytics(){
+            require_once(VIEWS_PATH."validate-session-admin.php");
+            $cinemas=$this->helper->helpGetCinemas();
+            $movies=$this->helper->helpAllMoviesInFunctions();
+            require_once(VIEWS_PATH."purchase-analytics-select.php");
+
+        }
+
+        public function AnalyticsSelect(){
+            require_once(VIEWS_PATH."validate-session-admin.php");
+            if($_POST){
+                if($_POST["date_start"]<=$_POST["date_end"]){
+                    if(isset($_POST["cinema_button"])){
+                        $cinema=$this->helper->helpGetCinemaById($_POST["cinemaId"]);
+                        $analytics=$this->helper->helpPurchasesByCinema($cinema,$_POST["date_start"],$_POST["date_end"]);
+                        require_once(VIEWS_PATH."show-cinema-analytics.php");
+                    }elseif(isset($_POST["movie_button"])){
+                        $movie=$this->helper->helpMovieById($_POST["movieId"]);
+                        $analytics=$this->helper->helpPurchasesByMovie($movie,$_POST["date_start"],$_POST["date_end"]);
+                        require_once(VIEWS_PATH."show-movie-analytics.php");
+                    }
+                }else{
+                    echo "<script> alert('Date Error');";  
+                    echo "window.location = '../User/ShowAnalytics'; </script>";
+                }
+            }
         }
 
     }

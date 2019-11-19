@@ -10,7 +10,7 @@
         private $connection;
         private $tableName = "user";
         private $roleTable = "userrole";
-        private $profileTable = "userprofile";
+        private $profileTable = "userprofile"; 
         private $userList = array();
 
         public function Add(User $user)

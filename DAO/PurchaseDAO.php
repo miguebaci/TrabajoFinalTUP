@@ -174,5 +174,83 @@
             }
         }
 
+        public function getPurchasesByCinema($cinema, $dateStart, $dateEnd){
+            try{
+                $dateEnd=$dateEnd." 23:59:59"; 
+
+                $query="SELECT SUM(P.total - (P.discount * P.total / 100)) as Total, SUM(P.ticketQuantity) as Tickets 
+                FROM ".$this->tableName." P 
+                JOIN ".$this->ticketTable." T 
+                ON T.idTicket=P.idTicket
+                JOIN moviefunction MD 
+                ON MD.idMovieFunction=T.idMovieFunction 
+                JOIN room R 
+                ON R.idRoom=MD.idRoom 
+                JOIN cinema C 
+                ON C.idCinema=R.idCinema 
+                WHERE C.idCinema = :idCinema AND (P.purchaseDate >= :dateStart AND P.purchaseDate <= :dateEnd) 
+                GROUP BY C.idCinema;";
+
+                $parameters["idCinema"]=$cinema->getIdCinema();
+                $parameters["dateStart"]=$dateStart;
+                $parameters["dateEnd"]=$dateEnd;
+
+                $this->connection = Connection::GetInstance();
+
+                $resultSet=$this->connection->Execute($query, $parameters);
+
+                if(isset($resultSet[0])){
+                    $purchase["Total"]=$resultSet[0]["Total"];
+                    $purchase["Tickets"]=$resultSet[0]["Tickets"];
+                }else{
+                    $purchase["Total"]=0;
+                    $purchase["Tickets"]=0;
+                }
+
+                return $purchase;
+
+            }catch(Exception $ex){
+                throw $ex;
+            }
+        }
+
+        public function getPurchasesByMovie($movie, $dateStart, $dateEnd){
+            try{
+                $dateEnd=$dateEnd." 23:59:59"; 
+
+                $query="SELECT SUM(P.total - (P.discount * P.total / 100)) as Total, SUM(P.ticketQuantity) as Tickets 
+                FROM ".$this->tableName." P 
+                JOIN ".$this->ticketTable." T 
+                ON T.idTicket=P.idTicket
+                JOIN moviefunction MD 
+                ON MD.idMovieFunction=T.idMovieFunction 
+                JOIN Movie M 
+                ON M.idMovie=MD.idMovie 
+                WHERE M.idMovie = :idMovie AND (P.purchaseDate >= :dateStart AND P.purchaseDate <= :dateEnd) 
+                GROUP BY M.idMovie;";
+
+                $parameters["idMovie"]=$movie->getIdMovie();
+                $parameters["dateStart"]=$dateStart;
+                $parameters["dateEnd"]=$dateEnd;
+
+                $this->connection = Connection::GetInstance();
+
+                $resultSet=$this->connection->Execute($query, $parameters);
+
+                if(isset($resultSet[0])){
+                    $purchase["Total"]=$resultSet[0]["Total"];
+                    $purchase["Tickets"]=$resultSet[0]["Tickets"];
+                }else{
+                    $purchase["Total"]=0;
+                    $purchase["Tickets"]=0;
+                }
+
+                return $purchase;
+
+            }catch(Exception $ex){
+                throw $ex;
+            }
+        }
+
     }
 ?>
