@@ -4,18 +4,18 @@
 <main class="py-5">
      <section id="listado" class="mb-5">
           <div class="container">
-               <h2 class="mb-4">Listado de Salas</h2>
+               <h2 class="mb-4">Room List</h2>
                <table class="table bg-light-alpha">
                     <thead>
-                         <th>Nombre</th>
-                         <th>Capacidad de la sala</th>
+                         <th>Room Name</th>
+                         <th>Room Capacity</th>
                          <th></th>
                          <th></th>
                          <th></th>
                     </thead>
                     <tbody>
                     <form action="<?php echo FRONT_ROOT ?>CinemaRoom/Select" method="POST">
-                    <button type="submit" class ="btn btn-primary" name ='add_button' value='<?php echo $cinema->getIdCinema(); ?>'> Agregar Sala </button>
+                    <button type="submit" class ="btn btn-primary" name ='add_button' value='<?php echo $cinema->getIdCinema(); ?>'> Add Room </button>
                          <?php
                               foreach($cinemaRoomList as $room)
                               {
@@ -24,13 +24,13 @@
                                              <td><?php echo $room->getRoomName() ?></td>
                                              <td><?php echo $room->getTotalCap() ?></td>
                                              <td> 
-                                                  <button type="submit" class ="btn btn-primary" name ='function_button' value='<?php echo $room->getIdCinemaRoom(); ?>'> Funciones </button>
+                                                  <button type="submit" class ="btn btn-primary" name ='function_button' value='<?php echo $room->getIdCinemaRoom(); ?>'> Functions </button>
                                              </td>
                                              <td> 
-                                                  <button type="submit" class ="btn btn-warning" name ='edit_button' value='<?php echo $room->getIdCinemaRoom(); ?>'> Editar </button>
+                                                  <button type="submit" class ="btn btn-warning" name ='edit_button' value='<?php echo $room->getIdCinemaRoom(); ?>'> Edit </button>
                                              </td>
                                              <td> 
-                                                  <button type="submit" class ="btn btn-danger" name ='delete_button' value='<?php echo $room->getIdCinemaRoom(); ?>'> Eliminar </button>
+                                                  <button type="submit" class ="btn btn-danger" name ='delete_button' value='<?php echo $room->getIdCinemaRoom(); ?>'> Delete </button>
                                              </td>
                                         </tr>
                                    <?php

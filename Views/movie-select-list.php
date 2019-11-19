@@ -4,13 +4,13 @@
 <main class="py-5">
      <section id="listado" class="mb-5">
           <div class="container">
-               <h2 class="mb-4">Listado de Peliculas</h2>
+               <h2 class="mb-4">Movie List</h2>
                <table class="table bg-light-alpha">
                     <thead>
                          <th></th>
-                         <th>Nombre</th>
-                         <th>Lenguaje</th>
-                         <th>Duracion total</th>
+                         <th>Movie Name</th>
+                         <th>Movie Language</th>
+                         <th>Runtime</th>
                          <th>Genre</th>
                          <th>Poster</th>
                     </thead>
@@ -22,7 +22,7 @@
                               {
                                    ?>
                                         <tr>
-                                             <td><button type="submit" name="select_movie" value="<?php echo $movie->getIdMovie();?>" class="btn btn-dark ml-auto d-block">Elegir</button></td>
+                                             <td><button type="submit" name="select_movie" value="<?php echo $movie->getIdMovie();?>" class="btn btn-dark ml-auto d-block">Choose</button></td>
                                              <td><?php echo $movie->getMovieName()  ?></td>
                                              <td><?php echo $movie->getLanguage() ?></td>
                                              <td><?php echo $movie->getDuration() ?></td>
