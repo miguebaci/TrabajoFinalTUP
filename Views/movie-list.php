@@ -4,13 +4,13 @@
 <main class="py-5">
      <section id="listado" class="mb-5">
           <div class="container">
-               <h2 class="mb-4">Listado de Peliculas</h2>
+               <h2 class="mb-4">Movie List</h2>
                <table class="table bg-light-alpha">
                     <thead>
-                         <th>Nombre</th>
-                         <th>Lenguaje</th>
-                         <th>Duracion total</th>
-                         <th>Genero/s</th>
+                         <th>Movie List</th>
+                         <th>Movie Language</th>
+                         <th>Runtime</th>
+                         <th>Genre</th>
                          <th>Poster</th>
                     </thead>
                     <tbody>

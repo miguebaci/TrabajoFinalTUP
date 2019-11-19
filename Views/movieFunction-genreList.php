@@ -4,16 +4,16 @@
 <main class="py-5">
      <section id="listado" class="mb-5">
           <div class="container">
-               <h2 class="mb-4">Listado de Funciones</h2>
+               <h2 class="mb-4">Function List</h2>
                <table class="table bg-light-alpha">
                     <thead>
-                         <th>Nombre</th>
-                         <th>Lenguaje</th>
-                         <th>Duracion total</th>
-                         <th>Genero/s</th>
+                         <th>Movie Name</th>
+                         <th>Movie Language</th>
+                         <th>Runtime</th>
+                         <th>Genre</th>
                          <th>Poster</th>
-                         <th>Dia de la Funcion</th>
-                         <th>Horario de la Funcion</th>
+                         <th>Function Date</th>
+                         <th>Function Time</th>
                     </thead>
                     <tbody>
                     <form action="<?php echo FRONT_ROOT ?>Function/Select" method="POST">
