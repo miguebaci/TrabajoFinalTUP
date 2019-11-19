@@ -273,14 +273,12 @@
         public function GetRemainingTickets($function){
             try{
 
-                $query="SELECT (R.totalCap-SUM(P.ticketQuantity)) 
+                $query="SELECT ifnull(SUM(P.ticketQuantity),0)  
                 FROM ".$this->tableName." P 
                 JOIN ".$this->ticketTable." T
                 ON P.idTicket=T.idTicket 
                 JOIN moviefunction MF 
                 ON T.idMovieFunction=MF.idMovieFunction
-                JOIN room R 
-                ON MF.idRoom=R.idRoom 
                 WHERE MF.idMovieFunction= :idMovieFunction 
                 GROUP BY MF.idMovieFunction;";
 
@@ -290,7 +288,25 @@
 
                 $resultSet=$this->connection->Execute($query, $parameters);
 
-                $remainingTickets=$resultSet[0][0];
+
+                $query2="SELECT R.totalCap 
+                FROM moviefunction MF 
+                JOIN room R 
+                ON MF.idRoom=R.idRoom 
+                WHERE MF.idMovieFunction= :idMovieFunction 
+                GROUP BY MF.idMovieFunction;";
+
+                $parameters2["idMovieFunction"]=$function->getIdFunction();
+
+                $this->connection = Connection::GetInstance();
+
+                $resultSet2=$this->connection->Execute($query2, $parameters2);
+
+                if(isset($resultSet[0][0])){
+                    $remainingTickets=$resultSet2[0][0]-$resultSet[0][0];
+                }else{
+                    $remainingTickets=$resultSet2[0][0];
+                }
                 
                 return $remainingTickets;
 
