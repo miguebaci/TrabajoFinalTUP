@@ -31,10 +31,12 @@
             require_once(VIEWS_PATH."validate-session.php");
             if($_POST){
                 $discount=0;
-                $cinema=$this->helper->helpCinemaByFunction($this->helper->helpFunctionById($_POST["buy_button"]));
-                if(isset($_POST["discount"])){
-                    if($_POST["discount"] == "BADU"){
-                        $discount=10;
+                $function=$this->helper->helpFunctionById($_POST["buy_button"]);
+                $date=date("l", strtotime($function->getDate()));
+                $cinema=$this->helper->helpCinemaByFunction($function);
+                if($date=="Tuesday" || $date=="Wednesday"){
+                    if($_POST["quantity"] >= 2){
+                        $discount=25;
                     }
                 }
                 $purchase=$this->purchaseDAO->Buy($cinema,$discount,$_POST["quantity"]);
