@@ -202,7 +202,7 @@
                 if($_SESSION["loggedUser"]->getPassword()==$_POST["oldPassword"]){
                     if($_POST["newPassword"]==$_POST["newPassword2"]){
                         $_SESSION["loggedUser"]->setPassword($_POST["newPassword"]);
-                        $this->userDAO->setNewPassword($_POST["newPassword"], $_SESSION["loggedUser"]->getIdUser());
+                        $this->userDAO->setNewPassword($_POST["newPassword"], $_SESSION["loggedUser"]);
                         echo "<script> alert('Password changed');";
                         echo "window.location = '".FRONT_ROOT."User/UserProfile'; </script>";
                     }else{
@@ -228,7 +228,7 @@
             require_once(VIEWS_PATH."validate-session.php");
             if(isset($_POST)){
                 $_SESSION["loggedUser"]->setUserProfile($_POST["lastName"],$_POST["firstName"],$_POST["dni"]);
-                $this->userDAO->setUserNewProfile($_SESSION["loggedUser"]->getUserProfile(),$_SESSION["loggedUser"]->getIdUser());
+                $this->userDAO->setUserNewProfile($_SESSION["loggedUser"]->getUserProfile(),$_SESSION["loggedUser"]);
                 echo "<script> alert('Info changed');";
                 echo "window.location = '".FRONT_ROOT."User/UserProfile'; </script>";
             }else{

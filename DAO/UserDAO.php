@@ -13,6 +13,11 @@
         private $profileTable = "userprofile"; 
         private $userList = array();
 
+        /*
+         * Recieves and User
+         * Adds it to the Database
+         */ 
+
         public function Add(User $user)
         {
             try
@@ -28,12 +33,16 @@
 
                 $this->connection->ExecuteNonQuery($query, $parameters);
 
-                $idUser=$this->getEmailID($user->getEmail());
+                $query= "SELECT LAST_INSERT_ID()";
+
+                $this->connection = Connection::GetInstance();
+
+                $resultSet=$this->connection->Execute($query);
 
                 $query2 = "INSERT INTO ".$this->profileTable." (idUser, firstName, lastName, dni) 
                             VALUES (:idUser, :firstName, :lastName, :dni);";
                 
-                $parameters2["idUser"] = $idUser;
+                $parameters2["idUser"] = $resultSet[0][0];
                 $parameters2["firstName"] = -1;
                 $parameters2["lastName"] = -1;
                 $parameters2["dni"] = -1;
@@ -47,6 +56,11 @@
                 throw $ex;
             }
         }
+
+        /*
+         * Recieves data from the facebook api (Email, First Name, Last Name)
+         * Adds it as an User to the Database
+         */ 
 
         public function AddFacebook($email,$first_name,$last_name)
         {
@@ -63,12 +77,16 @@
 
                 $this->connection->ExecuteNonQuery($query, $parameters);
 
-                $idUser=$this->getEmailID($email);
+                $query= "SELECT LAST_INSERT_ID()";
+
+                $this->connection = Connection::GetInstance();
+
+                $resultSet=$this->connection->Execute($query);
 
                 $query2 = "INSERT INTO ".$this->profileTable." (idUser, firstName, lastName, dni) 
                             VALUES (:idUser, :firstName, :lastName, :dni);";
                 
-                $parameters2["idUser"] = $idUser;
+                $parameters2["idUser"] = $resultSet[0][0];
                 $parameters2["firstName"] = $first_name;
                 $parameters2["lastName"] = $last_name;
                 $parameters2["dni"] = -1;
@@ -82,6 +100,11 @@
                 throw $ex;
             }
         }
+
+        /*
+         * Checks in the Database for all the Users
+         * Returns a list of the Users
+         */ 
 
         public function GetAll()
         {
@@ -130,6 +153,12 @@
             }
         }
 
+        /*
+         * Recieves the name of a role 
+         * Checks the Database for that name
+         * Returns it's ID
+         */
+
         public function GetIdRole($role){
             try
             {
@@ -143,6 +172,12 @@
                throw $ex;
             }
         }
+
+        /*
+         * Recieves the ID of a role
+         * Checks for it in the Database
+         * Returns the name of that role
+         */
 
         public function GetRoleById($idRole){
             try
@@ -158,6 +193,12 @@
             }
         }
 
+        /*
+         * Recieves an email
+         * Checks with all the emails of the Users
+         * And returns it's User if it has one
+         */
+
         public function emailVerification($email){
             $this->getAll();
                 $resultSet=NULL;
@@ -168,20 +209,21 @@
                 }
                 return $resultSet;
         }
+        
+        /*
+         * Recieves a password and an user id
+         * Updates it in the database
+         */
 
-        private function getEmailID($email){
-            $user=$this->emailVerification($email);
-            return $user->getIdUser();
-        }
-
-        public function setNewPassword($password,$idUser){
+        public function setNewPassword($password,$user){
             try
             {
                 $query = "UPDATE ".$this->tableName."
                           SET password = :password 
-                          WHERE idUser= ".$idUser;
+                          WHERE idUser= :idUser";
                 
                 $parameters["password"] = $password;
+                $parameters["idUser"] = $user->getIdUser();
 
                 $this->connection = Connection::GetInstance();
 
@@ -193,22 +235,30 @@
             }
         }
 
-        public function setUserNewProfile($userProfile,$idUser){
+        /*
+         * Recieves UserProfile and User
+         * Updates it on the DataBase
+         */
+
+        public function setUserNewProfile($userProfile,$user){
             try
             {   
                 $query2 ="SELECT *
                             FROM ".$this->profileTable." UP
-                            WHERE UP.idUser=".$idUser;
+                            WHERE UP.idUser= :idUser";
+
+                $parameters2["idUser"]=$user->getIdUser();
 
                 $this->connection = Connection::GetInstance();
 
-                $resultSet2 = $this->connection->Execute($query2);
+                $resultSet2 = $this->connection->Execute($query2,$parameters2);
                 
                 if($resultSet2!=NULL){
                     $query = "UPDATE ".$this->profileTable."
                     SET lastName = :lastName, firstName = :firstName, dni = :dni
-                    WHERE idUser= ".$idUser;
+                    WHERE idUser= :idUser";
           
+                    $parameters["idUser"]=$user->getIdUser();
                     $parameters["lastName"] = $userProfile->getLastName();
                     $parameters["firstName"] = $userProfile->getFirstName();
                     $parameters["dni"] = $userProfile->getDni();
@@ -220,7 +270,7 @@
                     $query = "INSERT INTO ".$this->profileTable." (idUser, firstName, lastName, dni) 
                             VALUES (:idUser, :firstName, :lastName, :dni);";
                 
-                    $parameters["idUser"] = $idUser;
+                    $parameters["idUser"] = $user->getIdUser();
                     $parameters["lastName"] = $userProfile->getLastName();
                     $parameters["firstName"] = $userProfile->getFirstName();
                     $parameters["dni"] = $userProfile->getDni();
