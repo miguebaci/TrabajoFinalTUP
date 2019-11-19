@@ -36,7 +36,7 @@
             {
                 $genreList = array();
 
-                $query = "SELECT * FROM ".$this->tableName;
+                $query = "SELECT * FROM ".$this->tableName ." G ORDER BY G.description";
 
                 $this->connection = Connection::GetInstance();
 
@@ -166,11 +166,3 @@
         }
 
     }
-
-    /*SELECT idMovieFunction
-    FROM moviefunction MF 
-    JOIN movie M 
-    ON M.idMovie = MF.idMovie
-    JOIN moviexgenre MXG 
-    ON MXG.idMovie = M.idMovie
-    WHERE MXG.idGenre = 28*/

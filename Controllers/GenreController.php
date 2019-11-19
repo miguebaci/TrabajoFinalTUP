@@ -17,8 +17,6 @@
         public function UpdateGenres(){
             require_once(VIEWS_PATH."validate-session-admin.php");
             $this->genreDAO->UpdateAll();
-            echo "<script> alert('Genres Updated');";  
-            echo "window.location = '../index.php'; </script>";
         }
     }
 ?>
