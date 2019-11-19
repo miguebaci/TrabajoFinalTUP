@@ -264,5 +264,40 @@
             }
         }
 
+        /*
+         * Recieves a Movie Function
+         * Gets the remaining tickets for that function from the database
+         * Returns the remaining tickets
+         */
+
+        public function GetRemainingTickets($function){
+            try{
+
+                $query="SELECT (R.totalCap-SUM(P.ticketQuantity)) 
+                FROM ".$this->tableName." P 
+                JOIN ".$this->ticketTable." T
+                ON P.idTicket=T.idTicket 
+                JOIN moviefunction MF 
+                ON T.idMovieFunction=MF.idMovieFunction
+                JOIN room R 
+                ON MF.idRoom=R.idRoom 
+                WHERE MF.idMovieFunction= :idMovieFunction 
+                GROUP BY MF.idMovieFunction;";
+
+                $parameters["idMovieFunction"]=$function->getIdFunction();
+
+                $this->connection = Connection::GetInstance();
+
+                $resultSet=$this->connection->Execute($query, $parameters);
+
+                $remainingTickets=$resultSet[0][0];
+                
+                return $remainingTickets;
+
+            }catch(Exception $ex){
+                throw $ex;
+            }
+        }
+
     }
 ?>
