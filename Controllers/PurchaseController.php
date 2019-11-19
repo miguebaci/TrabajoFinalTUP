@@ -4,6 +4,7 @@
     use DAO\IPurchaseDAO as IPurchaseDAO;
     use DAO\PurchaseDAO as PurchaseDAO;
     use Models\Purchase as Purchase;
+    use Helper\PurchaseHelper as Helper;
 
     use DAO\FunctionDAO as FunctionDAO;
 
@@ -11,11 +12,13 @@
     {
         private $purchaseDAO;
         private $functionDAO;
+        private $helper;
 
         public function __construct()
         {
             $this->purchaseDAO = new PurchaseDAO();
             $this->functionDAO = new FunctionDAO();
+            $this->helper = new Helper();
         }
 
         public function ShowBuyView(){
@@ -30,7 +33,7 @@
             require_once(VIEWS_PATH."validate-session.php");
             if($_POST){
                 $discount=0;
-                $cinema=$this->functionDAO->GetCinemaByFunction($this->functionDAO->GetById($_POST["buy_button"]));
+                $cinema=$this->helper->helpCinemaByFunction($this->helper->helpFunctionById($_POST["buy_button"]));
                 if(isset($_POST["discount"])){
                     if($_POST["discount"] == "BADU"){
                         $discount=10;

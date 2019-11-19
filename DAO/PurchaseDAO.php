@@ -5,17 +5,17 @@
     use Models\Purchase as Purchase;
     use Models\Ticket as Ticket;
     use DAO\Connection as Connection;
-    use DAO\FunctionDAO as FunctionDAO;
+    use Helper\PurchaseHelper as Helper;
 
-    class PurchaseDAO // implements IPurchaseDAO
+    class PurchaseDAO implements IPurchaseDAO
     {
         private $connection;
         private $tableName="purchase";
         private $ticketTable="ticket";
-        private $functionDAO;
+        private $helper;
 
         public function __construct(){
-            $this->functionDAO=new FunctionDAO();
+            $this->helper=new Helper();
         }
 
         /*
@@ -161,7 +161,7 @@
                     $ticket=new Ticket();
                     $ticket->setTicketNumber($row["idTicket"]);
                     $ticket->setQR($row["QR"]);
-                    $ticket->setMovieFunction($this->functionDAO->getById($row["idMovieFunction"]));
+                    $ticket->setMovieFunction($this->helper->helpFunctionById($row["idMovieFunction"]));
                     $purchase->setTicket($ticket);
                     array_push($purchaseList,$purchase);
                 }
@@ -173,6 +173,12 @@
                 throw $ex;
             }
         }
+
+        /*
+         * Recieves a cinema, and a first date and a last date
+         * Checks in the database the sells in money and tickets
+         * And returns them
+         */
 
         public function getPurchasesByCinema($cinema, $dateStart, $dateEnd){
             try{
@@ -213,6 +219,12 @@
                 throw $ex;
             }
         }
+
+        /*
+         * Recieves a movie, and a first date and a last date
+         * Checks in the database the sells in money and tickets
+         * And returns them
+         */
 
         public function getPurchasesByMovie($movie, $dateStart, $dateEnd){
             try{
