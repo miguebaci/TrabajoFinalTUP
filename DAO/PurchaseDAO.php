@@ -299,5 +299,40 @@
             }
         }
 
+        /*
+         * Recieves a Movie Function
+         * Gets the ticket price for that function from the database
+         * Returns the ticket price
+         */
+
+        public function getFunctionTicketPrice($function){
+            try{
+
+                $query="SELECT C.TicketPrice 
+                FROM ".$this->tableName." P 
+                JOIN ".$this->ticketTable." T
+                ON P.idTicket=T.idTicket 
+                JOIN moviefunction MF 
+                ON T.idMovieFunction=MF.idMovieFunction
+                JOIN room R 
+                ON MF.idRoom=R.idRoom 
+                JOIN cinema C 
+                ON C.idCinema=R.idCinema;";
+
+                $parameters["idMovieFunction"]=$function->getIdFunction();
+
+                $this->connection = Connection::GetInstance();
+
+                $resultSet=$this->connection->Execute($query, $parameters);
+
+                $ticketPrice=$resultSet[0][0];
+                
+                return $ticketPrice;
+
+            }catch(Exception $ex){
+                throw $ex;
+            }
+        }
+
     }
 ?>
