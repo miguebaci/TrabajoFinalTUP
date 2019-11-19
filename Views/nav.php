@@ -29,7 +29,7 @@
                               <select name="genre_select" onchange="this.form.submit()" class="dropbtn">
                                    <option readonly>Funciones por Genero</option>
                                    <option value="28">Action</option>
-                                   <option value="12">Aventure</option>
+                                   <option value="12">Adventure</option>
                                    <option value="16">Animation</option>
                                    <option value="35">Comedy</option>
                                    <option value="80">Crime</option>
@@ -65,6 +65,7 @@
                                    <option value="<?php echo FRONT_ROOT ?>Movie/UpdateMovies">Update Movies</option>
                                    <option value="<?php echo FRONT_ROOT ?>Movie/ShowListView">List Movies</option>
                                    <option value="<?php echo FRONT_ROOT ?>Genre/UpdateGenres">Update Genres</option>
+                                   <option value="<?php echo FRONT_ROOT ?>User/ShowAnalytics">Analytics</option>
                               </select>
                               </div>
                          </li>

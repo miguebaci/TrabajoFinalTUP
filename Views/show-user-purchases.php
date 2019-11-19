@@ -35,7 +35,7 @@
                                              <td><?php echo "<img src=".$ticket->getQR()."title='Your Ticket' />" ?></td>
                                         </tr>
                                    <?php
-                              }
+                              } 
                               
                          ?>
                          </form>

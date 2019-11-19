@@ -356,5 +356,17 @@ class FunctionDAO implements IFunctionDAO
             throw $ex;
         }
     }
+
+    public function GetAllMoviesInFunctions(){
+        $functionList = $this->GetAll();
+        $movieList = array();
+        foreach ($functionList as $function) {
+            $movie = $this->GetMovieByFunctionId($function->getIdFunction());
+            if (!in_array($movie, $movieList)) {
+                array_push($movieList, $movie);
+            }
+        }
+        return $movieList;
+    }
 }
 ?>
