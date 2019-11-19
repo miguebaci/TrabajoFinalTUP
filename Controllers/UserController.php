@@ -240,6 +240,7 @@
         public function ShowUserPurchases(){
             require_once(VIEWS_PATH."validate-session.php");
             $purchaseList=$this->helper->helpBringUserPurchases($_SESSION["loggedUser"]);
+            var_dump($purchaseList);
             require_once(VIEWS_PATH."show-user-purchases.php");
         }
 
