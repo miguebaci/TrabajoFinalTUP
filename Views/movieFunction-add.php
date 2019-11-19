@@ -12,7 +12,13 @@
                          <div class="col-lg-4">
                               <div class="form-group">
                                    <label for="">Horario</label>
-                                   <input type="time" name="function_time" value="" class="form-control">
+                                   <select name="function_time" class="form-control">
+                                   <option value="11:00">11:00</option>
+                                   <option value="14:00">14:00</option>
+                                   <option value="17:00">17:00</option>
+                                   <option value="20:00">20:00</option>
+                                   <option value="23:00">23:00</option>
+                                   </select>
                               </div>
                          </div>
                          <div class="col-lg-4">

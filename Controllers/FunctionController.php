@@ -1,33 +1,24 @@
 <?php
     namespace Controllers;
-
-use DAO\CinemaDAO;
-use DAO\MovieDAO as MovieDAO;
-    use DAO\IMovieDAO as IMovieDAO;
-    use Models\Movie as Movie;
-
-    use DAO\IRoomDAO as IRoomDAO;
-    use DAO\RoomDAO as RoomDAO;
-    use Models\CinemaRoom as CinemaRoom;
-
-    use DAO\IFunctionDAO as IFunctionDAO;
-    use DAO\FunctionDAO as FunctionDAO;
     
-    use DAO\IGenreDAO as IGenreDAO;
-    use DAO\GenreDAO as GenreDAO;
+    use Models\CinemaRoom as CinemaRoom;
+    use Models\Movie as Movie;
+    use DAO\FunctionDAO as FunctionDAO;
+    use Helper\FunctionHelper as FunctionHelper;
     use Models\Genre as Genre;
 
-    use Date as Date;
 
     use Models\MovieFunction as MovieFunction;
 
     class FunctionController
     {
         private $functionDAO;
+        private $helper;
 
         public function __construct()
         {
             $this->functionDAO = new FunctionDAO();
+            $this->helper = new FunctionHelper();
         }
 
         public function ShowAddView()
@@ -49,7 +40,7 @@ use DAO\MovieDAO as MovieDAO;
             $idGenre=$genre->getIdGenre();
             $functionDAO = $this->functionDAO;
             $functionList = $functionDAO->GetAllByGenre($idGenre);
-            $movieDAO= new MovieDAO();
+            $movieDAO= $this->helper->getMovieDAO();
             require_once(VIEWS_PATH."movieFunction-genreList.php");
         }
 
@@ -58,7 +49,7 @@ use DAO\MovieDAO as MovieDAO;
             require_once(VIEWS_PATH."validate-session-admin.php");
             $idRoom=$room->getIdCinemaRoom();
             $functionList = $this->functionDAO->GetAllByRoomId($room);
-            $movieDAO= new MovieDAO();
+            $movieDAO= $this->helper->getMovieDAO();
             require_once(VIEWS_PATH."movieFunction-list.php");
         }
 
@@ -73,13 +64,11 @@ use DAO\MovieDAO as MovieDAO;
 
                 if(isset($_POST["idMovie"])){
                     $idMovie=$_POST["idMovie"];
-                    $movieDAO= new MovieDAO();
-                    $movie = $movieDAO->GetById($idMovie);
+                    $movie= $this->helper->helpMovieById($idMovie);
                 }
                 if(isset($_POST["idRoom"])){
                     $idRoom = $_POST["idRoom"];
-                    $roomDAO = new RoomDAO();
-                    $room = $roomDAO->GetById($idRoom);
+                    $room = $this->helper->helpGetRoom($idRoom);
                 }
                 if(isset($_POST["function_date_start"]) && isset($_POST["function_date_end"])){
                     $functionStartDate = $_POST["function_date_start"];
@@ -123,20 +112,40 @@ use DAO\MovieDAO as MovieDAO;
 
         }
 
-        public function getall(){
-            $list=array();
-            $list = $this->functionDAO->GetAllCinemasData();
-            var_dump($list);
+        public function GetAllCinemasByMovie(Movie $movie)
+        {
+            $cinemaArray = $this->helper->helpGetCinemasByMovie($movie);
+            $functionList = array();
+
+            foreach ($cinemaArray as $cinema) {
+                $roomArray = $this->helper->helpGetRoomsByCinema($cinema);
+
+                foreach ($roomArray as $room) {
+                    $functionArray = $this->functionDAO->GetAllByRoomId($room);
+
+                    foreach ($functionArray as $function) {
+                        $movieAux = $function->getMovie();
+                        $functionMovieId = $movieAux->getIdMovie();
+
+                        if ($movie->getIdMovie() == $functionMovieId) {
+                            array_push($functionList, $function);
+                        }
+                    }
+                    $room->setFunctionList($functionList);
+                    
+                }
+                $cinema->setCinemaRoomList($roomArray);
+            }
+            return $cinemaArray;
         }
 
         public function Select()
         {   
             if($_POST){
-                $roomDAO= new RoomDAO();
+                $roomDAO= $this->helper->getRoomDAO();
                 if(isset($_POST["add_button"])){
                     require_once(VIEWS_PATH."validate-session-admin.php");
-                    $movieDAO= new MovieDAO();
-                    $movieList= $movieDAO->GetAll();
+                    $movieList= $this->helper->helpMovieList();
                     $idRoom=$_POST["add_button"];
                     require_once(VIEWS_PATH."movie-select-list.php");
 
@@ -151,8 +160,7 @@ use DAO\MovieDAO as MovieDAO;
 
                 if(isset($_POST["genre_select"])){
                     $idGenre=$_POST["genre_select"];
-                    $genreDAO= new GenreDAO();
-                    $genre=$genreDAO->GetById($idGenre);
+                    $genre=$this->helper->helpGetGenre($idGenre);
                     $this->ShowGenreListView($genre);
 
                 }
@@ -163,10 +171,18 @@ use DAO\MovieDAO as MovieDAO;
                     $this->ShowListView($idRoom);
 
                 }
+
                 if(isset($_POST["idMovie_Selected"]))
                 {
-                    $functionList=$this->functionDAO->GetByMovieId($_POST["idMovie_Selected"]);
+                    $movie = $this->helper->helpMovieById($_POST["idMovie_Selected"]);
+                    $cinemaList =  $this->GetAllCinemasByMovie($movie);
                     require_once(VIEWS_PATH."movieFunction-select.php");
+                }
+
+                if(isset($_POST["delete_old"]))
+                {
+                    $this->functionDAO->DeleteOldFunctions();
+                    require_once(VIEWS_PATH."success-view.php");
                 }
 
                 else if(isset($_POST["delete_button"])){
@@ -174,7 +190,7 @@ use DAO\MovieDAO as MovieDAO;
                     $idFunction=$_POST["delete_button"];
                     $function=$this->functionDAO->GetById($idFunction);
                     $idRoom=$this->functionDAO->GetRoomId($function);
-                    $room=$roomDAO->GetById($idRoom);
+                    $room=$this->helper->helpGetRoom ($idRoom);
                     $this->functionDAO->Delete($function);
                     $this->ShowListView($room);
                     

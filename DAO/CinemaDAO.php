@@ -4,6 +4,7 @@
     use DAO\ICinemaDAO as ICinemaDAO;
     use Models\Cinema as Cinema;
     use Models\CinemaRoom as CinemaRoom;
+    use Models\Movie as Movie;
     use DAO\Connection as Connection;
 
     class CinemaDAO implements ICinemaDAO
@@ -108,6 +109,34 @@
                     $cinema->setCinemaRoomList($roomList);
                 }
             return $cinema;
+            }
+            catch(Exception $ex)
+            {
+               throw $ex;
+            }
+        }
+
+        public function GetByMovie(Movie $movie){
+            try
+            {
+            $idMovie=$movie->getIdMovie();
+            $query = "SELECT * FROM ".$this->tableName. " C 
+            INNER JOIN room R ON C.idCinema = R.idCinema
+            INNER JOIN moviefunction MF ON R.idRoom = MF.idRoom
+            INNER JOIN movie M ON M.idMovie = MF.idMovie
+            WHERE M.idMovie ='$idMovie' GROUP BY C.idCinema";
+            $this->connection = Connection::GetInstance();
+            $resultSet = $this->connection->Execute($query);
+            $cinemaList=array();
+            foreach ($resultSet as $row)
+                {   
+                    $cinema = new Cinema($row["idCinema"],
+                    $row["cinemaName"],
+                    $row["adress"],
+                    $row["ticketPrice"]);
+                    array_push($cinemaList, $cinema);
+                }
+            return $cinemaList;
             }
             catch(Exception $ex)
             {

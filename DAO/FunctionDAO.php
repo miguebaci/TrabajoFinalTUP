@@ -2,24 +2,26 @@
 
 namespace DAO;
 
+use Helper\FunctionHelper as FunctionHelper;
 use DAO\IFunctionDAO as IFunctionDAO;
 use Models\MovieFunction as MovieFunction;
 use Models\Movie as Movie;
 use Models\CinemaRoom as CinemaRoom;
-use DAO\RoomDAO as RoomDAO;
 use Models\Cinema as Cinema;
-use DAO\CinemaDAO as CinemaDAO;
-use DAO\GenreDAO as GenreDAO;
 use DAO\Connection as Connection;
 
 class FunctionDAO implements IFunctionDAO
 {
     private $connection;
+    private $helper;
     private $tableName = "moviefunction";
-    private $roomTable = "room";
-    private $cinemaTable = "cinema";
     private $movieTable = "movie";
     private $mxgTable = "movieXgenre";
+
+    public function __construct()
+    {
+        $this->helper = new FunctionHelper();
+    }
 
     public function Add(MovieFunction $movieFunction)
     {
@@ -50,7 +52,10 @@ class FunctionDAO implements IFunctionDAO
         try {
             $functionList = array();
 
-            $query = "SELECT * FROM " . $this->tableName;
+            $query = "SELECT * FROM 
+            (SELECT * FROM " . $this->tableName . " F WHERE F.function_date >= CURDATE()) A 
+            WHERE A.idMovieFunction NOT IN (SELECT idMovieFunction FROM moviefunction F WHERE F.function_date = CURDATE() AND F.function_time < CURTIME()) 
+            GROUP BY A.idMovieFunction ORDER BY A.function_date";
 
             $this->connection = Connection::GetInstance();
 
@@ -58,7 +63,7 @@ class FunctionDAO implements IFunctionDAO
 
             foreach ($resultSet as $row) {
                 $movieFunction = new MovieFunction($row["idMovieFunction"], $row["function_date"], $row["function_time"], $this->GetMovieByFunctionId($row["idMovieFunction"]));
-                $roomDAO = new RoomDAO();
+                $roomDAO = $this->helper->getRoomDAO();
                 $room = $roomDAO->GetById($movieFunction->getIdFunction());
                 $movieFunction->setRoom($room);
 
@@ -72,13 +77,52 @@ class FunctionDAO implements IFunctionDAO
     }
 
 
+    public function GetAllByRoomIdAdmin(CinemaRoom $room)
+    {
+        try {
+            $idRoom = $room->getIdCinemaRoom();
+            $functionList = array();
+
+            $query = "SELECT * FROM 
+            (SELECT * FROM " . $this->tableName . " F WHERE F.function_date >= CURDATE()) A 
+            WHERE A.idRoom = " . $idRoom . "
+            AND A.idMovieFunction NOT IN (SELECT idMovieFunction FROM moviefunction F WHERE F.function_date = CURDATE() AND F.function_time < CURTIME()) 
+            GROUP BY A.idMovieFunction ORDER BY A.function_date";
+
+            $this->connection = Connection::GetInstance();
+
+            $resultSet = $this->connection->Execute($query);
+
+            foreach ($resultSet as $row) {
+                $movieFunction = new MovieFunction(
+                    $row["idMovieFunction"],
+                    $row["function_date"],
+                    $row["function_time"],
+                    $this->GetMovieByFunctionId($row["idMovieFunction"])
+                );
+                $movieFunction->setRoom($room);
+
+                array_push($functionList, $movieFunction);
+            }
+            return $functionList;
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+    }
+
+
     public function GetAllByRoomId(CinemaRoom $room)
     {
         try {
             $idRoom = $room->getIdCinemaRoom();
             $functionList = array();
 
-            $query = "SELECT * FROM " . $this->tableName . " WHERE " . $this->tableName . ".idRoom = " . $idRoom;
+            $query = "SELECT * FROM 
+            (SELECT * FROM " . $this->tableName . " F WHERE F.function_date >= CURDATE()) A 
+            WHERE A.idRoom = " . $idRoom . " 
+            AND  A.function_date BETWEEN CURDATE() AND CURDATE() + INTERVAL 3 DAY
+            AND A.idMovieFunction NOT IN (SELECT idMovieFunction FROM moviefunction F WHERE F.function_date = CURDATE() AND F.function_time < CURTIME()) 
+            GROUP BY A.idMovieFunction ORDER BY A.function_date";
 
             $this->connection = Connection::GetInstance();
 
@@ -106,7 +150,7 @@ class FunctionDAO implements IFunctionDAO
         try {
             $functionList = array();
 
-            $query = "SELECT * FROM " . $this->tableName . " F INNER JOIN " . $this->mxgTable . " MXG ON F.idMovie = MXG.idMovie  WHERE MXG.idGenre LIKE " . $idGenre;
+            $query = "SELECT * FROM " . $this->tableName . " F INNER JOIN " . $this->mxgTable . " MXG ON F.idMovie = MXG.idMovie  WHERE MXG.idGenre LIKE " . $idGenre . " AND F.function_date > CURDATE()";
 
             $this->connection = Connection::GetInstance();
 
@@ -119,7 +163,7 @@ class FunctionDAO implements IFunctionDAO
                     $row["function_time"],
                     $this->GetMovieByFunctionId($row["idMovieFunction"])
                 );
-                $roomDAO = new RoomDAO();
+                $roomDAO = $this->helper->getRoomDAO();
                 $idRoom = $this->GetRoomId($movieFunction);
                 $room = $roomDAO->GetById($idRoom);
                 $movieFunction->setRoom($room);
@@ -141,7 +185,7 @@ class FunctionDAO implements IFunctionDAO
             $this->connection = Connection::GetInstance();
 
             $resultSet = $this->connection->Execute($query);
-            $genreDAO = new GenreDAO();
+            $genreDAO = $this->helper->getGenreDAO();
             foreach ($resultSet as $row) {
                 $movie = new Movie(
                     $row["idMovie"],
@@ -166,6 +210,30 @@ class FunctionDAO implements IFunctionDAO
             $query = "DELETE FROM " . $this->tableName . " WHERE " . $this->tableName . ".idMovieFunction ='$idFunction'";
             $this->connection = Connection::GetInstance();
             $this->connection->ExecuteNonQuery($query);
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    public function DeleteOldFunctions()
+    {
+        try {
+            $idArray = array();
+            $query = "SELECT idMovieFunction FROM (SELECT * FROM " . $this->tableName . " F 
+            WHERE F.function_date <= CURDATE()) A 
+            WHERE A.idMovieFunction NOT IN (SELECT idMovieFunction FROM " . $this->tableName . " F WHERE F.function_date = CURDATE() AND F.function_time > CURTIME())";
+            $this->connection = Connection::GetInstance();
+            $resultSet = $this->connection->Execute($query);
+
+            foreach ($resultSet as $row) {
+                array_push($idArray, $row["idMovieFunction"]);
+            }
+
+            foreach ($idArray as $idFunction) {
+                $query2 = "DELETE FROM " . $this->tableName . " WHERE " . $this->tableName . ".idMovieFunction ='$idFunction'";
+                $this->connection = Connection::GetInstance();
+                $this->connection->ExecuteNonQuery($query2);
+            }
         } catch (Exception $ex) {
             throw $ex;
         }
@@ -288,29 +356,5 @@ class FunctionDAO implements IFunctionDAO
             throw $ex;
         }
     }
-
-    public function GetAllCinemasData()
-    {
-        try {
-            $cinemaDAO = new CinemaDAO();
-            $roomDAO = new RoomDAO();
-            $cinemaArray = array();
-            $roomArray = array();
-            $functionArray = array();
-
-            $cinemaList = $cinemaDAO->GetAll();
-            foreach ($cinemaList as $cinema) {
-                $roomArray = $roomDAO->GetAllByCinemaId($cinema->getIdCinema());
-                foreach ($roomArray as $room) {
-                    $functionArray = $this->GetAllByRoomId($room);
-                    $room->setFunctionList($functionArray);
-                }
-                $cinema->setCinemaRoomList($roomArray);
-            }
-
-            return $cinemaList;
-        } catch (Exception $ex) {
-            throw $ex;
-        }
-    }
 }
+?>

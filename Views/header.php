@@ -7,8 +7,8 @@
 
      <!-- Bootstrap CSS -->
      <link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH ?>bootstrap.min.css">
-     <link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH ?>estilos.css">
      <link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH ?>slide.css">
+     <link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH ?>dropdown.css">
 
      <title>Trabajo Practico Final</title>
 </head>
