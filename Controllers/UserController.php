@@ -4,19 +4,16 @@
     use DAO\IUserDAO as IUserDAO;
     use DAO\UserDAO as UserDAO;
     use Models\User as User;
-    use DAO\PurchaseDAO as PurchaseDAO;
     use Facebook\Facebook as Facebook;
     use Helper\UserHelper as Helper;
 
     class UserController
     {
         private $userDAO;
-        private $purchaseDAO;
         private $helper;
 
         public function __construct()
         {   
-            $this->purchaseDAO= new PurchaseDAO();
             $this->userDAO = new UserDAO();
             $this->helper= new Helper();
         }
@@ -242,7 +239,7 @@
 
         public function ShowUserPurchases(){
             require_once(VIEWS_PATH."validate-session.php");
-            $purchaseList=$this->purchaseDAO->bringUserPurchases($_SESSION["loggedUser"]);
+            $purchaseList=$this->helper->helpBringUserPurchases($_SESSION["loggedUser"]);
             require_once(VIEWS_PATH."show-user-purchases.php");
         }
 
