@@ -22,6 +22,7 @@
                 require_once(VIEWS_PATH."validate-session.php");
                 $function=$this->helper->helpFunctionById($_POST["buy_button"]);
                 $remainingTickets=$this->purchaseDAO->GetRemainingTickets($function);
+                $ticketPrice=$this->purchaseDAO->getFunctionTicketPrice($function);
                 require_once(VIEWS_PATH."buy-select.php");
             }
         }
