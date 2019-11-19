@@ -1,11 +1,6 @@
 <?php
 require_once('nav.php');
-
-use DAO\FunctionDAO as FunctionDAO;
-
-$functionDAO = new FunctionDAO;
-$functionList = $functionDAO->GetAll();
-$movieList = $functionDAO->GetAllMoviesInFunctions();
+require_once('get-active.php');
 ?>
 
 <main class="py-5">
