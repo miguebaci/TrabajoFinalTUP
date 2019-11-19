@@ -6,25 +6,22 @@
     use Models\Purchase as Purchase;
     use Helper\PurchaseHelper as Helper;
 
-    use DAO\FunctionDAO as FunctionDAO;
-
     class PurchaseController
     {
         private $purchaseDAO;
-        private $functionDAO;
         private $helper;
 
         public function __construct()
         {
             $this->purchaseDAO = new PurchaseDAO();
-            $this->functionDAO = new FunctionDAO();
             $this->helper = new Helper();
         }
 
         public function ShowBuyView(){
             if($_POST){
                 require_once(VIEWS_PATH."validate-session.php");
-                $idFunction=$_POST["buy_button"];
+                $function=$this->helper->helpFunctionById($_POST["buy_button"]);
+                $remainingTickets=$this->purchaseDAO->GetRemainingTickets($function);
                 require_once(VIEWS_PATH."buy-select.php");
             }
         }
