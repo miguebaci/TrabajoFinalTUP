@@ -32,71 +32,55 @@
             
         }
 
-        public function Add()
+        public function Add($cinemaName,$adress,$ticketPrice)
         {   
             require_once(VIEWS_PATH."validate-session-admin.php");
-            if($_POST){
-                $cinemaName="";
-                $adress="";
-                $ticketPrice=0;
-                if(isset($_POST["cinemaName"])){
-                    $cinemaName=$_POST["cinemaName"];
-                }
-                if(isset($_POST["adress"])){
-                    $adress=$_POST["adress"];
-                }
-                if(isset($_POST["ticketPrice"])){
-                    $ticketPrice=$_POST["ticketPrice"];
-                }
+            
                 $array=array();
                 $newCinema=new Cinema(0,$cinemaName,$adress,$ticketPrice,$array);
                 $this->cinemaDAO->Add($newCinema);
-        
+                /*
                 echo "<script> alert('Cinema added');";
-            }else{
                 echo "<script> alert('Cinema error');";  
-            }
-            echo "</script>";
+                echo "</script>";*/
             $this->ShowListView();
         }
 
-        public function Update()
+        public function Update($idCinema, $cinemaName, $adress, $ticketPrice)
         {   
             require_once(VIEWS_PATH."validate-session-admin.php");
-            if($_POST){
-                $cinema=$this->cinemaDAO->GetById($_POST["idCinema"]);
-                $this->cinemaDAO->Update($cinema, $_POST);
+            
+                $cinema=$this->cinemaDAO->GetById($idCinema);
+                $mod= array("cinemaName"=>$cinemaName, "adress"=>$adress, "ticketPrice"=>$ticketPrice);
+                $this->cinemaDAO->Update($cinema, $mod);
                 $this->ShowListView();
-
-            }
         }
 
-        public function Select()
+        public function Select($button)
         {   
             require_once(VIEWS_PATH."validate-session-admin.php");
-            if($_POST){
 
-                if(isset($_POST["add_button"])){
+                if($button == "add"){
                     $this->ShowAddView();
                 }
 
-                if(isset($_POST["room_button"])){
-                    $cinema=$this->cinemaDAO->GetById($_POST["room_button"]);
+                if($button == "room"){
+                    $cinema=$this->cinemaDAO->GetById($_SESSION['idCinema']);
                     $cinemaRoomList=$cinema->getCinemaRoomList();
                     require_once(VIEWS_PATH."cinemaRoom-list.php");
                 }
 
-                if(isset($_POST["edit_button"])){
-                    $cinema=$this->cinemaDAO->GetById($_POST["edit_button"]);
+                if($button == "edit"){
+                    $cinema=$this->cinemaDAO->GetById($_SESSION['idCinema']);
                     require_once(VIEWS_PATH."cinema-mod.php");
 
                 }
-                else if(isset($_POST["delete_button"])){
-                    $cinema=$this->cinemaDAO->GetById($_POST["delete_button"]);
+                else if($button == "delete"){
+                    $cinema=$this->cinemaDAO->GetById($_SESSION['idCinema']);
                     $this->cinemaDAO->Delete($cinema);
                     $this->ShowListView();
                 }
-            }
+            
         }
     }
 ?>
