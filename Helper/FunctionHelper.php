@@ -43,6 +43,10 @@
             return $this->cinemaDAO->GetByMovie($movie);
         }
 
+        function helpGetCinemasByGenre($idGenre){
+            return $this->cinemaDAO->GetByGenre($idGenre);
+        }
+
         function helpGetRoomsByCinema(Cinema $cinema){
             
             return $this->roomDAO->GetAllByCinemaId($cinema->getIdCinema());
