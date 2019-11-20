@@ -32,7 +32,7 @@
                     </div>
                          <div>
                               <div class="form-group">
-                                   <button type="submit" name="cinema_button" class="btn btn-dark ml-auto d-block">Show Cinema Sales</button>
+                                   <button type="submit" name="button_name" value="cinema" value="1" class="btn btn-dark ml-auto d-block">Show Cinema Sales</button>
                               </div>
                          </div> 
                 </form>
@@ -63,7 +63,7 @@
                     </div>
                          <div>
                               <div class="form-group">
-                                   <button type="submit" name="movie_button" class="btn btn-dark ml-auto d-block">Show Movie Sales</button>
+                                   <button type="submit" value="movie" name="button_name" class="btn btn-dark ml-auto d-block">Show Movie Sales</button>
                               </div>
                          </div>     
                </form>
