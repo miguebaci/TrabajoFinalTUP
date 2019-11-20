@@ -32,7 +32,7 @@ use Models\Movie as Movie;
 
         public function UpdateMovies(){
             require_once(VIEWS_PATH."validate-session-admin.php");
-            $this->genreHelper->helpGenre();
+            $this->genreHelper->helpGenreList();
             $this->movieDAO->UpdateAll();
             $this->ShowListView();
         }
