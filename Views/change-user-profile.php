@@ -23,7 +23,7 @@
                          <div class="col-lg-4">
                               <div class="form-group">
                                    <label for="">DNI</label>
-                                   <input type="number" name="dni" value="" class="form-control" required>
+                                   <input type="number" name="dni" min="1" value="" class="form-control" required>
                               </div>
                          </div>
                          </div>
