@@ -17,34 +17,30 @@
             $this->helper = new Helper();
         }
 
-        public function ShowBuyView(){
-            if($_POST){
+        public function ShowBuyView($functionId){
                 require_once(VIEWS_PATH."validate-session.php");
-                $function=$this->helper->helpFunctionById($_POST["buy_button"]);
+                $function=$this->helper->helpFunctionById($functionId);
                 $remainingTickets=$this->purchaseDAO->GetRemainingTickets($function);
                 $ticketPrice=$this->purchaseDAO->getFunctionTicketPrice($function);
                 require_once(VIEWS_PATH."buy-select.php");
-            }
         }
 
-        public function Buy(){
+        public function Buy($quantity,$functionId){
             require_once(VIEWS_PATH."validate-session.php");
-            if($_POST){
                 $discount=0;
-                $function=$this->helper->helpFunctionById($_POST["buy_button"]);
+                $function=$this->helper->helpFunctionById($functionId);
                 $date=date("l", strtotime($function->getDate()));
                 $cinema=$this->helper->helpCinemaByFunction($function);
                 if($date=="Tuesday" || $date=="Wednesday"){
-                    if($_POST["quantity"] >= 2){
+                    if($quantity >= 2){
                         $discount=25;
                     }
                 }
-                $purchase=$this->purchaseDAO->Buy($cinema,$discount,$_POST["quantity"]);
+                $purchase=$this->purchaseDAO->Buy($cinema,$discount,$quantity);
                 $ticket=$purchase->getTicket();
                 $email=$_SESSION["loggedUser"]->getEmail();
                 $this->SendBuyMail($ticket, $email);
                 require_once(VIEWS_PATH."show-qr.php");
-            }
         }
 
         public function SendBuyMail($ticket, $email){
