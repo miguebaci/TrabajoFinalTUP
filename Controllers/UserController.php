@@ -29,12 +29,11 @@
             require_once(VIEWS_PATH."login.php");
         }
 
-        public function RegisterValidation()
+        public function RegisterValidation($email, $password, $password2, $role)
         {   
-            if($_POST){
-                if($this->userDAO->emailVerification($_POST["email"])==NULL){
-                    if($_POST["password"]==$_POST["password2"]){    
-                        $user=new User(0,$_POST["email"],$_POST["password"],$_POST["role"]);
+                if($this->userDAO->emailVerification($email)){
+                    if($password==$password2){    
+                        $user=new User(0,$email,$password,$role);
                         $this->userDAO->Add($user);
                         $this->SendCreateMail($user);
                         echo "<script> alert('Account created');";
@@ -47,17 +46,12 @@
                     echo "<script> alert('Email already in use');";
                     echo "window.location = '".FRONT_ROOT."User/Register'; </script>";
                 }
-            }else{
-                echo "<script> alert('There was an error');";
-                echo "window.location = '".FRONT_ROOT."User/Register'; </script>";
-            }
         }
 
-        public function LoginValidation(){
-            if($_POST){
-                $user=$this->userDAO->emailVerification($_POST["email"]);
+        public function LoginValidation($email,$password){
+                $user=$this->userDAO->emailVerification($email);
                 if($user!=NULL){
-                    if($_POST["password"]==$user->getPassword()){
+                    if($password==$user->getPassword()){
                         $loggedUser= $user;
                         $_SESSION["loggedUser"]=$loggedUser;
                         echo "<script> alert('Logged In');";
@@ -70,10 +64,6 @@
                     echo "<script> alert('Email does not exist');";
                     echo "window.location = '".FRONT_ROOT."User/Login'; </script>";
                 }
-            }else{
-                echo "<script> alert('Error');";
-                echo "window.location = '".FRONT_ROOT."User/Login'; </script>";
-            }
         }
 
         public function FBCallback(){
@@ -189,13 +179,12 @@
             require_once(VIEWS_PATH."change-password.php");
         }
 
-        public function ChangePasswordConfirm(){
+        public function ChangePasswordConfirm($oldPassword,$newPassword,$newPassword2){
             require_once(VIEWS_PATH."validate-session.php");
-            if(isset($_POST)){
-                if($_SESSION["loggedUser"]->getPassword()==$_POST["oldPassword"]){
-                    if($_POST["newPassword"]==$_POST["newPassword2"]){
-                        $_SESSION["loggedUser"]->setPassword($_POST["newPassword"]);
-                        $this->userDAO->setNewPassword($_POST["newPassword"], $_SESSION["loggedUser"]);
+                if($_SESSION["loggedUser"]->getPassword()==$oldPassword){
+                    if($newPassword==$newPassword2){
+                        $_SESSION["loggedUser"]->setPassword($newPassword);
+                        $this->userDAO->setNewPassword($newPassword, $_SESSION["loggedUser"]);
                         echo "<script> alert('Password changed');";
                         echo "window.location = '".FRONT_ROOT."User/UserProfile'; </script>";
                     }else{
@@ -206,10 +195,6 @@
                     echo "<script> alert('Old Password field is wrong');";
                     echo "window.location = '".FRONT_ROOT."User/ChangePassword'; </script>";
                 }
-            }else{
-                echo "<script> alert('Error');";
-                echo "window.location = '".FRONT_ROOT."index.php'; </script>";
-            }
         }
 
         public function ChangeUserProfile(){
@@ -217,17 +202,12 @@
             require_once(VIEWS_PATH."change-user-profile.php");
         }
 
-        public function changeUserProfileConfirm(){
+        public function changeUserProfileConfirm($lastName,$firstName,$dni){
             require_once(VIEWS_PATH."validate-session.php");
-            if(isset($_POST)){
-                $_SESSION["loggedUser"]->setUserProfile($_POST["lastName"],$_POST["firstName"],$_POST["dni"]);
+                $_SESSION["loggedUser"]->setUserProfile($lastName,$firstName,$dni);
                 $this->userDAO->setUserNewProfile($_SESSION["loggedUser"]->getUserProfile(),$_SESSION["loggedUser"]);
                 echo "<script> alert('Info changed');";
                 echo "window.location = '".FRONT_ROOT."User/UserProfile'; </script>";
-            }else{
-                echo "<script> alert('Error');";
-                echo "window.location = '".FRONT_ROOT."index.php'; </script>";
-            }
         }
 
         public function ShowUserPurchases(){
@@ -244,24 +224,24 @@
 
         }
 
-        public function AnalyticsSelect(){
+        public function AnalyticsSelect($firstId="",$date_start,$date_end,$button_name=""){
             require_once(VIEWS_PATH."validate-session-admin.php");
-            if($_POST){
-                if($_POST["date_start"]<=$_POST["date_end"]){
-                    if(isset($_POST["cinema_button"])){
-                        $cinema=$this->helper->helpGetCinemaById($_POST["cinemaId"]);
-                        $analytics=$this->helper->helpPurchasesByCinema($cinema,$_POST["date_start"],$_POST["date_end"]);
+                if($date_start<=$date_end){
+                    if($button_name=="cinema"){
+                        $cinemaId=$firstId;
+                        $cinema=$this->helper->helpGetCinemaById($cinemaId);
+                        $analytics=$this->helper->helpPurchasesByCinema($cinema,$date_start,$date_end);
                         require_once(VIEWS_PATH."show-cinema-analytics.php");
-                    }elseif(isset($_POST["movie_button"])){
-                        $movie=$this->helper->helpMovieById($_POST["movieId"]);
-                        $analytics=$this->helper->helpPurchasesByMovie($movie,$_POST["date_start"],$_POST["date_end"]);
+                    }elseif($button_name=="movie"){
+                        $movieId=$firstId;
+                        $movie=$this->helper->helpMovieById($movieId);
+                        $analytics=$this->helper->helpPurchasesByMovie($movie,$date_start,$date_end);
                         require_once(VIEWS_PATH."show-movie-analytics.php");
                     }
                 }else{
                     echo "<script> alert('Date Error');";  
                     echo "window.location = '../User/ShowAnalytics'; </script>";
                 }
-            }
         }
 
 
