@@ -290,11 +290,12 @@ class FunctionDAO implements IFunctionDAO
     public function GetByCinemaIdAndMovieId($idCinema, $idMovie)
     {
         try {
-            $query = "SELECT * FROM " . $this->tableName . " F
+            $query = "SELECT A.idMovieFunction, A.function_date, A.function_time FROM (SELECT F.idMovieFunction, F.function_date, F.function_time FROM " . $this->tableName . " F
             INNER JOIN room R ON R.idRoom = F.IdRoom
             INNER JOIN cinema C ON C.idCinema = R.IdCinema
-            WHERE F.idMovie ='$idMovie' AND C.idCinema = '$idCinema'
-            GROUP BY F.idMovieFunction";
+            WHERE F.idMovie ='$idMovie' AND C.idCinema = '$idCinema') A  WHERE A.function_date BETWEEN CURDATE() AND CURDATE() + INTERVAL 3 DAY
+            AND A.idMovieFunction NOT IN (SELECT idMovieFunction FROM moviefunction F WHERE F.function_date = CURDATE() AND F.function_time < CURTIME())
+            GROUP BY A.idMovieFunction";
             $this->connection = Connection::GetInstance();
             $resultSet = $this->connection->Execute($query);
             $movieFunction = NULL;
@@ -320,13 +321,14 @@ class FunctionDAO implements IFunctionDAO
     public function GetByCinemaIdAndGenreId($idCinema, $idGenre)
     {
         try {
-            $query = "SELECT * FROM " . $this->tableName . " F
+            $query = "SELECT A.idMovieFunction, A.function_date, A.function_time FROM (SELECT F.idMovieFunction, F.function_date, F.function_time FROM " . $this->tableName . " F
             INNER JOIN movie M ON M.idMovie = F.idMovie
             INNER JOIN room R ON R.idRoom = F.IdRoom
             INNER JOIN cinema C ON C.idCinema = R.IdCinema
             INNER JOIN moviexgenre MXG ON M.idMovie = MXG.idMovie
-            WHERE MXG.idGenre ='$idGenre' AND C.idCinema = '$idCinema'
-            GROUP BY F.idMovieFunction";
+            WHERE MXG.idGenre ='$idGenre' AND C.idCinema = '$idCinema')A  WHERE A.function_date BETWEEN CURDATE() AND CURDATE() + INTERVAL 3 DAY
+            AND A.idMovieFunction NOT IN (SELECT idMovieFunction FROM moviefunction F WHERE F.function_date = CURDATE() AND F.function_time < CURTIME())
+            GROUP BY A.idMovieFunction";
             $this->connection = Connection::GetInstance();
             $resultSet = $this->connection->Execute($query);
             $movieFunction = NULL;

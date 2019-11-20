@@ -38,9 +38,9 @@
         {
             require_once(VIEWS_PATH."validate-session-admin.php");
             $idRoom=$room->getIdCinemaRoom();
-            $functionList = $this->functionDAO->GetAllByRoomId($room);
-            $movieDAO= $this->helper->getMovieDAO();
-            require_once(VIEWS_PATH."movieFunction-list.php");
+            $room->setFunctionList($this->functionDAO->GetAllByRoomIdAdmin($room));
+            $functionList=$room->getFunctionList();
+            require_once(VIEWS_PATH."moviefunction-list.php");
         }
 
         public function Add()
@@ -98,6 +98,7 @@
                 echo "<script> alert('Function error');";  
             }
             echo "</script>";
+            
             $this->ShowListView($room);
 
         }

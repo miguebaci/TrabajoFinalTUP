@@ -1,31 +1,20 @@
 <?php
     namespace Controllers;
 
-    use DAO\IRoomDAO as IRoomDAO;
     use DAO\RoomDAO as RoomDAO;
-
-    use DAO\ICinemaDAO as ICinemaDAO;
-    use DAO\CinemaDAO as CinemaDAO;
-
-    use DAO\MovieDAO as MovieDAO;
-    use DAO\IMovieDAO as IMovieDAO;
-
-    use DAO\IFunctionDAO as IFunctionDAO;
-    use DAO\FunctionDAO as FunctionDAO;
-    
-    use DAO\IGenreDAO as IGenreDAO;
-    use DAO\GenreDAO as GenreDAO;
-
+    use Helper\RoomHelper as RoomHelper;
     use Models\Cinema as Cinema;
     use Models\CinemaRoom as CinemaRoom;
 
     class CinemaRoomController
     {
         private $cinemaRoomDAO;
+        private $helper;
 
         public function __construct()
         {
             $this->cinemaRoomDAO = new RoomDAO();
+            $this->helper = new RoomHelper();
         }
 
         public function ShowAddView()
@@ -97,8 +86,7 @@
                     
                     $room=$this->cinemaRoomDAO->GetById($_POST["function_button"]);
                     $idRoom=$room->getIdCinemaRoom();
-                    $functionDAO=new FunctionDAO();
-                    $room->setFunctionList($functionDAO->GetAllByRoomIdAdmin($room));
+                    $room->setFunctionList($this->helper->helpGetAllByRoom($room));
                     $functionList=$room->getFunctionList();
                     require_once(VIEWS_PATH."moviefunction-list.php");
 
