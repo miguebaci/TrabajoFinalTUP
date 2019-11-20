@@ -325,15 +325,12 @@
             try{
 
                 $query="SELECT C.TicketPrice 
-                FROM ".$this->tableName." P 
-                JOIN ".$this->ticketTable." T
-                ON P.idTicket=T.idTicket 
-                JOIN moviefunction MF 
-                ON T.idMovieFunction=MF.idMovieFunction
+                FROM moviefunction MF 
                 JOIN room R 
                 ON MF.idRoom=R.idRoom 
                 JOIN cinema C 
-                ON C.idCinema=R.idCinema;";
+                ON C.idCinema=R.idCinema 
+                WHERE MF.idMovieFunction= :idMovieFunction;";
 
                 $parameters["idMovieFunction"]=$function->getIdFunction();
 
