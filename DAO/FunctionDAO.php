@@ -267,7 +267,7 @@ class FunctionDAO implements IFunctionDAO
             INNER JOIN room R ON R.idRoom = F.IdRoom
             INNER JOIN cinema C ON C.idCinema = R.IdCinema
             INNER JOIN moviexgenre MXG ON M.idMovie = MXG.idMovie
-            WHERE MXG.idGenre ='$idGenre' AND C.idCinema = '$idCinema')A  WHERE A.function_date BETWEEN CURDATE() AND CURDATE() + INTERVAL 3 DAY
+            WHERE MXG.idGenre LIKE'$idGenre' AND C.idCinema = '$idCinema')A  WHERE A.function_date BETWEEN CURDATE() AND CURDATE() + INTERVAL 3 DAY
             AND A.idMovieFunction NOT IN (SELECT idMovieFunction FROM moviefunction F WHERE F.function_date = CURDATE() AND F.function_time < CURTIME())
             GROUP BY A.idMovieFunction";
             $this->connection = Connection::GetInstance();
