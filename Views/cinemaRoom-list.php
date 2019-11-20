@@ -15,22 +15,25 @@
                     </thead>
                     <tbody>
                     <form action="<?php echo FRONT_ROOT ?>CinemaRoom/Select" method="POST">
-                    <button type="submit" class ="btn btn-primary" name ='add_button' value='<?php echo $cinema->getIdCinema(); ?>'> Add Room </button>
-                         <?php
+                    <button type="submit" class ="btn btn-primary" name ='button' value='add'> Add Room </button>
+                         <?php $_SESSION['idCinema']=$cinema->getIdCinema();
                               foreach($cinemaRoomList as $room)
-                              {
+                              {    $_SESSION['idRoom']=$room->getIdCinemaRoom();
+                                   
+                                   
+
                                    ?>
                                         <tr>
                                              <td><?php echo $room->getRoomName() ?></td>
                                              <td><?php echo $room->getTotalCap() ?></td>
                                              <td> 
-                                                  <button type="submit" class ="btn btn-primary" name ='function_button' value='<?php echo $room->getIdCinemaRoom(); ?>'> Functions </button>
+                                                  <button type="submit" class ="btn btn-primary" name ='button' value='function'> Functions </button>
                                              </td>
                                              <td> 
-                                                  <button type="submit" class ="btn btn-warning" name ='edit_button' value='<?php echo $room->getIdCinemaRoom(); ?>'> Edit </button>
+                                                  <button type="submit" class ="btn btn-warning" name ='button' value='edit'> Edit </button>
                                              </td>
                                              <td> 
-                                                  <button type="submit" class ="btn btn-danger" name ='delete_button' value='<?php echo $room->getIdCinemaRoom(); ?>' onclick="return confirm('Are you sure yo want to delete <?php echo $room->getRoomName() ?>? This will delete all functions data associated with it')"> Delete </button>
+                                                  <button type="submit" class ="btn btn-danger" name ='button' value='delete' onclick="return confirm('Are you sure yo want to delete <?php echo $room->getRoomName() ?>? This will delete all functions data associated with it')"> Delete </button>
                                              </td>
                                         </tr>
                                    <?php
