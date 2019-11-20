@@ -9,7 +9,8 @@
      <link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH ?>bootstrap.min.css">
      <link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH ?>slide.css">
      <link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH ?>dropdown.css">
-
+     <link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH ?>footer.css">
+     
      <title>Trabajo Practico Final</title>
 </head>
-<body style="background-image: url('https://images.wallpaperscraft.com/image/surface_light_background_leaf_50523_3840x2400.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center center;">
+<body style="background-image: url('https://images.wallpaperscraft.com/image/surface_light_background_leaf_50523_3840x2400.jpg'); background-size: cover; background-position: center center;">
