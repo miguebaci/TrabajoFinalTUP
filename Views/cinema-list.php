@@ -39,7 +39,7 @@
                                                   <button type="submit" class ="btn btn-warning" name ='edit_button' value='<?php echo  $cinema->getIdCinema(); ?>'> Edit </button>
                                              </td>
                                              <td> 
-                                                  <button type="submit" class ="btn btn-danger" name ='delete_button' value='<?php echo $cinema->getIdCinema(); ?>'> Delete </button>
+                                                  <button type="submit" class ="btn btn-danger" name ='delete_button' value='<?php echo $cinema->getIdCinema(); ?>' onclick="return confirm('Are you sure yo want to delete <?php echo $cinema->getCinemaName() ?>? This will delete all cinema rooms and functions data associated with it')"> Delete </button>
                                              </td>
                                         </tr>
                                    <?php
