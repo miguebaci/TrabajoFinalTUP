@@ -7,7 +7,6 @@
         function Add(MovieFunction $movieFunction);
         function GetAll();
         function GetAllByRoomId(CinemaRoom $room);
-        function GetAllByGenre($idGenre);
         function GetMovieByFunctionId($idFunction);
         function Delete(MovieFunction $movieFunction);
         function DeleteOldFunctions();

@@ -16,7 +16,6 @@ class FunctionDAO implements IFunctionDAO
     private $helper;
     private $tableName = "moviefunction";
     private $movieTable = "movie";
-    private $mxgTable = "movieXgenre";
 
     public function __construct()
     {
@@ -145,38 +144,6 @@ class FunctionDAO implements IFunctionDAO
         }
     }
 
-    public function GetAllByGenre($idGenre)
-    {
-        try {
-            $functionList = array();
-
-            $query = "SELECT * FROM " . $this->tableName . " F INNER JOIN " . $this->mxgTable . " MXG ON F.idMovie = MXG.idMovie  WHERE MXG.idGenre LIKE " . $idGenre . " AND F.function_date > CURDATE()";
-
-            $this->connection = Connection::GetInstance();
-
-            $resultSet = $this->connection->Execute($query);
-
-            foreach ($resultSet as $row) {
-                $movieFunction = new MovieFunction(
-                    $row["idMovieFunction"],
-                    $row["function_date"],
-                    $row["function_time"],
-                    $this->GetMovieByFunctionId($row["idMovieFunction"])
-                );
-                $roomDAO = $this->helper->getRoomDAO();
-                $idRoom = $this->GetRoomId($movieFunction);
-                $room = $roomDAO->GetById($idRoom);
-                $movieFunction->setRoom($room);
-
-                array_push($functionList, $movieFunction);
-            }
-
-            return $functionList;
-        } catch (Exception $ex) {
-            throw $ex;
-        }
-    }
-
     public function GetMovieByFunctionId($idFunction)
     {
         try {
@@ -256,32 +223,6 @@ class FunctionDAO implements IFunctionDAO
                 );
             }
             return $movieFunction;
-        } catch (Exception $ex) {
-            throw $ex;
-        }
-    }
-
-    public function GetByMovieId($idMovie)
-    {
-        try {
-            $query = "SELECT * FROM " . $this->tableName . " WHERE " . $this->tableName . ".idMovie ='$idMovie'";
-            $this->connection = Connection::GetInstance();
-            $resultSet = $this->connection->Execute($query);
-            $movieFunction = NULL;
-            $functionList = array();
-
-            foreach ($resultSet as $row) {
-                $movie = $this->GetMovieByFunctionId($row["idMovieFunction"]);
-                $movieFunction = new MovieFunction(
-                    $row["idMovieFunction"],
-                    $row["function_date"],
-                    $row["function_time"],
-                    $movie
-                );
-                array_push($functionList, $movieFunction);
-            }
-
-            return $functionList;
         } catch (Exception $ex) {
             throw $ex;
         }
