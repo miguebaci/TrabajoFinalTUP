@@ -34,16 +34,6 @@
             require_once(VIEWS_PATH."movieFunction-add.php");
         }
 
-        public function ShowGenreListView(Genre $genre)
-        {
-            require_once(VIEWS_PATH."validate-session.php");
-            $idGenre=$genre->getIdGenre();
-            $functionDAO = $this->functionDAO;
-            $functionList = $functionDAO->GetAllByGenre($idGenre);
-            $movieDAO= $this->helper->getMovieDAO();
-            require_once(VIEWS_PATH."movieFunction-genreList.php");
-        }
-
         public function ShowListView(CinemaRoom $room)
         {
             require_once(VIEWS_PATH."validate-session-admin.php");
@@ -114,29 +104,26 @@
 
         public function GetAllCinemasByMovie(Movie $movie)
         {
+            $cinemaFunction=array();
             $cinemaArray = $this->helper->helpGetCinemasByMovie($movie);
-            $functionList = array();
-
             foreach ($cinemaArray as $cinema) {
-                $roomArray = $this->helper->helpGetRoomsByCinema($cinema);
-
-                foreach ($roomArray as $room) {
-                    $functionArray = $this->functionDAO->GetAllByRoomId($room);
-
-                    foreach ($functionArray as $function) {
-                        $movieAux = $function->getMovie();
-                        $functionMovieId = $movieAux->getIdMovie();
-
-                        if ($movie->getIdMovie() == $functionMovieId) {
-                            array_push($functionList, $function);
-                        }
-                    }
-                    $room->setFunctionList($functionList);
-                    
-                }
-                $cinema->setCinemaRoomList($roomArray);
+                $resultset["cinema"] = $cinema;
+                $resultset["functions"] = $this->functionDAO->GetByCinemaIdAndMovieId($cinema->getIdCinema(),$movie->getIdMovie());
+                array_push($cinemaFunction,$resultset);
             }
-            return $cinemaArray;
+            return $cinemaFunction;
+        }
+
+        public function GetAllCinemasByGenre($idGenre)
+        {
+            $cinemaFunction=array();
+            $cinemaArray = $this->helper->helpGetCinemasByGenre($idGenre);
+            foreach ($cinemaArray as $cinema) {
+                $resultset["cinema"] = $cinema;
+                $resultset["functions"] = $this->functionDAO->GetByCinemaIdAndGenreId($cinema->getIdCinema(),$idGenre);
+                array_push($cinemaFunction,$resultset);
+            }
+            return $cinemaFunction;
         }
 
         public function Select()
@@ -160,8 +147,8 @@
 
                 if(isset($_POST["genre_select"])){
                     $idGenre=$_POST["genre_select"];
-                    $genre=$this->helper->helpGetGenre($idGenre);
-                    $this->ShowGenreListView($genre);
+                    $list=$this->GetAllCinemasByGenre($idGenre);
+                    require_once(VIEWS_PATH."movieFunction-select.php");
 
                 }
 
@@ -175,7 +162,7 @@
                 if(isset($_POST["idMovie_Selected"]))
                 {
                     $movie = $this->helper->helpMovieById($_POST["idMovie_Selected"]);
-                    $cinemaList =  $this->GetAllCinemasByMovie($movie);
+                    $list =  $this->GetAllCinemasByMovie($movie);
                     require_once(VIEWS_PATH."movieFunction-select.php");
                 }
 

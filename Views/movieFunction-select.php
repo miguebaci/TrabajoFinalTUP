@@ -5,11 +5,11 @@ require_once('nav.php');
     <section id="listado" class="mb-5">
         <div class="container">
             <h2 class="mb-4">Function List</h2>
-            <?php foreach ($cinemaList as $cinema) {
-                $roomList = $cinema->getCinemaRoomList();
+            <?php foreach ($list as $cinema) {
+                    $functionList=$cinema["functions"];
                 ?>
                 <td>
-                    <h4><?php echo $cinema->getCinemaName()?></h4>
+                    <h4><?php echo $cinema["cinema"]->getCinemaName()?></h4>
                 </td>
                 <table class="table bg-light-alpha">
 
@@ -26,16 +26,13 @@ require_once('nav.php');
                         </thead>
                         <tbody>
                             <?php
-                                foreach ($roomList as $room) {
-                                    $functionList = $room->getFunctionList();
-
                                     foreach ($functionList as $function) {
                                         $movie = $function->getMovie();
                                         ?>
                                     <tr>
                                         <td><?php echo $movie->getMovieName() ?></td>
                                         <td><?php echo $movie->getLanguage() ?></td>
-                                        <td><?php echo $movie->getDuration() ?></td>
+                                        <td><?php echo $movie->getDuration() ?> min</td>
                                         <td><?php $genreArray = $movie->getGenre();
                                                         foreach ($genreArray as $genres) {
                                                             echo $genres->getDescription();
@@ -53,7 +50,6 @@ require_once('nav.php');
                         <?php
                                 }
                             }
-                        }
 
                         ?>
                         </tbody>

@@ -287,6 +287,68 @@ class FunctionDAO implements IFunctionDAO
         }
     }
 
+    public function GetByCinemaIdAndMovieId($idCinema, $idMovie)
+    {
+        try {
+            $query = "SELECT * FROM " . $this->tableName . " F
+            INNER JOIN room R ON R.idRoom = F.IdRoom
+            INNER JOIN cinema C ON C.idCinema = R.IdCinema
+            WHERE F.idMovie ='$idMovie' AND C.idCinema = '$idCinema'
+            GROUP BY F.idMovieFunction";
+            $this->connection = Connection::GetInstance();
+            $resultSet = $this->connection->Execute($query);
+            $movieFunction = NULL;
+            $functionList = array();
+
+            foreach ($resultSet as $row) {
+                $movie = $this->GetMovieByFunctionId($row["idMovieFunction"]);
+                $movieFunction = new MovieFunction(
+                    $row["idMovieFunction"],
+                    $row["function_date"],
+                    $row["function_time"],
+                    $movie
+                );
+                array_push($functionList, $movieFunction);
+            }
+
+            return $functionList;
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    public function GetByCinemaIdAndGenreId($idCinema, $idGenre)
+    {
+        try {
+            $query = "SELECT * FROM " . $this->tableName . " F
+            INNER JOIN movie M ON M.idMovie = F.idMovie
+            INNER JOIN room R ON R.idRoom = F.IdRoom
+            INNER JOIN cinema C ON C.idCinema = R.IdCinema
+            INNER JOIN moviexgenre MXG ON M.idMovie = MXG.idMovie
+            WHERE MXG.idGenre ='$idGenre' AND C.idCinema = '$idCinema'
+            GROUP BY F.idMovieFunction";
+            $this->connection = Connection::GetInstance();
+            $resultSet = $this->connection->Execute($query);
+            $movieFunction = NULL;
+            $functionList = array();
+
+            foreach ($resultSet as $row) {
+                $movie = $this->GetMovieByFunctionId($row["idMovieFunction"]);
+                $movieFunction = new MovieFunction(
+                    $row["idMovieFunction"],
+                    $row["function_date"],
+                    $row["function_time"],
+                    $movie
+                );
+                array_push($functionList, $movieFunction);
+            }
+
+            return $functionList;
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+    }
+
     public function FunctionExist(CinemaRoom $room, $date, $time)
     {
         try {

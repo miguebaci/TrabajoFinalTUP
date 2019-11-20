@@ -144,6 +144,34 @@
             }
         }
 
+        public function GetByGenre($idGenre){
+            try
+            {
+            $query = "SELECT * FROM ".$this->tableName. " C 
+            INNER JOIN room R ON C.idCinema = R.idCinema
+            INNER JOIN moviefunction MF ON R.idRoom = MF.idRoom
+            INNER JOIN movie M ON M.idMovie = MF.idMovie
+            INNER JOIN moviexgenre MXG ON M.idMovie = MXG.idMovie
+            WHERE MXG.idGenre ='$idGenre' GROUP BY C.idCinema";
+            $this->connection = Connection::GetInstance();
+            $resultSet = $this->connection->Execute($query);
+            $cinemaList=array();
+            foreach ($resultSet as $row)
+                {   
+                    $cinema = new Cinema($row["idCinema"],
+                    $row["cinemaName"],
+                    $row["adress"],
+                    $row["ticketPrice"]);
+                    array_push($cinemaList, $cinema);
+                }
+            return $cinemaList;
+            }
+            catch(Exception $ex)
+            {
+               throw $ex;
+            }
+        }
+
         public function GetRoomList($idCinema){
             try
             {
