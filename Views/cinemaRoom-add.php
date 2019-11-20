@@ -4,7 +4,7 @@
 <main class="py-5">
      <section id="listado" class="mb-5">
           <div class="container">
-               <h2 class="mb-4">Add Cinema</h2>
+               <h2 class="mb-4">Add Room</h2>
                <form action="<?php echo FRONT_ROOT ?>CinemaRoom/Add" method="post" class="bg-light-alpha p-5">
                <input type="hidden" name="idCinema" value="<?php echo $cinema->getIdCinema();?>">
                     <div class="row">                         
