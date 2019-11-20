@@ -152,7 +152,7 @@
             INNER JOIN moviefunction MF ON R.idRoom = MF.idRoom
             INNER JOIN movie M ON M.idMovie = MF.idMovie
             INNER JOIN moviexgenre MXG ON M.idMovie = MXG.idMovie
-            WHERE MXG.idGenre ='$idGenre' GROUP BY C.idCinema";
+            WHERE MXG.idGenre LIKE '$idGenre' GROUP BY C.idCinema";
             $this->connection = Connection::GetInstance();
             $resultSet = $this->connection->Execute($query);
             $cinemaList=array();
