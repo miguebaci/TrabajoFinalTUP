@@ -12,4 +12,4 @@
 
      <title>Trabajo Practico Final</title>
 </head>
-<body style="background-image: url('https://www.howdeniberia.com/wp-content/uploads/2015/06/Grey-Background.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center center;">
+<body style="background-image: url('https://images.wallpaperscraft.com/image/surface_light_background_leaf_50523_3840x2400.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center center;">

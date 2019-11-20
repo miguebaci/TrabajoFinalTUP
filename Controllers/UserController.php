@@ -177,15 +177,6 @@
             echo "window.location = '".FRONT_ROOT."index.php'; </script>";
         }
 
-
-        public function LoggedUser(){
-            require_once(VIEWS_PATH."validate-session-admin.php");
-            if(isset($_SESSION["loggedUser"]))
-                var_dump($_SESSION["loggedUser"]);
-            else
-                echo "No logged user";
-        }
-
         public function UserProfile(){
             require_once(VIEWS_PATH."validate-session.php");
             require_once(VIEWS_PATH."user-profile.php");
