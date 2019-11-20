@@ -1,11 +1,12 @@
 <?php
     namespace Controllers;
 
-    use DAO\IUserDAO as IUserDAO;
     use DAO\UserDAO as UserDAO;
     use Models\User as User;
     use Facebook\Facebook as Facebook;
     use Helper\UserHelper as Helper;
+    use Mailer\PHPMailer as PHPMailer;
+    use Mailer\Exception as MailerException;
 
     class UserController
     {
@@ -35,6 +36,7 @@
                     if($_POST["password"]==$_POST["password2"]){    
                         $user=new User(0,$_POST["email"],$_POST["password"],$_POST["role"]);
                         $this->userDAO->Add($user);
+                        $this->SendCreateMail($user);
                         echo "<script> alert('Account created');";
                         echo "window.location = '".FRONT_ROOT."index.php'; </script>";
                     }else{
@@ -262,5 +264,45 @@
             }
         }
 
-    }
+
+        public function SendCreateMail(User $user){
+            // Instantiation and passing `true` enables exceptions
+            $mail = new PHPMailer(true);
+
+            try {
+            //Server settings
+            $mail->SMTPOptions = array(
+                'ssl' => array(
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed' => true
+                )
+            );
+            $mail->SMTPDebug = 0;                      // Enable verbose debug output
+            $mail->isSMTP();                                            // Send using SMTP
+            $mail->Host       = 'smtp.gmail.com';                    // Set the SMTP server to send through
+            $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
+            $mail->Username   = 'trabajofinallab4@gmail.com';                     // SMTP username
+            $mail->Password   = 'Laboratorio4UTN2019';                              // SMTP password
+            $mail->SMTPSecure = 'tls';         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
+            $mail->Port       = 587;                                    // TCP port to connect to
+
+            //Recipients
+            $mail->setFrom('trabajofinallab4@gmail.com', 'CinemaTek');
+            $mail->addAddress($user->getEmail());     // Add a recipient
+
+            // Content
+            $mail->isHTML(true);                                  // Set email format to HTML
+            $mail->Subject = 'Welcome to CinemaTek!';
+            $mail->Body    = 'Hello a new account has been created with this email:' .$user->getEmail(). '. <br> Thanks for choosing us!';
+            $mail->AltBody = 'Hello a new account has been created with this email. Thanks for choosing us!';
+
+            $mail->send();
+
+            } catch (MailerException $e) {
+                echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            }
+
+        }
+}
 ?>
