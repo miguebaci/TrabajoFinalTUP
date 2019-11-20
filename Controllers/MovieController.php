@@ -23,7 +23,7 @@ use Models\Movie as Movie;
         
         public function ShowListView()
         {
-            
+            require_once(VIEWS_PATH."validate-session-admin.php");
             $movieList = $this->movieDAO->GetAll();
             $genreRepo = $this->genreHelper->getGenreDAO();
             require_once(VIEWS_PATH."movie-list.php");
