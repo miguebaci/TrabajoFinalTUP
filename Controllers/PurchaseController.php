@@ -1,9 +1,7 @@
 <?php
     namespace Controllers;
 
-    use DAO\IPurchaseDAO as IPurchaseDAO;
     use DAO\PurchaseDAO as PurchaseDAO;
-    use Models\Purchase as Purchase;
     use Helper\PurchaseHelper as Helper;
 
     class PurchaseController
