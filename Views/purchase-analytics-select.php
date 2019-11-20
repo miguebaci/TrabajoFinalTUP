@@ -24,9 +24,9 @@
                          <div class="col-lg-3">
                               <div class="form-group">
                                    <label for="">Fecha de inicio</label>
-                                   <input type="date" name="date_start" value="" class="form-control">
+                                   <input type="date" name="date_start" value="" class="form-control" required>
                                    <label for="">Fecha de finalización</label>
-                                   <input type="date" name="date_end" value="" class="form-control">
+                                   <input type="date" name="date_end" value="" class="form-control" required>
                               </div>
                          </div>
                     </div>
@@ -41,7 +41,7 @@
                          <div class="col-lg-5">
                               <div class="form-group">
                                    <label for="">Movies</label>
-                                   <select class="nav-item dropdown" name="movieId" onchange="this.form.submit()" class="nav-link dropdown-toggle">
+                                   <select class="nav-item dropdown" name="movieId" class="nav-link dropdown-toggle">
                                         <?php
                                             foreach($movies as $movie){
                                         ?>
@@ -55,9 +55,9 @@
                          <div class="col-lg-3">
                               <div class="form-group">
                                    <label for="">Fecha de inicio</label>
-                                   <input type="date" name="date_start" value="" class="form-control">
+                                   <input type="date" name="date_start" value="" class="form-control" required>
                                    <label for="">Fecha de finalización</label>
-                                   <input type="date" name="date_end" value="" class="form-control">
+                                   <input type="date" name="date_end" value="" class="form-control" required>
                               </div>
                          </div>
                     </div>
