@@ -200,7 +200,7 @@
             require_once(VIEWS_PATH."change-user-profile.php");
         }
 
-        public function changeUserProfileConfirm($lastName,$firstName,$dni){
+        public function changeUserProfileConfirm($firstName,$lastName,$dni){
             require_once(VIEWS_PATH."validate-session.php");
                 $_SESSION["loggedUser"]->setUserProfile($lastName,$firstName,$dni);
                 $this->userDAO->setUserNewProfile($_SESSION["loggedUser"]->getUserProfile(),$_SESSION["loggedUser"]);
