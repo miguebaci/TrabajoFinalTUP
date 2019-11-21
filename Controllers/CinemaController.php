@@ -32,51 +32,41 @@
             
         }
 
-        public function Add($cinemaName,$adress,$ticketPrice)
+        public function ShowUpdateView($idCinema)
+        {
+            require_once(VIEWS_PATH."validate-session-admin.php");
+            $cinema=$this->cinemaDAO->GetById($idCinema);
+            require_once(VIEWS_PATH."cinema-mod.php");
+            
+        }
+
+        public function Add($cinemaName,$address,$ticketPrice)
         {   
             require_once(VIEWS_PATH."validate-session-admin.php");
             
                 $array=array();
-                $newCinema=new Cinema(0,$cinemaName,$adress,$ticketPrice,$array);
+                $newCinema=new Cinema(0,$cinemaName,$address,$ticketPrice,$array);
                 $this->cinemaDAO->Add($newCinema);
             $this->ShowListView();
         }
 
-        public function Update($idCinema, $cinemaName, $adress, $ticketPrice)
+        public function Update($idCinema, $cinemaName, $address, $ticketPrice)
         {   
             require_once(VIEWS_PATH."validate-session-admin.php");
             
                 $cinema=$this->cinemaDAO->GetById($idCinema);
-                $mod= array("cinemaName"=>$cinemaName, "adress"=>$adress, "ticketPrice"=>$ticketPrice);
+                $mod= array("cinemaName"=>$cinemaName, "address"=>$address, "ticketPrice"=>$ticketPrice);
                 $this->cinemaDAO->Update($cinema, $mod);
                 $this->ShowListView();
         }
 
-        public function Select($button, $idCinema)
+        public function Delete($idCinema)
         {   
             require_once(VIEWS_PATH."validate-session-admin.php");
-                var_dump($button);
-                var_dump($idCinema);
-                if($button == "add"){
-                    $this->ShowAddView();
-                }
-
-                if($button == "room"){
-                    $cinema=$this->cinemaDAO->GetById($idCinema);
-                    $cinemaRoomList=$cinema->getCinemaRoomList();
-                    require_once(VIEWS_PATH."cinemaRoom-list.php");
-                }
-
-                if($button == "edit"){
-                    $cinema=$this->cinemaDAO->GetById($idCinema);
-                    require_once(VIEWS_PATH."cinema-mod.php");
-
-                }
-                else if($button == "delete"){
-                    $cinema=$this->cinemaDAO->GetById($idCinema);
-                    $this->cinemaDAO->Delete($cinema);
-                    $this->ShowListView();
-                }
+            $cinema=$this->cinemaDAO->GetById($idCinema);
+            $this->cinemaDAO->Delete($cinema);
+            $this->ShowListView();
+            
         }
     }
 ?>

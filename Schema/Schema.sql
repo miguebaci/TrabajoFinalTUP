@@ -6,7 +6,7 @@ CREATE TABLE cinema
 (
 	idCinema INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     cinemaName VARCHAR(100) NOT NULL,
-    adress VARCHAR(100) NOT NULL,
+    address VARCHAR(100) NOT NULL,
     ticketPrice INT NOT NULL
 )Engine=InnoDB;
 

@@ -16,8 +16,8 @@
                          </div>
                          <div class="col-lg-4">
                               <div class="form-group">
-                                   <label for="">Adress</label>
-                                   <input type="text" name="adress" value="<?php echo $cinema->getAdress();?>" class="form-control">
+                                   <label for="">Address</label>
+                                   <input type="text" name="address" value="<?php echo $cinema->getAddress();?>" class="form-control">
                               </div>
                          </div>
                          <div class="col-lg-4">

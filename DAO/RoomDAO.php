@@ -175,7 +175,7 @@
             foreach ($resultSet as $row)
                 {   $cinema = new Cinema($row["idCinema"],
                     $row["cinemaName"],
-                    $row["adress"],
+                    $row["address"],
                     $row["ticketPrice"]);
                 }
 

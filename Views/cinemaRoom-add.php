@@ -6,7 +6,7 @@
           <div class="container">
                <h2 class="mb-4">Add Room</h2>
                <form action="<?php echo FRONT_ROOT ?>CinemaRoom/Add" method="post" class="bg-light-alpha p-5">
-               <input type="hidden" name="idCinema" value="<?php echo $cinema->getIdCinema();?>">
+               <input type="hidden" name="idCinema" value="<?php echo $idCinema?>">
                     <div class="row">                         
                          <div class="col-lg-4">
                               <div class="form-group">

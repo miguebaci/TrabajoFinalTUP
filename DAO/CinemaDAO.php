@@ -16,10 +16,10 @@
         {
             try
             {
-                $query = "INSERT INTO ".$this->tableName." (cinemaName, adress, ticketPrice) VALUES (:cinemaName, :adress, :ticketPrice);";
+                $query = "INSERT INTO ".$this->tableName." (cinemaName, address, ticketPrice) VALUES (:cinemaName, :address, :ticketPrice);";
                 
                 $parameters["cinemaName"] = $cinema->getCinemaName();
-                $parameters["adress"] = $cinema->getAdress();
+                $parameters["address"] = $cinema->getAddress();
                 $parameters["ticketPrice"] = $cinema->getTicketPrice();
 
                 $this->connection = Connection::GetInstance();
@@ -48,7 +48,7 @@
                 {   $roomList=$this->GetRoomList($row["idCinema"]);
                     $cinema = new Cinema($row["idCinema"],
                     $row["cinemaName"],
-                    $row["adress"],
+                    $row["address"],
                     $row["ticketPrice"]);
                     $cinema->setCinemaRoomList($roomList);
                     array_push($cinemaList, $cinema);
@@ -82,9 +82,9 @@
             try{
                 $idCinema=$cinema->getIdCinema();
                 $newName=$updatedCinema['cinemaName'];
-                $newAdress=$updatedCinema['adress'];
+                $newAddress=$updatedCinema['address'];
                 $newTicketPrice=$updatedCinema['ticketPrice'];
-                $query = "UPDATE ". $this->tableName ." SET cinemaName='$newName', adress='$newAdress', ticketPrice='$newTicketPrice'"  . " WHERE idCinema ='$idCinema'";
+                $query = "UPDATE ". $this->tableName ." SET cinemaName='$newName', address='$newAddress', ticketPrice='$newTicketPrice'"  . " WHERE idCinema ='$idCinema'";
                 $this->connection = Connection::GetInstance();
                 $this->connection->ExecuteNonQuery($query);
                 }
@@ -104,7 +104,7 @@
                 {   $roomList=$this->GetRoomList($row["idCinema"]);
                     $cinema = new Cinema($row["idCinema"],
                     $row["cinemaName"],
-                    $row["adress"],
+                    $row["address"],
                     $row["ticketPrice"]);
                     $cinema->setCinemaRoomList($roomList);
                 }
@@ -132,7 +132,7 @@
                 {   
                     $cinema = new Cinema($row["idCinema"],
                     $row["cinemaName"],
-                    $row["adress"],
+                    $row["address"],
                     $row["ticketPrice"]);
                     array_push($cinemaList, $cinema);
                 }
@@ -160,7 +160,7 @@
                 {   
                     $cinema = new Cinema($row["idCinema"],
                     $row["cinemaName"],
-                    $row["adress"],
+                    $row["address"],
                     $row["ticketPrice"]);
                     array_push($cinemaList, $cinema);
                 }
