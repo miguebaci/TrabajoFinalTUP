@@ -29,18 +29,16 @@
             require_once(VIEWS_PATH."login.php");
         }
 
-        public function RegisterValidation($email, $password, $password2, $role)
+        public function RegisterValidation($role, $email, $password, $password2)
         {   
-                if($this->userDAO->emailVerification($email)){
+                if($this->userDAO->emailVerification($email)==NULL){
                     if($password==$password2){    
                         $user=new User(0,$email,$password,$role);
                         $this->userDAO->Add($user);
                         $this->SendCreateMail($user);
-                        echo "<script> alert('Account created');";
-                        echo "window.location = '".FRONT_ROOT."index.php'; </script>";
+                        $this->Message("Account Created", FRONT_ROOT."index.php");
                     }else{
-                        echo "<script> alert('Passwords do not match');";
-                        echo "window.location = '".FRONT_ROOT."User/Register'; </script>";
+                        $this->Message("Passwords do not match", FRONT_ROOT."User/Register");
                     }
                 }else{
                     echo "<script> alert('Email already in use');";
@@ -283,6 +281,10 @@
                 echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
             }
 
+        }
+
+        public function Message($message,$location){
+            require_once(VIEWS_PATH."user-message.php");
         }
 }
 ?>
