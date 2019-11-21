@@ -19,9 +19,6 @@
                          <?php $_SESSION['idCinema']=$cinema->getIdCinema();
                               foreach($cinemaRoomList as $room)
                               {    $_SESSION['idRoom']=$room->getIdCinemaRoom();
-                                   
-                                   
-
                                    ?>
                                         <tr>
                                              <td><?php echo $room->getRoomName() ?></td>

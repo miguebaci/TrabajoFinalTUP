@@ -44,19 +44,16 @@
         public function Update($idCinema, $roomName, $totalCap)
         {   
             require_once(VIEWS_PATH."validate-session-admin.php");
-            if($_POST){
                 $updatedRoom= array("roomName"=>$roomName, "totalCap"=>$totalCap);
                 $room=$this->cinemaRoomDAO->GetById($_SESSION["idRoom"]);
                 $this->cinemaRoomDAO->Update($room, $updatedRoom);
                 $cinema=$room->getCinema();
                 $this->ShowListView($cinema);
-            }
         }
 
         public function Select($button)
         {   
             require_once(VIEWS_PATH."validate-session-admin.php");
-            if($_POST){
                 if($button == "add"){
                     $idCinema=$_SESSION["idCinema"];
                     $cinema=$this->cinemaRoomDAO->GetCinemaById($idCinema);
@@ -85,7 +82,6 @@
                     $this->ShowListView($cinema);
                     
                 }
-        }
         }
     }
 ?>

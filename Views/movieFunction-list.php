@@ -18,11 +18,13 @@
                     </thead>
                     <tbody>
                     <form action="<?php echo FRONT_ROOT ?>Function/Select" method="POST">
-                    <button type="submit" class ="btn btn-primary" name ='add_button' value='<?php echo $idRoom; ?>'> Add Function/s </button>
-                    <button type="submit" class ="btn btn-danger" name ='delete_old' value='<?php echo $idRoom; ?>' onclick="return confirm('Are you sure yo want to delete all past functions?')"> Delete all old functions </button>
+                    <button type="submit" class ="btn btn-primary" name ='button' value='add_button'> Add Function/s </button>
+                    <button type="submit" class ="btn btn-danger" name ='button' value='delete_old' onclick="return confirm('Are you sure yo want to delete all past functions?')"> Delete all old functions </button>
                          <?php 
                               foreach($functionList as $function)
-                              {   $movie=$function->getMovie();
+                              {     $_SESSION['idFunction']=$function->getIdFunction();
+                                   var_dump($_SESSION['idFunction']);
+                                   $movie=$function->getMovie();
                                    ?>
                                         <tr>
                                              <td><?php echo $movie->getMovieName() ?></td>
@@ -38,7 +40,7 @@
                                              <td><?php echo $function->getDate() ?></td>
                                              <td><?php echo $function->getTime() ?></td>
                                              <td> 
-                                                  <button type="submit" class ="btn btn-danger" name ='delete_button' value='<?php echo $function->getIdFunction(); ?>' onclick="return confirm('Are you sure yo want to delete the function of <?php echo $movie->getMovieName() ?> on <?php echo $function->getDate() ?> at <?php echo $function->getTime() ?>?')"> Delete </button>
+                                                  <button type="submit" class ="btn btn-danger" name ='button' value='delete_button' onclick="return confirm('Are you sure yo want to delete the function of <?php echo $movie->getMovieName() ?> on <?php echo $function->getDate() ?> at <?php echo $function->getTime() ?>?')"> Delete </button>
                                              </td>
                                         </tr>
                                    <?php
