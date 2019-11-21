@@ -41,28 +41,27 @@
 
         }
 
-        public function Update($idCinema, $roomName, $totalCap)
+        public function Update($idRoom, $roomName, $totalCap)
         {   
             require_once(VIEWS_PATH."validate-session-admin.php");
                 $updatedRoom= array("roomName"=>$roomName, "totalCap"=>$totalCap);
-                $room=$this->cinemaRoomDAO->GetById($_SESSION["idRoom"]);
+                $room=$this->cinemaRoomDAO->GetById($idRoom);
                 $this->cinemaRoomDAO->Update($room, $updatedRoom);
                 $cinema=$room->getCinema();
                 $this->ShowListView($cinema);
         }
 
-        public function Select($button)
+        public function Select($button, $idCinema, $idRoom)
         {   
             require_once(VIEWS_PATH."validate-session-admin.php");
                 if($button == "add"){
-                    $idCinema=$_SESSION["idCinema"];
                     $cinema=$this->cinemaRoomDAO->GetCinemaById($idCinema);
                     require_once(VIEWS_PATH."cinemaRoom-add.php");
 
                 }
                 if($button == "function"){
                     
-                    $room=$this->cinemaRoomDAO->GetById($_SESSION['idRoom']);
+                    $room=$this->cinemaRoomDAO->GetById($idRoom);
                     $idRoom=$room->getIdCinemaRoom();
                     $room->setFunctionList($this->helper->helpGetAllByRoom($room));
                     $functionList=$room->getFunctionList();
@@ -71,12 +70,11 @@
                 }
                 
                 if($button == "edit"){
-                    $room=$this->cinemaRoomDAO->GetById($_SESSION['idRoom']);
+                    $room=$this->cinemaRoomDAO->GetById($idRoom);
                     require_once(VIEWS_PATH."cinemaRoom-mod.php");
 
                 }
                 else if($button == "delete"){
-                    $idRoom=$_SESSION['idRoom'];
                     $room=$this->cinemaRoomDAO->GetById($idRoom);
                     $cinema=$this->cinemaRoomDAO->Delete($room);
                     $this->ShowListView($cinema);

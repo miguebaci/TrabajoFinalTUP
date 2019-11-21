@@ -19,7 +19,7 @@
                     <button type="submit" class ="btn btn-primary" name ='button' value="add"> Add Cinema </button>
                          <?php
                               foreach($cinemaList as $cinema)
-                              {              $_SESSION['idCinema']=$cinema->getIdCinema();                    
+                              {              var_dump($cinema);           
                                    ?>
                                         <tr>
                                              <td><?php echo $cinema->getCinemaName() ?></td>
@@ -35,6 +35,7 @@
                                                   <button type="submit" class ="btn btn-danger" name ='button' value='delete' onclick="return confirm('Are you sure yo want to delete <?php echo $cinema->getCinemaName() ?>? This will delete all cinema rooms and functions data associated with it')"> Delete </button>
                                              </td>
                                         </tr>
+                                        <input type="hidden" name="idCinema" value="<?php echo $cinema->getIdCinema()?>">
                                    <?php
                               }
                          ?>

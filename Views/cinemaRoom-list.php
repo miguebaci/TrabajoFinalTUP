@@ -1,5 +1,7 @@
 <?php
     require_once('nav.php');
+    var_dump($cinema);
+    $_SESSION['idCinema']=$cinema->getIdCinema();
 ?>
 <main class="py-5">
      <section id="listado" class="mb-5">
@@ -16,11 +18,12 @@
                     <tbody>
                     <form action="<?php echo FRONT_ROOT ?>CinemaRoom/Select" method="POST">
                     <button type="submit" class ="btn btn-primary" name ='button' value='add'> Add Room </button>
-                         <?php $_SESSION['idCinema']=$cinema->getIdCinema();
+                         <?php 
                               foreach($cinemaRoomList as $room)
-                              {    $_SESSION['idRoom']=$room->getIdCinemaRoom();
-                                   ?>
-                                        <tr>
+                              {   
+                                   ?>        <input type="hidden" name="idCinema" value="<?php echo $idCinema?>">
+                                             <input type="hidden" name="idRoom" value="<?php echo $room->getIdCinemaRoom();?>">
+                                        <tr> 
                                              <td><?php echo $room->getRoomName() ?></td>
                                              <td><?php echo $room->getTotalCap() ?></td>
                                              <td> 

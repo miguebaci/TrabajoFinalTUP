@@ -39,10 +39,6 @@
                 $array=array();
                 $newCinema=new Cinema(0,$cinemaName,$adress,$ticketPrice,$array);
                 $this->cinemaDAO->Add($newCinema);
-                /*
-                echo "<script> alert('Cinema added');";
-                echo "<script> alert('Cinema error');";  
-                echo "</script>";*/
             $this->ShowListView();
         }
 
@@ -56,31 +52,31 @@
                 $this->ShowListView();
         }
 
-        public function Select($button)
+        public function Select($button, $idCinema)
         {   
             require_once(VIEWS_PATH."validate-session-admin.php");
-
+                var_dump($button);
+                var_dump($idCinema);
                 if($button == "add"){
                     $this->ShowAddView();
                 }
 
                 if($button == "room"){
-                    $cinema=$this->cinemaDAO->GetById($_SESSION['idCinema']);
+                    $cinema=$this->cinemaDAO->GetById($idCinema);
                     $cinemaRoomList=$cinema->getCinemaRoomList();
                     require_once(VIEWS_PATH."cinemaRoom-list.php");
                 }
 
                 if($button == "edit"){
-                    $cinema=$this->cinemaDAO->GetById($_SESSION['idCinema']);
+                    $cinema=$this->cinemaDAO->GetById($idCinema);
                     require_once(VIEWS_PATH."cinema-mod.php");
 
                 }
                 else if($button == "delete"){
-                    $cinema=$this->cinemaDAO->GetById($_SESSION['idCinema']);
+                    $cinema=$this->cinemaDAO->GetById($idCinema);
                     $this->cinemaDAO->Delete($cinema);
                     $this->ShowListView();
                 }
-            
         }
     }
 ?>

@@ -77,6 +77,16 @@
             $this->ShowListView($room);
 
         }
+        
+        public function Delete($idFunction){
+            require_once(VIEWS_PATH."validate-session-admin.php");
+            $function=$this->functionDAO->GetById($idFunction);
+            $idRoom=$this->functionDAO->GetRoomId($function);
+            $room=$this->helper->helpGetRoom ($idRoom);
+            $this->functionDAO->Delete($function);
+            $this->ShowListView($room);
+        }
+
         public function MovieAdd($select_movie)
         {   var_dump($select_movie);
             $idMovie=$select_movie;
@@ -114,9 +124,16 @@
             require_once(VIEWS_PATH."movieFunction-select.php");
         }
 
+        public function SelectSlider($idMovie_Selected)
+        {
+            $movie = $this->helper->helpMovieById($idMovie_Selected);
+            $list =  $this->GetAllCinemasByMovie($movie);
+            require_once(VIEWS_PATH."movieFunction-select.php");
+        }
+
         public function Select($button)
         {   
-                if($button =="add_button"){
+                if($button =="add"){
                     require_once(VIEWS_PATH."validate-session-admin.php");
                     $movieList= $this->helper->helpMovieList();
                     $idRoom=$_SESSION["idRoom"];
@@ -124,37 +141,10 @@
 
                 }
 
-                if($button == "list_button"){
-                    require_once(VIEWS_PATH."validate-session-admin.php");
-                    $idRoom=$_SESSION["idRoom"];
-                    $this->ShowListView($idRoom);
-
-                }
-
-                if($button =="idMovie_Selected")
-                {
-                    $movie = $this->helper->helpMovieById($_SESSION["idMovie"]);
-                    $list =  $this->GetAllCinemasByMovie($movie);
-                    require_once(VIEWS_PATH."movieFunction-select.php");
-                }
-
                 if($button == "delete_old")
                 {
                     $this->functionDAO->DeleteOldFunctions();
                     require_once(VIEWS_PATH."success-view.php");
-                }
-
-                else if($button == "delete"){
-                    require_once(VIEWS_PATH."validate-session-admin.php");
-                    $idFunction=$_SESSION["idFunction"];
-                    var_dump($idFunction);
-                    var_dump($_SESSION["idFunction"]);
-                    $function=$this->functionDAO->GetById($idFunction);
-                    $idRoom=$this->functionDAO->GetRoomId($function);
-                    $room=$this->helper->helpGetRoom ($idRoom);
-                    $this->functionDAO->Delete($function);
-                    $this->ShowListView($room);
-                    
                 }
             }
     }
