@@ -1,6 +1,7 @@
 <?php
     namespace Controllers;
 
+    use Models\Purchase as Purchase;
     use DAO\PurchaseDAO as PurchaseDAO;
     use Helper\PurchaseHelper as Helper;
     use Mailer\PHPMailer as PHPMailer;
@@ -36,9 +37,11 @@
                         $discount=25;
                     }
                 }
-                $purchase=$this->purchaseDAO->Buy($cinema,$discount,$quantity);
-                $ticket=$purchase->getTicket();
-                $email=$_SESSION["loggedUser"]->getEmail();
+                $purchase=new Purchase(date("Y-m-d H:i:s"),$cinema->getTicketPrice()*$quantity,$quantity,$discount,$_SESSION["loggedUser"]);
+                $ticket=$this->purchaseDAO->CreateTicket($purchase,$cinema);
+                $purchase->setTicket($ticket);
+                $purchase->setIdPurchase($this->purchaseDAO->Add($purchase));
+                $email=$purchase->getUser()->getEmail();
                 $this->SendBuyMail($ticket, $email);
                 require_once(VIEWS_PATH."show-qr.php");
         }

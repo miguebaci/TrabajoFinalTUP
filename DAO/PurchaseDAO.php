@@ -19,19 +19,6 @@
         }
 
         /*
-         * Recieves a Cinema with its Room, Function, and Movie
-         * Generates the Purchase with its Ticket, and adds them both to the Database
-         * Returns the Purchase object
-         */
-
-        public function Buy($cinema,$discount,$quantity){
-            $purchase=new Purchase(date("Y-m-d H:i:s"),$cinema->getTicketPrice()*$quantity,$quantity,$discount);
-            $purchase->setTicket($this->CreateTicket($purchase,$cinema));
-            $purchase->setIdPurchase($this->Add($purchase,$_SESSION["loggedUser"]));
-            return $purchase;
-        }
-
-        /*
          * Recieves the Purchase info and the Cinema with its Room, Function, and Movie
          * Generates a Ticket and adds it to the Database
          * And returns the Ticket
@@ -66,13 +53,13 @@
          * Returns the ID in the Database of the Purchase
          */
 
-        public function Add($purchase,$user){
+        public function Add($purchase){
             try
             {
                 $query = "INSERT INTO ".$this->tableName." (idUser, idTicket, ticketQuantity, total, discount, purchaseDate) 
                             VALUES (:idUser, :idTicket, :ticketQuantity, :total, :discount, :purchaseDate);";
                 
-                $parameters["idUser"]=$user->getIdUser();
+                $parameters["idUser"]=$purchase->getUser()->getIdUser();
                 $parameters["idTicket"]=$purchase->getTicket()->getTicketNumber();
                 $parameters["ticketQuantity"]=$purchase->getTicketQuantity();
                 $parameters["total"]=$purchase->getTotal();
@@ -156,7 +143,7 @@
                 $purchaseList=array();
 
                 foreach ($resultSet as $row ) {
-                    $purchase=new Purchase($row["purchaseDate"], $row["total"], $row["ticketQuantity"], $row["discount"]);
+                    $purchase=new Purchase($row["purchaseDate"], $row["total"], $row["ticketQuantity"], $row["discount"],$this->helper->helpUserById($row["idUser"]));
                     $purchase->setIdPurchase($row["idPurchase"]);
                     $ticket=new Ticket();
                     $ticket->setTicketNumber($row["idTicket"]);

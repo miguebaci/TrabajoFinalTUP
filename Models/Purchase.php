@@ -9,12 +9,14 @@ namespace Models;
         private $total;
         private $discount;
         private $ticket;
+        private $user;
 
-        public function __construct($purchase_date, $total, $ticketQuantity, $discount){
+        public function __construct($purchase_date, $total, $ticketQuantity, $discount, $user){
             $this->purchase_date = $purchase_date;
             $this->ticketQuantity = $ticketQuantity;
             $this->total = $total;
             $this->discount = $discount;
+            $this->user=$user;
         }
 
         public function getIdPurchase()
@@ -75,6 +77,16 @@ namespace Models;
         public function setTicket($ticket)
         {
             $this->ticket = $ticket;
+        }
+
+        public function getUser()
+        {
+            return $this->user;
+        }
+
+        public function setUser($user)
+        {
+            $this->user = $user;
         }
 
     }
