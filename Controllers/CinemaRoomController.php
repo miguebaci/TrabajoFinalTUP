@@ -66,11 +66,4 @@
             $this->ShowListView($cinema->getIdCinema());
         }
     }
-    /*               
-                    $room=$this->cinemaRoomDAO->GetById($idRoom);
-                    $idRoom=$room->getIdCinemaRoom();
-                    $room->setFunctionList($this->helper->helpGetAllByRoom($room));
-                    $functionList=$room->getFunctionList();
-                    require_once(VIEWS_PATH."moviefunction-list.php");
-            */
 ?>

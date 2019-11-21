@@ -21,12 +21,21 @@
             $this->helper = new FunctionHelper();
         }
 
+        public function ShowSelectView($idRoom)
+        {   
+            require_once(VIEWS_PATH."validate-session-admin.php");
+            $movieList= $this->helper->helpMovieList();
+            require_once(VIEWS_PATH."movie-select-list.php");
+
+        }
+
         public function ShowAddView()
         {
             require_once(VIEWS_PATH."validate-session-admin.php");
             require_once(VIEWS_PATH."movieFunction-add.php");
         }
         public function ShowAddViewError(CinemaRoom $room)
+        
         {   $idRoom=$room->getIdCinemaRoom();
             $movie=$room->getMovie();
             $idMovie=$movie->getIdMovie();
@@ -34,21 +43,21 @@
             require_once(VIEWS_PATH."movieFunction-add.php");
         }
 
-        public function ShowListView(CinemaRoom $room)
+        public function ShowListView($idRoom)
         {
             require_once(VIEWS_PATH."validate-session-admin.php");
-            $idRoom=$room->getIdCinemaRoom();
+            $room=$this->helper->helpGetRoom($idRoom);
             $room->setFunctionList($this->functionDAO->GetAllByRoomIdAdmin($room));
             $functionList=$room->getFunctionList();
             require_once(VIEWS_PATH."moviefunction-list.php");
         }
 
-        public function Add($functionTime, $function_date_start, $function_date_end)
+        public function Add($idRoom, $idMovie, $functionTime, $function_date_start, $function_date_end)
         {   
             require_once(VIEWS_PATH."validate-session-admin.php");
 
-                $movie= $this->helper->helpMovieById($_SESSION["idMovie"]); 
-                $room = $this->helper->helpGetRoom($_SESSION["idRoom"]);
+                $movie= $this->helper->helpMovieById($idMovie); 
+                $room = $this->helper->helpGetRoom($idRoom);
 
                 $functionDate = date_create($function_date_start);
                 $functionEndDate = date_create($function_date_end);               
@@ -74,24 +83,30 @@
                 {
                     return $this->ShowAddViewError($room);
                 }
-            $this->ShowListView($room);
+            $this->ShowListView($idRoom);
 
+        }
+
+        public function MovieAdd($idRoom, $idMovie)
+        {   var_dump($idMovie);
+            var_dump($idRoom);
+            require_once(VIEWS_PATH."movieFunction-add.php");
         }
         
         public function Delete($idFunction){
             require_once(VIEWS_PATH."validate-session-admin.php");
             $function=$this->functionDAO->GetById($idFunction);
             $idRoom=$this->functionDAO->GetRoomId($function);
-            $room=$this->helper->helpGetRoom ($idRoom);
             $this->functionDAO->Delete($function);
-            $this->ShowListView($room);
+            $this->ShowListView($idRoom);
         }
 
-        public function MovieAdd($select_movie)
-        {   var_dump($select_movie);
-            $idMovie=$select_movie;
-            $idRoom=$_SESSION["idRoom"];
-            require_once(VIEWS_PATH."movieFunction-add.php");
+        public function DeleteOld()
+        {   
+            require_once(VIEWS_PATH."validate-session-admin.php");
+            $this->functionDAO->DeleteOldFunctions();
+            require_once(VIEWS_PATH."success-view.php");
+                
         }
 
         public function GetAllCinemasByMovie(Movie $movie)
@@ -131,21 +146,5 @@
             require_once(VIEWS_PATH."movieFunction-select.php");
         }
 
-        public function Select($button)
-        {   
-                if($button =="add"){
-                    require_once(VIEWS_PATH."validate-session-admin.php");
-                    $movieList= $this->helper->helpMovieList();
-                    $idRoom=$_SESSION["idRoom"];
-                    require_once(VIEWS_PATH."movie-select-list.php");
-
-                }
-
-                if($button == "delete_old")
-                {
-                    $this->functionDAO->DeleteOldFunctions();
-                    require_once(VIEWS_PATH."success-view.php");
-                }
-            }
     }
 ?>

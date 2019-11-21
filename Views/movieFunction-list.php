@@ -17,9 +17,12 @@
                          <th></th>
                     </thead>
                     <tbody>
-                    <form action="<?php echo FRONT_ROOT ?>Function/Select" method="POST">
-                    <button type="submit" class ="btn btn-primary" name ='button' value='add'> Add Function/s </button>
-                    <button type="submit" class ="btn btn-danger" name ='button' value='delete_old' onclick="return confirm('Are you sure yo want to delete all past functions?')"> Delete all old functions </button>
+                    <form action="<?php echo FRONT_ROOT ?>Function/ShowSelectView" method="POST">
+                    <input type="hidden" name="idRoom" value="<?php echo $idRoom?>">
+                    <button type="submit" class ="btn btn-primary"> Add Function/s </button>
+                    </form>
+                    <form action="<?php echo FRONT_ROOT ?>Function/DeleteOld" method="POST">
+                    <button type="submit" class ="btn btn-danger" onclick="return confirm('Are you sure yo want to delete all past functions?')"> Delete all old functions </button>
                     </form>
                          <form action="<?php echo FRONT_ROOT ?>Function/Delete" method="POST">
                          <?php 

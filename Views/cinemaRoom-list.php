@@ -1,6 +1,5 @@
 <?php
     require_once('nav.php');
-    var_dump($idCinema);
 ?>
 <main class="py-5">
      <section id="listado" class="mb-5">

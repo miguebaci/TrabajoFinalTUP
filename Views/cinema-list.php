@@ -2,8 +2,8 @@
     require_once('nav.php');
 ?>
 <main class="py-5">
-     <section id="list" class="mb-5">
-          <div class="content"> 
+     <section id="listado" class="mb-5">
+          <div class="container"> 
       <div class="scrollable">
       <h2 class="mb-4">Cinemas List</h2>
 
