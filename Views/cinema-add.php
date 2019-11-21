@@ -15,8 +15,8 @@
                          </div>
                          <div class="col-lg-4">
                               <div class="form-group">
-                                   <label for="">Adress</label>
-                                   <input type="text" name="adress" value="" class="form-control">
+                                   <label for="">Address</label>
+                                   <input type="text" name="address" value="" class="form-control">
                               </div>
                          </div>
                     

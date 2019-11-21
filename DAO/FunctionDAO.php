@@ -350,7 +350,7 @@ class FunctionDAO implements IFunctionDAO
             $resultSet = $this->connection->Execute($query, $parameters);
 
 
-            $cinema = new Cinema($resultSet[0]["idCinema"], $resultSet[0]["cinemaName"], $resultSet[0]["adress"], $resultSet[0]["ticketPrice"]);
+            $cinema = new Cinema($resultSet[0]["idCinema"], $resultSet[0]["cinemaName"], $resultSet[0]["address"], $resultSet[0]["ticketPrice"]);
             $room = array(new CinemaRoom($resultSet[0]["idRoom"], $resultSet[0]["roomName"], $resultSet[0]["totalCap"]));
             $cinema->setCinemaRoomList($room);
             $mf = array();

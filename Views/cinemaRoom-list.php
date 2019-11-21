@@ -14,26 +14,35 @@
                          <th></th>
                     </thead>
                     <tbody>
-                    <form action="<?php echo FRONT_ROOT ?>CinemaRoom/Select" method="POST">
-                    <button type="submit" class ="btn btn-primary" name ='button' value='add'> Add Room </button>
-                         <?php $_SESSION['idCinema']=$cinema->getIdCinema();
+                    <form method = "POST" action = <?php echo FRONT_ROOT."CinemaRoom/ShowAddView" ?>>
+                    <input type="hidden" name="idCinema" value="<?php echo $idCinema?>">
+                    <button id="buttons" class="btn btn-primary" type="submit">Add Room</button>
+                    </form>
+                         <?php 
                               foreach($cinemaRoomList as $room)
-                              {    $_SESSION['idRoom']=$room->getIdCinemaRoom();
-                                   
-                                   
-
-                                   ?>
-                                        <tr>
-                                             <td><?php echo $room->getRoomName() ?></td>
-                                             <td><?php echo $room->getTotalCap() ?></td>
-                                             <td> 
-                                                  <button type="submit" class ="btn btn-primary" name ='button' value='function'> Functions </button>
+                              {   
+                                   ?>        
+                                             
+                                        <tr> 
+                                        <td><?php echo $room->getRoomName() ?></td>
+                                        <td><?php echo $room->getTotalCap() ?></td>
+                                             <td>
+                                                  <form action=<?php echo FRONT_ROOT.'Function/ShowListView'?> method = "POST">
+                                                       <input type="hidden" name="idRoom" value="<?php echo $room->getIdCinemaRoom();?>">
+                                                       <button type=submit class ="btn btn-primary"> Functions </button>
+                                                  </form>
                                              </td>
-                                             <td> 
-                                                  <button type="submit" class ="btn btn-warning" name ='button' value='edit'> Edit </button>
+                                             <td>
+                                                  <form action=<?php echo FRONT_ROOT.'CinemaRoom/ShowUpdateView'?> method = "POST">
+                                                       <input type="hidden" name="idRoom" value="<?php echo $room->getIdCinemaRoom();?>">
+                                                       <button type=submit class ="btn btn-warning"> Edit </button>
+                                                  </form>
                                              </td>
-                                             <td> 
-                                                  <button type="submit" class ="btn btn-danger" name ='button' value='delete' onclick="return confirm('Are you sure yo want to delete <?php echo $room->getRoomName() ?>? This will delete all functions data associated with it')"> Delete </button>
+                                             <td>
+                                                  <form action=<?php echo FRONT_ROOT.'CinemaRoom/Delete'?> method = "POST">
+                                                       <input type="hidden" name="idRoom" value="<?php echo $room->getIdCinemaRoom();?>">
+                                                       <button type=submit class ="btn btn-danger"> Delete </button>
+                                                  </form>
                                              </td>
                                         </tr>
                                    <?php

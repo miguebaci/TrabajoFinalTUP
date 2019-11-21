@@ -16,7 +16,6 @@
                          <th>Function Time</th>
                     </thead>
                     <tbody>
-                    <form action="<?php echo FRONT_ROOT ?>Function/Select" method="POST">
                          <?php 
                               foreach($functionList as $function)
                               {   
@@ -40,7 +39,6 @@
                               }
                               
                          ?>
-                         </form>
                     </tbody>
                </table>
           </div>

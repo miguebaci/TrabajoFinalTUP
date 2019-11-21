@@ -5,7 +5,7 @@ require_once('get-active.php');
 
 <main class="py-5">
      <div class="slideshow-container">
-          <form action="<?php echo FRONT_ROOT ?>Function/Select" method="post" class="bg-light-alpha p-5">
+          <form action="<?php echo FRONT_ROOT ?>Function/SelectSlider" method="post" class="bg-light-alpha p-5">
                <?php
 
                foreach ($movieList as $movie) {

@@ -1,13 +1,15 @@
 <?php
     require_once('nav.php');
+    $_SESSION["idRoom"]=$idRoom;
+    $_SESSION["idMovie"]=$idMovie;
 ?>
 <main class="py-5">
      <section id="listado" class="mb-5">
           <div class="container">
                <h2 class="mb-4">Add Function</h2>
                <form action="<?php echo FRONT_ROOT ?>Function/Add" method="post" class="bg-light-alpha p-5">
-               <input type="hidden" name="idRoom" value="<?php echo $idRoom;?>">
-               <input type="hidden" name="idMovie" value="<?php echo $idMovie;?>">
+               <input type="hidden" name="idRoom" value="<?php echo $idRoom?>">
+               <input type="hidden" name="idMovie" value="<?php echo $idMovie?>">
                     <div class="row">                         
                          <div class="col-lg-4">
                               <div class="form-group">

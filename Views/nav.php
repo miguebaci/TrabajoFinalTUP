@@ -25,7 +25,7 @@ require_once(VIEWS_PATH."genre-charge.php");
 
                     <li>
 
-                         <form action="<?php echo FRONT_ROOT ?>Function/Select" method="POST">
+                         <form action="<?php echo FRONT_ROOT ?>Function/GetFunctionsByGenre" method="POST">
                               <li>
                          <div class="dropdown">
                          

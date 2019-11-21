@@ -21,12 +21,21 @@
             $this->helper = new FunctionHelper();
         }
 
+        public function ShowSelectView($idRoom)
+        {   
+            require_once(VIEWS_PATH."validate-session-admin.php");
+            $movieList= $this->helper->helpMovieList();
+            require_once(VIEWS_PATH."movie-select-list.php");
+
+        }
+
         public function ShowAddView()
         {
             require_once(VIEWS_PATH."validate-session-admin.php");
             require_once(VIEWS_PATH."movieFunction-add.php");
         }
         public function ShowAddViewError(CinemaRoom $room)
+        
         {   $idRoom=$room->getIdCinemaRoom();
             $movie=$room->getMovie();
             $idMovie=$movie->getIdMovie();
@@ -34,42 +43,24 @@
             require_once(VIEWS_PATH."movieFunction-add.php");
         }
 
-        public function ShowListView(CinemaRoom $room)
+        public function ShowListView($idRoom)
         {
             require_once(VIEWS_PATH."validate-session-admin.php");
-            $idRoom=$room->getIdCinemaRoom();
+            $room=$this->helper->helpGetRoom($idRoom);
             $room->setFunctionList($this->functionDAO->GetAllByRoomIdAdmin($room));
             $functionList=$room->getFunctionList();
             require_once(VIEWS_PATH."moviefunction-list.php");
         }
 
-        public function Add()
+        public function Add($idRoom, $idMovie, $functionTime, $function_date_start, $function_date_end)
         {   
             require_once(VIEWS_PATH."validate-session-admin.php");
-            if($_POST){
-                $idMovie="";
-                $idRoom="";
-                $functionDate= date('d-m-Y');
-                $functionTime="";
 
-                if(isset($_POST["idMovie"])){
-                    $idMovie=$_POST["idMovie"];
-                    $movie= $this->helper->helpMovieById($idMovie);
-                }
-                if(isset($_POST["idRoom"])){
-                    $idRoom = $_POST["idRoom"];
-                    $room = $this->helper->helpGetRoom($idRoom);
-                }
-                if(isset($_POST["function_date_start"]) && isset($_POST["function_date_end"])){
-                    $functionStartDate = $_POST["function_date_start"];
-                    $functionEndDate = $_POST["function_date_end"];
-                }
-                if(isset($_POST["function_time"])){
-                    $functionTime=$_POST["function_time"];
-                }
-                
-                $functionDate = date_create($functionStartDate);
-                $functionEndDate = date_create($functionEndDate);               
+                $movie= $this->helper->helpMovieById($idMovie); 
+                $room = $this->helper->helpGetRoom($idRoom);
+
+                $functionDate = date_create($function_date_start);
+                $functionEndDate = date_create($function_date_end);               
                 if($functionDate<=$functionEndDate)
                 {
                     while($functionDate <= $functionEndDate)
@@ -90,17 +81,32 @@
                 }
                 else
                 {
-                    echo "<script> alert('Function date incorrect, try a valid date');";
-                    echo "</script>";
-                    return $this->ShowAddViewError($idRoom, $idMovie);
+                    return $this->ShowAddViewError($room);
                 }
-            }else{
-                echo "<script> alert('Function error');";  
-            }
-            echo "</script>";
-            
-            $this->ShowListView($room);
+            $this->ShowListView($idRoom);
 
+        }
+
+        public function MovieAdd($idRoom, $idMovie)
+        {   var_dump($idMovie);
+            var_dump($idRoom);
+            require_once(VIEWS_PATH."movieFunction-add.php");
+        }
+        
+        public function Delete($idFunction){
+            require_once(VIEWS_PATH."validate-session-admin.php");
+            $function=$this->functionDAO->GetById($idFunction);
+            $idRoom=$this->functionDAO->GetRoomId($function);
+            $this->functionDAO->Delete($function);
+            $this->ShowListView($idRoom);
+        }
+
+        public function DeleteOld()
+        {   
+            require_once(VIEWS_PATH."validate-session-admin.php");
+            $this->functionDAO->DeleteOldFunctions();
+            require_once(VIEWS_PATH."success-view.php");
+                
         }
 
         public function GetAllCinemasByMovie(Movie $movie)
@@ -127,63 +133,18 @@
             return $cinemaFunction;
         }
 
-        public function Select()
-        {   
-            if($_POST){
-                $roomDAO= $this->helper->getRoomDAO();
-                if(isset($_POST["add_button"])){
-                    require_once(VIEWS_PATH."validate-session-admin.php");
-                    $movieList= $this->helper->helpMovieList();
-                    $idRoom=$_POST["add_button"];
-                    require_once(VIEWS_PATH."movie-select-list.php");
-
-                }
-
-                if(isset($_POST["select_movie"])){
-                    $idMovie=$_POST["select_movie"];
-                    $idRoom=$_POST["idRoom"];
-                    require_once(VIEWS_PATH."movieFunction-add.php");
-
-                }
-
-                if(isset($_POST["genre_select"])){
-                    $idGenre=$_POST["genre_select"];
-                    $list=$this->GetAllCinemasByGenre($idGenre);
-                    require_once(VIEWS_PATH."movieFunction-select.php");
-
-                }
-
-                if(isset($_POST["list_button"])){
-                    require_once(VIEWS_PATH."validate-session-admin.php");
-                    $idRoom=$_POST["list_button"];
-                    $this->ShowListView($idRoom);
-
-                }
-
-                if(isset($_POST["idMovie_Selected"]))
-                {
-                    $movie = $this->helper->helpMovieById($_POST["idMovie_Selected"]);
-                    $list =  $this->GetAllCinemasByMovie($movie);
-                    require_once(VIEWS_PATH."movieFunction-select.php");
-                }
-
-                if(isset($_POST["delete_old"]))
-                {
-                    $this->functionDAO->DeleteOldFunctions();
-                    require_once(VIEWS_PATH."success-view.php");
-                }
-
-                else if(isset($_POST["delete_button"])){
-                    require_once(VIEWS_PATH."validate-session-admin.php");
-                    $idFunction=$_POST["delete_button"];
-                    $function=$this->functionDAO->GetById($idFunction);
-                    $idRoom=$this->functionDAO->GetRoomId($function);
-                    $room=$this->helper->helpGetRoom ($idRoom);
-                    $this->functionDAO->Delete($function);
-                    $this->ShowListView($room);
-                    
-                }
-            }
+        public function GetFunctionsByGenre($genre_select)
+        {
+            $list=$this->GetAllCinemasByGenre($genre_select);
+            require_once(VIEWS_PATH."movieFunction-select.php");
         }
+
+        public function SelectSlider($idMovie_Selected)
+        {
+            $movie = $this->helper->helpMovieById($idMovie_Selected);
+            $list =  $this->GetAllCinemasByMovie($movie);
+            require_once(VIEWS_PATH."movieFunction-select.php");
+        }
+
     }
 ?>

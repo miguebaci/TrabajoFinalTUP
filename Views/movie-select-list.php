@@ -15,14 +15,14 @@
                          <th>Poster</th>
                     </thead>
                     <tbody>
-                    <form action="<?php echo FRONT_ROOT ?>Function/Select" method="post" class="bg-light-alpha p-5">
-                    <input type="hidden" name="idRoom" value="<?php echo $idRoom;?>">
+                    <form action="<?php echo FRONT_ROOT ?>Function/MovieAdd" method="post" class="bg-light-alpha p-5">
+                    <!-- session?-->
                          <?php
                               foreach($movieList as $movie)
-                              {
+                              { 
                                    ?>
-                                        <tr>
-                                             <td><button type="submit" name="select_movie" value="<?php echo $movie->getIdMovie();?>" class="btn btn-dark ml-auto d-block">Choose</button></td>
+                                        <tr> <input type="hidden" name="idRoom" value="<?php echo $idRoom?>">
+                                             <td><button type="submit" name="idMovie" value="<?php echo $movie->getIdMovie()?>" class="btn btn-dark ml-auto d-block">Choose</button></td>
                                              <td><?php echo $movie->getMovieName()  ?></td>
                                              <td><?php echo $movie->getLanguage() ?></td>
                                              <td><?php echo $movie->getDuration() ?></td>

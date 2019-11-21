@@ -6,14 +6,14 @@
         
         private $idCinema;
         private $cinemaName;
-        private $adress;
+        private $address;
         private $ticketPrice;
         private $cinemaRoomList;
 
-        public function __construct($idCinema,$cinemaName, $adress, $ticketPrice){
+        public function __construct($idCinema,$cinemaName, $address, $ticketPrice){
             $this->idCinema=$idCinema;
             $this->cinemaName = $cinemaName;
-            $this->adress = $adress;
+            $this->address = $address;
             $this->ticketPrice = $ticketPrice;
             $this->cinemaRoomList = array();
         }
@@ -37,14 +37,14 @@
             $this->cinemaName = $cinemaName;
         }
 
-        public function getAdress()
+        public function getAddress()
         {
-            return $this->adress;
+            return $this->address;
         }
 
-        public function setAdress($adress)
+        public function setAddress($address)
         {
-            $this->adress = $adress;
+            $this->address = $address;
         }
 
         public function getTicketPrice()
