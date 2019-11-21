@@ -287,5 +287,52 @@
             }
         }
 
+        public function GetUserById($idUser){
+            try
+            {
+                $user=NULL;
+                $query = "SELECT U.idUser,U.email,U.password,R.role_description 
+                            FROM ".$this->tableName. " U 
+                            INNER JOIN ".$this->roleTable." R 
+                            ON R.idRole = U.idRole 
+                            WHERE U.idUser= :idUser";
+
+                $parameters["idUser"]=$idUser;
+
+                $this->connection = Connection::GetInstance();
+
+                $resultSet = $this->connection->Execute($query,$parameters);
+                
+                foreach ($resultSet as $row)
+                {               
+                    $user = new User($row["idUser"],
+                    $row["email"],
+                    $row["password"],
+                    $row["role_description"]);
+
+                    $query2 ="SELECT UP.firstName,UP.lastName,UP.dni 
+                            FROM ".$this->tableName. " U 
+                            INNER JOIN ".$this->profileTable." UP
+                            ON U.idUser = UP.idUser
+                            WHERE U.idUser=".$row["idUser"];
+
+                    $this->connection = Connection::GetInstance();
+
+                    $resultSet2 = $this->connection->Execute($query2);
+
+                    if($resultSet2!=NULL){
+                        $user->setUserProfile($resultSet2[0]["lastName"],$resultSet2[0]["firstName"],$resultSet2[0]["dni"]);
+                        $resultSet2=NULL;
+                    }
+                }
+                
+                return $user;
+            }
+            catch(Exception $ex)
+            {
+                throw $ex;
+            }
+        }
+
     }
 ?>
