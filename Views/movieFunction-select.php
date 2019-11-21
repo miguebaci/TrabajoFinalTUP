@@ -21,6 +21,7 @@ require_once('nav.php');
                     <td><button type="submit" class="btn btn-primary" name='list' value='<?php echo $idMovie_Selected ?>'> Search </button></td>
                 </tr>
                 </table>
+                </form>
                 <td>
                     <h4><?php if($cinema["functions"]!= NULL)echo $cinema["cinema"]->getCinemaName()?></h4>
                 </td>
