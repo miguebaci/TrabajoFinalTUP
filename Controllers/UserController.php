@@ -41,8 +41,7 @@
                         $this->Message("Passwords do not match", FRONT_ROOT."User/Register");
                     }
                 }else{
-                    echo "<script> alert('Email already in use');";
-                    echo "window.location = '".FRONT_ROOT."User/Register'; </script>";
+                    $this->Message("Email already in use", FRONT_ROOT."User/Register");
                 }
         }
 
@@ -52,15 +51,12 @@
                     if($password==$user->getPassword()){
                         $loggedUser= $user;
                         $_SESSION["loggedUser"]=$loggedUser;
-                        echo "<script> alert('Logged In');";
-                        echo "window.location = '".FRONT_ROOT."index.php'; </script>";
+                        $this->Message("Logged In", FRONT_ROOT."index.php");
                     }else{
-                        echo "<script> alert('Wrong Password');";
-                        echo "window.location = '".FRONT_ROOT."User/Login'; </script>";
+                        $this->Message("Wrong Password", FRONT_ROOT."User/Login");
                     }
                 }else{
-                    echo "<script> alert('Email does not exist');";
-                    echo "window.location = '".FRONT_ROOT."User/Login'; </script>";
+                    $this->Message("Email doesnt exist", FRONT_ROOT."User/Login");
                 }
         }
 
@@ -151,8 +147,7 @@
                 $loggedUser=$user;
             }
             $_SESSION["loggedUser"]=$loggedUser;
-            echo "<script> alert('Logged In With Facebook');";
-            echo "window.location = '".FRONT_ROOT."index.php'; </script>";
+            $this->Message("Logged in with Facebook", FRONT_ROOT."index.php");
 
             // User is logged in with a long-lived access token.
             // You can redirect them to a members-only page.
@@ -163,8 +158,7 @@
             session_destroy();
             unset($_SESSION["loggedUser"]);
             unset($_SESSION["fb_access_token"]);
-            echo "<script> alert('Logged Out');";
-            echo "window.location = '".FRONT_ROOT."index.php'; </script>";
+            $this->Message("Logged out", FRONT_ROOT."index.php");
         }
 
         public function UserProfile(){
@@ -183,15 +177,12 @@
                     if($newPassword==$newPassword2){
                         $_SESSION["loggedUser"]->setPassword($newPassword);
                         $this->userDAO->setNewPassword($newPassword, $_SESSION["loggedUser"]);
-                        echo "<script> alert('Password changed');";
-                        echo "window.location = '".FRONT_ROOT."User/UserProfile'; </script>";
+                        $this->Message("Password changed", FRONT_ROOT."User/UserProfile");
                     }else{
-                        echo "<script> alert('The Passwords do not match');";
-                        echo "window.location = '".FRONT_ROOT."User/ChangePassword'; </script>";
+                        $this->Message("The Passwords do not match", FRONT_ROOT."User/ChangePassword");
                     }
                 }else{
-                    echo "<script> alert('Old Password field is wrong');";
-                    echo "window.location = '".FRONT_ROOT."User/ChangePassword'; </script>";
+                    $this->Message("Old Password field is incorrect", FRONT_ROOT."User/ChangePassword");
                 }
         }
 
@@ -204,8 +195,7 @@
             require_once(VIEWS_PATH."validate-session.php");
                 $_SESSION["loggedUser"]->setUserProfile($lastName,$firstName,$dni);
                 $this->userDAO->setUserNewProfile($_SESSION["loggedUser"]->getUserProfile(),$_SESSION["loggedUser"]);
-                echo "<script> alert('Info changed');";
-                echo "window.location = '".FRONT_ROOT."User/UserProfile'; </script>";
+                $this->Message("Information changed", FRONT_ROOT."User/UserProfile");
         }
 
         public function ShowUserPurchases(){
@@ -237,8 +227,7 @@
                         require_once(VIEWS_PATH."show-movie-analytics.php");
                     }
                 }else{
-                    echo "<script> alert('Date Error');";  
-                    echo "window.location = '../User/ShowAnalytics'; </script>";
+                    $this->Message("Date Error", FRONT_ROOT."User/ShowAnalytics");
                 }
         }
 
@@ -284,7 +273,7 @@
         }
 
         public function Message($message,$location){
-            require_once(VIEWS_PATH."user-message.php");
+            require_once(VIEWS_PATH."message.php");
         }
 }
 ?>
