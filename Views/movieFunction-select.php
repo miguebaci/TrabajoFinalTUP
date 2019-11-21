@@ -18,11 +18,11 @@ require_once('nav.php');
                 <tr>
                     <td><input type="date" name="startDate" value="" class="form-control"></td>
                     <td><input type="date" name="endDate" value="" class="form-control"></td>
-                    <td><button type="submit" class="btn btn-primary" name='list' value='<?php echo $idMovie_Selected ?>'> Buy Tickets </button></td>
+                    <td><button type="submit" class="btn btn-primary" name='list' value='<?php echo $idMovie_Selected ?>'> Search </button></td>
                 </tr>
                 </table>
                 <td>
-                    <h4><?php echo $cinema["cinema"]->getCinemaName()?></h4>
+                    <h4><?php if($cinema["functions"]!= NULL)echo $cinema["cinema"]->getCinemaName()?></h4>
                 </td>
                 <table class="table bg-light-alpha">
 
