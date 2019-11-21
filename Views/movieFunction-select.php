@@ -8,6 +8,19 @@ require_once('nav.php');
             <?php foreach ($list as $cinema) {
                     $functionList=$cinema["functions"];
                 ?>
+                <form action="<?php echo FRONT_ROOT ?>Function/ShowDateRange" method="POST">
+                <table>
+                <tr>
+                    <td>Start Date</td>
+                    <td>Finish Date</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><input type="date" name="startDate" value="" class="form-control"></td>
+                    <td><input type="date" name="endDate" value="" class="form-control"></td>
+                    <td><button type="submit" class="btn btn-primary" name='list' value='<?php echo $idMovie_Selected ?>'> Buy Tickets </button></td>
+                </tr>
+                </table>
                 <td>
                     <h4><?php echo $cinema["cinema"]->getCinemaName()?></h4>
                 </td>

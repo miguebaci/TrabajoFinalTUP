@@ -52,6 +52,12 @@
             require_once(VIEWS_PATH."moviefunction-list.php");
         }
 
+        public function ShowDateRange($startDate, $endDate, $idMovie_Selected){
+            $movie = $this->helper->helpMovieById($idMovie_Selected);
+            $list =  $this->GetAllCinemasByMovieAndDate($movie, $startDate, $endDate);
+            require_once(VIEWS_PATH."movieFunction-select.php");
+        }
+
         public function Add($idRoom, $idMovie, $functionTime, $function_date_start, $function_date_end)
         {   
             require_once(VIEWS_PATH."validate-session-admin.php");
@@ -88,8 +94,7 @@
         }
 
         public function MovieAdd($idRoom, $idMovie)
-        {   var_dump($idMovie);
-            var_dump($idRoom);
+        {   
             require_once(VIEWS_PATH."movieFunction-add.php");
         }
         
@@ -116,6 +121,18 @@
             foreach ($cinemaArray as $cinema) {
                 $resultset["cinema"] = $cinema;
                 $resultset["functions"] = $this->functionDAO->GetByCinemaIdAndMovieId($cinema->getIdCinema(),$movie->getIdMovie());
+                array_push($cinemaFunction,$resultset);
+            }
+            return $cinemaFunction;
+        }
+
+        public function GetAllCinemasByMovieAndDAte(Movie $movie, $startDate, $endDate)
+        {
+            $cinemaFunction=array();
+            $cinemaArray = $this->helper->helpGetCinemasByMovie($movie);
+            foreach ($cinemaArray as $cinema) {
+                $resultset["cinema"] = $cinema;
+                $resultset["functions"] = $this->functionDAO->GetByCinemaIdAndMovieIdAndDate($cinema->getIdCinema(),$movie->getIdMovie(), $startDate, $endDate);
                 array_push($cinemaFunction,$resultset);
             }
             return $cinemaFunction;
