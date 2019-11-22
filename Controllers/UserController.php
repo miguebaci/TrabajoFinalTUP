@@ -273,7 +273,7 @@
         }
 
         public function Message($message,$location){
-            require_once(VIEWS_PATH."user-message.php");
+            require_once(VIEWS_PATH."message.php");
         }
 }
 ?>
