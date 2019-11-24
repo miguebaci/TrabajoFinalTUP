@@ -29,6 +29,10 @@
         function helpUserById($id){
             return $this->userDAO->GetUserById($id);
         }
-    }
 
+        function helpGetRemainingTickets($function){
+            return $this->functionDAO->GetRemainingTickets($function);
+        }
+    
+    }
 ?>

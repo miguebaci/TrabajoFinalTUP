@@ -82,24 +82,23 @@ CREATE TABLE userProfile
     constraint pfk_idUser FOREIGN KEY (idUser) references user(idUser) ON DELETE CASCADE
 )Engine=InnoDB;
 
-CREATE TABLE ticket
-(   idTicket INT AUTO_INCREMENT NOT NULL,
-    idMovieFunction INT NOT NULL,
-    QR VARCHAR(150),
-    constraint pk_idTicket PRIMARY KEY (idTicket),
-    constraint fk_idMovieFunction FOREIGN KEY (idMovieFunction) references moviefunction(idMovieFunction) ON DELETE CASCADE
-)Engine=InnoDB;
-
 CREATE TABLE purchase
 (
     idPurchase INT AUTO_INCREMENT NOT NULL,
     idUser INT NOT NULL,
-    idTicket INT NOT NULL,
-    ticketQuantity INT NOT NULL,
     total INT NOT NULL,
     discount INT,
     purchaseDate VARCHAR(100),
     constraint pk_idPurchase PRIMARY KEY (idPurchase),
-    constraint fk_idUser FOREIGN KEY (idUser) references user(idUser) ON DELETE CASCADE,
-    constraint fk_idTicket FOREIGN KEY (idTicket) references ticket(idTicket) ON DELETE CASCADE
+    constraint fk_idUser FOREIGN KEY (idUser) references user(idUser) ON DELETE CASCADE
+)Engine=InnoDB;
+
+CREATE TABLE ticket
+(   idTicket INT AUTO_INCREMENT NOT NULL,
+    idMovieFunction INT NOT NULL,
+    QR VARCHAR(150),
+    idPurchase INT NOT NULL,
+    constraint pk_idTicket PRIMARY KEY (idTicket),
+    constraint fk_idPurchase FOREIGN KEY (idPurchase) REFERENCES purchase(idPurchase) ON DELETE CASCADE,
+    constraint fk_idMovieFunction FOREIGN KEY (idMovieFunction) references moviefunction(idMovieFunction) ON DELETE CASCADE
 )Engine=InnoDB;

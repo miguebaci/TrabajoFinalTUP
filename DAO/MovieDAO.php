@@ -105,6 +105,8 @@
 
                 $resultSet = $this->connection->Execute($query);
 
+                $movie=NULL;
+
                 foreach ($resultSet as $row)
                 {   
                     $movie = new Movie(

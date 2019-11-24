@@ -149,6 +149,7 @@
             foreach ($cinemaArray as $cinema) {
                 $resultset["cinema"] = $cinema;
                 $resultset["functions"] = $this->functionDAO->GetByCinemaIdAndGenreId($cinema->getIdCinema(),$idGenre);
+                $resultset["functions"] = $this->functionDAO->RemoveFullFunctions($resultset["functions"]);
                 array_push($cinemaFunction,$resultset);
             }
             return $cinemaFunction;

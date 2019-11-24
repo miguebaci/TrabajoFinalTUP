@@ -64,7 +64,7 @@
         function helpGetGenre($idGenre){
             return $this->genreDAO->GetById($idGenre);
         }
-
+        
 
         function getCinemaDAO(){
             return $this->cinemaDAO;

@@ -21,7 +21,7 @@
         public function ShowBuyView($functionId){
                 require_once(VIEWS_PATH."validate-session.php");
                 $function=$this->helper->helpFunctionById($functionId);
-                $remainingTickets=$this->purchaseDAO->GetRemainingTickets($function);
+                $remainingTickets=$this->helper->helpGetRemainingTickets($function);
                 $ticketPrice=$this->purchaseDAO->getFunctionTicketPrice($function);
                 require_once(VIEWS_PATH."buy-select.php");
         }
@@ -37,21 +37,29 @@
                         $discount=25;
                     }
                 }
-                $purchase=new Purchase(date("Y-m-d H:i:s"),$cinema->getTicketPrice()*$quantity,$quantity,$discount,$_SESSION["loggedUser"]);
-                $ticket=$this->purchaseDAO->CreateTicket($purchase,$cinema);
-                $purchase->setTicket($ticket);
+                $purchase=new Purchase(date("Y-m-d H:i:s"),$cinema->getTicketPrice()*$quantity,$discount,$_SESSION["loggedUser"]);
                 $purchase->setIdPurchase($this->purchaseDAO->Add($purchase));
+                $tickets=$this->purchaseDAO->CreateTicket($purchase,$cinema,$quantity);
+                foreach($tickets as $ticket){
+                    $ticket->setTicketNumber($this->purchaseDAO->AddTicket($ticket,$purchase));
+                }
+                $purchase->setTickets($tickets);
                 $email=$purchase->getUser()->getEmail();
                 $this->SendBuyMail($ticket, $email);
                 require_once(VIEWS_PATH."show-qr.php");
         }
 
-        public function SendBuyMail($ticket, $email){
+        public function SendBuyMail($tickets, $email){
             // Instantiation and passing `true` enables exceptions
             $mail = new PHPMailer(true);
 
-            $image = $ticket->getQR();
-            $image = file_get_contents($image);
+            $images=array();
+            foreach ($tickets as $ticket) {
+                $image = $ticket->getQR();
+                $image = file_get_contents($image);
+                array_push($images,$image);
+            }
+        
             $body = 'We have sent you a QR code, present it at the Cinema. <br> Thanks for choosing us!<p><img src="cid:qrcode" /></p>';
             try {
             //Server settings
@@ -76,7 +84,9 @@
             $mail->addAddress($email);     // Add a recipient
 
             // Attachments
-            $mail->addStringEmbeddedImage($image,'qrcode','qrcode.jpg');         // Add attachments
+            foreach($images as $image){
+                $mail->addStringEmbeddedImage($image,'qrcode','qrcode.jpg');         // Add attachments
+            }
 
             // Content
             $mail->isHTML(true);                                  // Set email format to HTML
