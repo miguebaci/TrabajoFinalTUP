@@ -23,7 +23,7 @@ require_once('nav.php');
                 </table>
                 </form>
                 <td>
-                    <h4><?php if($cinema["functions"]!= NULL)echo $cinema["cinema"]->getCinemaName()?></h4>
+                    <h4><?php if($cinema["functions"]!= NULL) { echo $cinema["cinema"]->getCinemaName()?></h4>
                 </td>
                 <table class="table bg-light-alpha">
 
@@ -64,7 +64,7 @@ require_once('nav.php');
                         <?php
                                 }
                             }
-
+                        }
                         ?>
                         </tbody>
                     </form>

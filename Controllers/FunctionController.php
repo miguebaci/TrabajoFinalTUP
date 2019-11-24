@@ -57,6 +57,10 @@
             $list =  $this->GetAllCinemasByMovieAndDate($movie, $startDate, $endDate);
             require_once(VIEWS_PATH."movieFunction-select.php");
         }
+        public function ShowDateRangeGenre($startDate, $endDate, $genre_select){
+            $list =  $this->GetAllCinemasByGenreAndDate($genre_select, $startDate, $endDate);
+            require_once(VIEWS_PATH."movieFunction-genreList.php");
+        }
 
         public function Add($idRoom, $idMovie, $functionTime, $function_date_start, $function_date_end)
         {   
@@ -126,7 +130,7 @@
             return $cinemaFunction;
         }
 
-        public function GetAllCinemasByMovieAndDAte(Movie $movie, $startDate, $endDate)
+        public function GetAllCinemasByMovieAndDate(Movie $movie, $startDate, $endDate)
         {
             $cinemaFunction=array();
             $cinemaArray = $this->helper->helpGetCinemasByMovie($movie);
@@ -149,11 +153,22 @@
             }
             return $cinemaFunction;
         }
+        public function GetAllCinemasByGenreAndDate($idGenre , $startDate, $endDate)
+        {
+            $cinemaFunction=array();
+            $cinemaArray = $this->helper->helpGetCinemasByGenre($idGenre);
+            foreach ($cinemaArray as $cinema) {
+                $resultset["cinema"] = $cinema;
+                $resultset["functions"] = $this->functionDAO->GetByCinemaIdGenreIdAndDate($cinema->getIdCinema(),$idGenre, $startDate, $endDate);
+                array_push($cinemaFunction,$resultset);
+            }
+            return $cinemaFunction;
+        }
 
         public function GetFunctionsByGenre($genre_select)
         {
             $list=$this->GetAllCinemasByGenre($genre_select);
-            require_once(VIEWS_PATH."movieFunction-select.php");
+            require_once(VIEWS_PATH."movieFunction-genreList.php");
         }
 
         public function SelectSlider($idMovie_Selected)
