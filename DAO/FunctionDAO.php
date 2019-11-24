@@ -433,5 +433,68 @@ class FunctionDAO implements IFunctionDAO
         }
         return $movieList;
     }
+
+    public function RemoveFullFunctions($functions){
+        $newFunctions=array();
+        foreach($functions as $function){
+            if($this->GetRemainingTickets($function)>0){
+                array_push($newFunctions,$function);
+            }
+        }
+        return $newFunctions;
+    }
+
+    
+        /*
+         * Recieves a Movie Function
+         * Gets the remaining tickets for that function from the database
+         * Returns the remaining tickets
+         */
+
+        public function GetRemainingTickets($function){
+            try{
+
+                $query="SELECT ifnull(COUNT(T.idTicket),0)  
+                FROM purchase P 
+                JOIN ticket T
+                ON P.idPurchase=T.idPurchase 
+                JOIN ".$this->tableName." MF 
+                ON T.idMovieFunction=MF.idMovieFunction
+                WHERE MF.idMovieFunction= :idMovieFunction 
+                GROUP BY MF.idMovieFunction;";
+
+                $parameters["idMovieFunction"]=$function->getIdFunction();
+
+                $this->connection = Connection::GetInstance();
+
+                $resultSet=$this->connection->Execute($query, $parameters);
+
+
+                $query2="SELECT R.totalCap 
+                FROM ".$this->tableName." MF 
+                JOIN room R 
+                ON MF.idRoom=R.idRoom 
+                WHERE MF.idMovieFunction= :idMovieFunction 
+                GROUP BY MF.idMovieFunction;";
+
+                $parameters2["idMovieFunction"]=$function->getIdFunction();
+
+                $this->connection = Connection::GetInstance();
+
+                $resultSet2=$this->connection->Execute($query2, $parameters2);
+
+                if(isset($resultSet[0][0])){
+                    $remainingTickets=$resultSet2[0][0]-$resultSet[0][0];
+                }else{
+                    $remainingTickets=$resultSet2[0][0];
+                }
+                
+                return $remainingTickets;
+
+            }catch(Exception $ex){
+                throw $ex;
+            }
+        }
+
 }
 ?>

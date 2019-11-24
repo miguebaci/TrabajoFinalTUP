@@ -24,12 +24,15 @@
          * And returns the Ticket
          */
 
-        public function CreateTicket($purchase,$cinema){
-            $ticket= new Ticket();
-            $ticket->setQR($this->CreateQR($cinema,$purchase->getTicketQuantity()));
-            $ticket->setMovieFunction($cinema->getCinemaRoomList()[0]->getFunctionList()[0]);
-            $ticket->setTicketNumber($this->AddTicket($ticket));
-            return $ticket;
+        public function CreateTicket($purchase,$cinema,$quantity){
+            $tickets=array();
+            for($i=0;$i<$quantity;$i++){
+                $ticket= new Ticket();
+                $ticket->setQR($this->CreateQR($cinema,$purchase));
+                $ticket->setMovieFunction($cinema->getCinemaRoomList()[0]->getFunctionList()[0]);
+                array_push($tickets,$ticket);
+            }
+            return $tickets;
         }
 
         /*
@@ -38,11 +41,11 @@
          * Returns the QR
          */
 
-        public function CreateQR($cinema,$quantity){
+        public function CreateQR($cinema,$purchase){
             $room=$cinema->getCinemaRoomList()[0];
             $function=$room->getFunctionList()[0];
             $movie=$function->getMovie();
-            $QR="https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=".$cinema->getCinemaName()."/".$cinema->getIdCinema()."/".$room->getRoomName()."/".$room->getIdCinemaRoom()."/".$function->getIdFunction()."/".$function->getDate()."/".$function->getTime()."/".$quantity."/".$movie->getMovieName()."/".$movie->getIdMovie()."&choe=UTF-8";
+            $QR="https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=".$cinema->getCinemaName()."/".$cinema->getIdCinema()."/".$room->getRoomName()."/".$room->getIdCinemaRoom()."/".$function->getIdFunction()."/".$function->getDate()."/".$function->getTime()."/".$purchase->getIdPurchase()."/".$movie->getMovieName()."/".$movie->getIdMovie()."&choe=UTF-8";
             $QR=str_replace(" ","-",$QR);
             return $QR;
         }
@@ -56,12 +59,10 @@
         public function Add($purchase){
             try
             {
-                $query = "INSERT INTO ".$this->tableName." (idUser, idTicket, ticketQuantity, total, discount, purchaseDate) 
-                            VALUES (:idUser, :idTicket, :ticketQuantity, :total, :discount, :purchaseDate);";
+                $query = "INSERT INTO ".$this->tableName." (idUser, total, discount, purchaseDate) 
+                            VALUES (:idUser, :total, :discount, :purchaseDate);";
                 
                 $parameters["idUser"]=$purchase->getUser()->getIdUser();
-                $parameters["idTicket"]=$purchase->getTicket()->getTicketNumber();
-                $parameters["ticketQuantity"]=$purchase->getTicketQuantity();
                 $parameters["total"]=$purchase->getTotal();
                 $parameters["discount"]=$purchase->getDiscount();
                 $parameters["purchaseDate"]=$purchase->getPurchase_date();
@@ -90,21 +91,21 @@
          * Returns its ID in the Database
          */
 
-        public function AddTicket($ticket){
+        public function AddTicket($ticket, $purchase){
             try
             {
-                $query = "INSERT INTO ".$this->ticketTable." (idMovieFunction, QR) 
-                            VALUES (:idMovieFunction, :QR);";
+                $query = "INSERT INTO ".$this->ticketTable." (idMovieFunction, QR, idPurchase) 
+                            VALUES (:idMovieFunction, :QR, :idPurchase);";
                 
 
                 $parameters["idMovieFunction"]=$ticket->getMovieFunction()->getIdFunction();
                 $parameters["QR"]=$ticket->getQR();
+                $parameters["idPurchase"]=$purchase->getIdPurchase();
 
                 $this->connection = Connection::GetInstance();
 
                 $this->connection->ExecuteNonQuery($query, $parameters);
 
-                //$query="SELECT idPurchase FROM ".$this->tableName." WHERE idTicket = :idTicket";
                 $query="SELECT LAST_INSERT_ID()";
 
                 $this->connection = Connection::GetInstance();
@@ -129,10 +130,8 @@
             try
             {
                 $query="SELECT * 
-                FROM ".$this->tableName." P 
-                JOIN ".$this->ticketTable." T 
-                ON P.idTicket=T.idTicket 
-                WHERE P.idUser= :idUser";
+                FROM ".$this->tableName."  
+                WHERE idUser= :idUser";
 
                 $parameters["idUser"]=$user->getIdUser();
 
@@ -143,13 +142,33 @@
                 $purchaseList=array();
 
                 foreach ($resultSet as $row ) {
-                    $purchase=new Purchase($row["purchaseDate"], $row["total"], $row["ticketQuantity"], $row["discount"],$this->helper->helpUserById($row["idUser"]));
+                    $purchase=new Purchase($row["purchaseDate"], $row["total"], $row["discount"],$this->helper->helpUserById($row["idUser"]));
                     $purchase->setIdPurchase($row["idPurchase"]);
-                    $ticket=new Ticket();
-                    $ticket->setTicketNumber($row["idTicket"]);
-                    $ticket->setQR($row["QR"]);
-                    $ticket->setMovieFunction($this->helper->helpFunctionById($row["idMovieFunction"]));
-                    $purchase->setTicket($ticket);
+
+                    $query2="SELECT * 
+                        FROM ".$this->ticketTable." T 
+                        JOIN ".$this->tableName." P 
+                        ON T.idPurchase=P.idPurchase 
+                        WHERE T.idPurchase= :idPurchase;";
+
+                    $parameters2["idPurchase"]=$purchase->getIdPurchase();
+
+                    $this->connection = Connection::GetInstance();
+        
+                    $resultSet2=$this->connection->Execute($query2, $parameters2);
+
+                    $tickets=array();
+
+                    foreach($resultSet2 as $row2){
+                        $ticket=new Ticket();
+                        $ticket->setTicketNumber($row2["idTicket"]);
+                        $ticket->setQR($row2["QR"]);
+                        $ticket->setMovieFunction($this->helper->helpFunctionById($row2["idMovieFunction"]));
+                        array_push($tickets,$ticket);
+                    }
+
+                    $purchase->setTickets($tickets);
+
                     array_push($purchaseList,$purchase);
                 }
 
@@ -171,10 +190,10 @@
             try{
                 $dateEnd=$dateEnd." 23:59:59"; 
 
-                $query="SELECT SUM(P.total - (P.discount * P.total / 100)) as Total, SUM(P.ticketQuantity) as Tickets 
+                $query="SELECT SUM(P.total - (P.discount * P.total / 100)) as Total, COUNT(T.idTicket) as Tickets 
                 FROM ".$this->tableName." P 
                 JOIN ".$this->ticketTable." T 
-                ON T.idTicket=P.idTicket
+                ON T.idPurchase=P.idPurchase
                 JOIN moviefunction MD 
                 ON MD.idMovieFunction=T.idMovieFunction 
                 JOIN room R 
@@ -217,10 +236,10 @@
             try{
                 $dateEnd=$dateEnd." 23:59:59"; 
 
-                $query="SELECT SUM(P.total - (P.discount * P.total / 100)) as Total, SUM(P.ticketQuantity) as Tickets 
+                $query="SELECT ((SUM(P.total - (P.discount * P.total / 100)))*COUNT(DISTINCT P.idPurchase))/COUNT(T.idTicket) as Total, COUNT(T.idTicket) as Tickets 
                 FROM ".$this->tableName." P 
                 JOIN ".$this->ticketTable." T 
-                ON T.idTicket=P.idTicket
+                ON T.idPurchase=P.idPurchase
                 JOIN moviefunction MD 
                 ON MD.idMovieFunction=T.idMovieFunction 
                 JOIN Movie M 
@@ -251,56 +270,6 @@
             }
         }
 
-        /*
-         * Recieves a Movie Function
-         * Gets the remaining tickets for that function from the database
-         * Returns the remaining tickets
-         */
-
-        public function GetRemainingTickets($function){
-            try{
-
-                $query="SELECT ifnull(SUM(P.ticketQuantity),0)  
-                FROM ".$this->tableName." P 
-                JOIN ".$this->ticketTable." T
-                ON P.idTicket=T.idTicket 
-                JOIN moviefunction MF 
-                ON T.idMovieFunction=MF.idMovieFunction
-                WHERE MF.idMovieFunction= :idMovieFunction 
-                GROUP BY MF.idMovieFunction;";
-
-                $parameters["idMovieFunction"]=$function->getIdFunction();
-
-                $this->connection = Connection::GetInstance();
-
-                $resultSet=$this->connection->Execute($query, $parameters);
-
-
-                $query2="SELECT R.totalCap 
-                FROM moviefunction MF 
-                JOIN room R 
-                ON MF.idRoom=R.idRoom 
-                WHERE MF.idMovieFunction= :idMovieFunction 
-                GROUP BY MF.idMovieFunction;";
-
-                $parameters2["idMovieFunction"]=$function->getIdFunction();
-
-                $this->connection = Connection::GetInstance();
-
-                $resultSet2=$this->connection->Execute($query2, $parameters2);
-
-                if(isset($resultSet[0][0])){
-                    $remainingTickets=$resultSet2[0][0]-$resultSet[0][0];
-                }else{
-                    $remainingTickets=$resultSet2[0][0];
-                }
-                
-                return $remainingTickets;
-
-            }catch(Exception $ex){
-                throw $ex;
-            }
-        }
 
         /*
          * Recieves a Movie Function

@@ -11,17 +11,17 @@
                          <th>Date of Purchase</th>
                          <th>Movie Name</th>
                          <th>Function Date</th>
-                         <th>Ticket Number</th>
+                         <th>Ticket/s Number</th>
                          <th>Ticket Quantity</th>
                          <th>Total</th>
-                         <th>QR</th>
+                         <th>QR/s</th>
                     </thead>
                     <tbody>
                         <?php 
                               foreach($purchaseList as $purchase)
                               {   
-                                  $ticket=$purchase->getTicket();
-                                  $function=$ticket->getMovieFunction();
+                                  $ticket=$purchase->getTickets();
+                                  $function=$ticket[0]->getMovieFunction();
                                   $movie=$function->getMovie();
                         ?>
                                         <tr>
@@ -29,10 +29,13 @@
                                              <td><?php echo $purchase->getPurchase_date() ?></td>
                                              <td><?php echo $movie->getMovieName() ?></td>
                                              <td><?php echo $function->getDate()." ".$function->getTime() ?></td>
-                                             <td><?php echo $ticket->getTicketNumber() ?></td>
-                                             <td><?php echo $purchase->getTicketQuantity() ?></td>
+                                             <td><?php foreach($purchase->getTickets() as $ticket){echo $ticket->getTicketNumber()."/";} ?></td>
+                                             <td><?php echo count($purchase->getTickets()) ?></td>
                                              <td><?php echo "$".($purchase->getTotal() - ($purchase->getTotal()*$purchase->getDiscount()/100)) ?></td>
-                                             <td><?php echo "<img src=".$ticket->getQR()."title='Your Ticket' />" ?></td>
+                                             <td><?php foreach($purchase->getTickets() as $ticket){
+                                                            echo "<img src=".$ticket->getQR()."title='Your Ticket' height=75 width=75 />"; 
+                                                       }?>
+                                             </td>
                                         </tr>
                                    <?php
                               } 

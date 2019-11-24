@@ -5,18 +5,17 @@ namespace Models;
     {
         private $idPurchase;
         private $purchase_date;
-        private $ticketQuantity;
         private $total;
         private $discount;
-        private $ticket;
+        private $tickets;
         private $user;
 
-        public function __construct($purchase_date, $total, $ticketQuantity, $discount, $user){
+        public function __construct($purchase_date, $total, $discount, $user, $tickets=array()){
             $this->purchase_date = $purchase_date;
-            $this->ticketQuantity = $ticketQuantity;
             $this->total = $total;
             $this->discount = $discount;
             $this->user=$user;
+            $this->tickets=$tickets;
         }
 
         public function getIdPurchase()
@@ -49,16 +48,6 @@ namespace Models;
             $this->total = $total;
         }
 
-        public function getTicketQuantity()
-        {
-            return $this->ticketQuantity;
-        }
-
-        public function setTicketQuantity($ticketQuantity)
-        {
-            $this->ticketQuantity = $ticketQuantity;
-        }
-
         public function getDiscount()
         {
             return $this->discount;
@@ -69,14 +58,18 @@ namespace Models;
             $this->discount = $discount;
         }
 
-        public function getTicket()
+        public function getTickets()
         {
-            return $this->ticket;
+            return $this->tickets;
         }
 
-        public function setTicket($ticket)
+        public function setTickets($tickets)
         {
-            $this->ticket = $ticket;
+            $this->tickets = $tickets;
+        }
+
+        public function addTickets($tickets){
+            array_push($this->tickets,$tickets);
         }
 
         public function getUser()
