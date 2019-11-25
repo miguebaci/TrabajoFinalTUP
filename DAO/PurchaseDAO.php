@@ -236,7 +236,7 @@
             try{
                 $dateEnd=$dateEnd." 23:59:59"; 
 
-                $query="SELECT ((SUM(P.total - (P.discount * P.total / 100)))*COUNT(DISTINCT P.idPurchase))/COUNT(T.idTicket) as Total, COUNT(T.idTicket) as Tickets 
+                $query="SELECT ((SUM(P.total - (P.discount * P.total / 100)))/COUNT(T.idTicket)*COUNT(DISTINCT P.idPurchase)) as Total, COUNT(T.idTicket) as Tickets 
                 FROM ".$this->tableName." P 
                 JOIN ".$this->ticketTable." T 
                 ON T.idPurchase=P.idPurchase
