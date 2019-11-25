@@ -190,7 +190,7 @@
             try{
                 $dateEnd=$dateEnd." 23:59:59"; 
 
-                $query="SELECT SUM(P.total - (P.discount * P.total / 100)) as Total, COUNT(T.idTicket) as Tickets 
+                $query="SELECT SUM(P.total - (P.discount * P.total / 100))/COUNT(T.idTicket) as Total, COUNT(T.idTicket) as Tickets 
                 FROM ".$this->tableName." P 
                 JOIN ".$this->ticketTable." T 
                 ON T.idPurchase=P.idPurchase
@@ -201,7 +201,8 @@
                 JOIN cinema C 
                 ON C.idCinema=R.idCinema 
                 WHERE C.idCinema = :idCinema AND (P.purchaseDate >= :dateStart AND P.purchaseDate <= :dateEnd) 
-                GROUP BY C.idCinema;";
+                GROUP BY P.idPurchase 
+                ORDER BY P.idPurchase;";
 
                 $parameters["idCinema"]=$cinema->getIdCinema();
                 $parameters["dateStart"]=$dateStart;
@@ -211,13 +212,14 @@
 
                 $resultSet=$this->connection->Execute($query, $parameters);
 
-                if(isset($resultSet[0])){
-                    $purchase["Total"]=$resultSet[0]["Total"];
-                    $purchase["Tickets"]=$resultSet[0]["Tickets"];
-                }else{
-                    $purchase["Total"]=0;
-                    $purchase["Tickets"]=0;
+                $purchase["Total"]=0;
+                $purchase["Tickets"]=0;
+                foreach($resultSet as $row){
+                    $purchase["Total"]+=$row["Total"];
+                    $purchase["Tickets"]+=$row["Tickets"];
                 }
+
+
 
                 return $purchase;
 
@@ -236,7 +238,7 @@
             try{
                 $dateEnd=$dateEnd." 23:59:59"; 
 
-                $query="SELECT ((SUM(P.total - (P.discount * P.total / 100)))/COUNT(T.idTicket)*COUNT(DISTINCT P.idPurchase)) as Total, COUNT(T.idTicket) as Tickets 
+                $query="SELECT SUM(P.total - (P.discount * P.total / 100))/COUNT(T.idTicket) as Total, COUNT(T.idTicket) as Tickets 
                 FROM ".$this->tableName." P 
                 JOIN ".$this->ticketTable." T 
                 ON T.idPurchase=P.idPurchase
@@ -245,7 +247,7 @@
                 JOIN Movie M 
                 ON M.idMovie=MD.idMovie 
                 WHERE M.idMovie = :idMovie AND (P.purchaseDate >= :dateStart AND P.purchaseDate <= :dateEnd) 
-                GROUP BY M.idMovie;";
+                GROUP BY P.idPurchase;";
 
                 $parameters["idMovie"]=$movie->getIdMovie();
                 $parameters["dateStart"]=$dateStart;
@@ -255,12 +257,11 @@
 
                 $resultSet=$this->connection->Execute($query, $parameters);
 
-                if(isset($resultSet[0])){
-                    $purchase["Total"]=$resultSet[0]["Total"];
-                    $purchase["Tickets"]=$resultSet[0]["Tickets"];
-                }else{
-                    $purchase["Total"]=0;
-                    $purchase["Tickets"]=0;
+                $purchase["Total"]=0;
+                $purchase["Tickets"]=0;
+                foreach($resultSet as $row){
+                    $purchase["Total"]+=$row["Total"];
+                    $purchase["Tickets"]+=$row["Tickets"];
                 }
 
                 return $purchase;
