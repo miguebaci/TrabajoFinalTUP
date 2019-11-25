@@ -45,7 +45,7 @@
                 }
                 $purchase->setTickets($tickets);
                 $email=$purchase->getUser()->getEmail();
-                $this->SendBuyMail($ticket, $email);
+                $this->SendBuyMail($tickets, $email);
                 require_once(VIEWS_PATH."show-qr.php");
         }
 
@@ -84,8 +84,10 @@
             $mail->addAddress($email);     // Add a recipient
 
             // Attachments
+            $i=1;
             foreach($images as $image){
-                $mail->addStringEmbeddedImage($image,'qrcode','qrcode.jpg');         // Add attachments
+                $mail->addStringEmbeddedImage($image,'qrcode'.$i,'qrcode'.$i.'.jpg');         // Add attachments
+                $i++;
             }
 
             // Content

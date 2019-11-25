@@ -4,7 +4,7 @@
     interface IPurchaseDAO
     {
         function CreateTicket($purchase,$cinema,$quantity);
-        function CreateQR($cinema,$purchase);
+        function CreateQR($cinema,$purchase,$number);
         function Add($purchase);
         function AddTicket($ticket, $purchase);
         function bringUserPurchases($user);

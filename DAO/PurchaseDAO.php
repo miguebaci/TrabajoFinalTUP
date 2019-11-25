@@ -28,7 +28,7 @@
             $tickets=array();
             for($i=0;$i<$quantity;$i++){
                 $ticket= new Ticket();
-                $ticket->setQR($this->CreateQR($cinema,$purchase));
+                $ticket->setQR($this->CreateQR($cinema,$purchase,$i+1));
                 $ticket->setMovieFunction($cinema->getCinemaRoomList()[0]->getFunctionList()[0]);
                 array_push($tickets,$ticket);
             }
@@ -41,11 +41,11 @@
          * Returns the QR
          */
 
-        public function CreateQR($cinema,$purchase){
+        public function CreateQR($cinema,$purchase,$number){
             $room=$cinema->getCinemaRoomList()[0];
             $function=$room->getFunctionList()[0];
             $movie=$function->getMovie();
-            $QR="https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=".$cinema->getCinemaName()."/".$cinema->getIdCinema()."/".$room->getRoomName()."/".$room->getIdCinemaRoom()."/".$function->getIdFunction()."/".$function->getDate()."/".$function->getTime()."/".$purchase->getIdPurchase()."/".$movie->getMovieName()."/".$movie->getIdMovie()."&choe=UTF-8";
+            $QR="https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=".$cinema->getCinemaName()."/".$cinema->getIdCinema()."/".$room->getRoomName()."/".$room->getIdCinemaRoom()."/".$function->getIdFunction()."/".$function->getDate()."/".$function->getTime()."/".$purchase->getIdPurchase()."/".$movie->getMovieName()."/".$movie->getIdMovie()."/".$number."&choe=UTF-8";
             $QR=str_replace(" ","-",$QR);
             return $QR;
         }
