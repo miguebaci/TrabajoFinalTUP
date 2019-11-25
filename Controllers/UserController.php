@@ -261,7 +261,7 @@
             // Content
             $mail->isHTML(true);                                  // Set email format to HTML
             $mail->Subject = 'Welcome to CinemaTek!';
-            $mail->Body    = 'Hello a new account has been created with this email:' .$user->getEmail(). '. <br> Thanks for choosing us!';
+            $mail->Body    = 'Hello a new account has been created with this email: ' .$user->getEmail(). '. <br> Thanks for choosing us!';
             $mail->AltBody = 'Hello a new account has been created with this email. Thanks for choosing us!';
 
             $mail->send();
