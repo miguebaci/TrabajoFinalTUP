@@ -57,6 +57,7 @@
             $list =  $this->GetAllCinemasByMovieAndDate($movie, $startDate, $endDate);
             require_once(VIEWS_PATH."movieFunction-select.php");
         }
+
         public function ShowDateRangeGenre($startDate, $endDate, $genre_select){
             $list =  $this->GetAllCinemasByGenreAndDate($genre_select, $startDate, $endDate);
             require_once(VIEWS_PATH."movieFunction-genreList.php");
@@ -125,6 +126,7 @@
             foreach ($cinemaArray as $cinema) {
                 $resultset["cinema"] = $cinema;
                 $resultset["functions"] = $this->functionDAO->GetByCinemaIdAndMovieId($cinema->getIdCinema(),$movie->getIdMovie());
+                $resultset["functions"] = $this->functionDAO->RemoveFullFunctions($resultset["functions"]);
                 array_push($cinemaFunction,$resultset);
             }
             return $cinemaFunction;
@@ -137,6 +139,7 @@
             foreach ($cinemaArray as $cinema) {
                 $resultset["cinema"] = $cinema;
                 $resultset["functions"] = $this->functionDAO->GetByCinemaIdAndMovieIdAndDate($cinema->getIdCinema(),$movie->getIdMovie(), $startDate, $endDate);
+                $resultset["functions"] = $this->functionDAO->RemoveFullFunctions($resultset["functions"]);
                 array_push($cinemaFunction,$resultset);
             }
             return $cinemaFunction;
@@ -161,6 +164,7 @@
             foreach ($cinemaArray as $cinema) {
                 $resultset["cinema"] = $cinema;
                 $resultset["functions"] = $this->functionDAO->GetByCinemaIdGenreIdAndDate($cinema->getIdCinema(),$idGenre, $startDate, $endDate);
+                $resultset["functions"] = $this->functionDAO->RemoveFullFunctions($resultset["functions"]);
                 array_push($cinemaFunction,$resultset);
             }
             return $cinemaFunction;
