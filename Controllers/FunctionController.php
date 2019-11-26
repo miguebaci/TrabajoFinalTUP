@@ -49,7 +49,8 @@
             $room=$this->helper->helpGetRoom($idRoom);
             $room->setFunctionList($this->functionDAO->GetAllByRoomIdAdmin($room));
             $functionList=$room->getFunctionList();
-            require_once(VIEWS_PATH."moviefunction-list.php");
+            $functionList=$this->functionDAO->getFunctionListWithRemainings($functionList);
+            require_once(VIEWS_PATH."movieFunction-list.php");
         }
 
         public function ShowDateRange($startDate, $endDate, $idMovie_Selected){
