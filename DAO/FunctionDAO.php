@@ -496,5 +496,15 @@ class FunctionDAO implements IFunctionDAO
             }
         }
 
+        public function getFunctionListWithRemainings($functionList){
+            $newFunctionList=array();
+            foreach($functionList as $function){
+                $newFunction["function"]=$function;
+                $newFunction["remaining"]=$this->GetRemainingTickets($function);
+                array_push($newFunctionList,$newFunction);
+            }
+            return $newFunctionList;
+        }
+
 }
 ?>
