@@ -9,6 +9,7 @@ use Models\Movie as Movie;
 use Models\CinemaRoom as CinemaRoom;
 use Models\Cinema as Cinema;
 use DAO\Connection as Connection;
+use \Exception as Exception;
 
 class FunctionDAO implements IFunctionDAO
 {

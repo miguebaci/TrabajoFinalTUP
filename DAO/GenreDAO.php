@@ -4,6 +4,7 @@
     use DAO\IGenreDAO as IGenreDAO;
     use Models\Genre as Genre;
     use DAO\Connection as Connection;
+    use \Exception as Exception;
 
     class GenreDAO implements IGenreDAO
     {
@@ -71,7 +72,7 @@
                 CURLOPT_TIMEOUT => 30,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => "GET",
-                CURLOPT_POSTFIELDS => "{}",
+                CURLOPT_POSTFIELDS => "",
                 ));
 
                 $response = curl_exec($curl);

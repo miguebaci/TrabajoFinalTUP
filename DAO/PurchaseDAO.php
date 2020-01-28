@@ -6,6 +6,7 @@
     use Models\Ticket as Ticket;
     use DAO\Connection as Connection;
     use Helper\PurchaseHelper as Helper;
+    use \Exception as Exception;
 
     class PurchaseDAO implements IPurchaseDAO
     {

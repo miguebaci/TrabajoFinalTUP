@@ -4,6 +4,7 @@
     use DAO\IUserDAO as IUserDAO;
     use Models\User as User;
     use DAO\Connection as Connection;
+    use \Exception as Exception;
 
     class UserDAO implements IUserDAO
     {

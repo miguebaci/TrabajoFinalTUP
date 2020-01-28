@@ -6,6 +6,7 @@
     use Models\CinemaRoom as CinemaRoom;
     use Models\Movie as Movie;
     use DAO\Connection as Connection;
+    use \Exception as Exception;
 
     class CinemaDAO implements ICinemaDAO
     {

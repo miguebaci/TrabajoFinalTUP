@@ -5,6 +5,7 @@
     use Models\CinemaRoom as CinemaRoom;
     use DAO\Connection as Connection;
     use Models\Cinema as Cinema;
+    use \Exception as Exception;
 
     class RoomDAO implements IRoomDAO
     {
