@@ -36,7 +36,7 @@
                                         <tr>
                                              <td><?php echo $movie->getMovieName() ?></td>
                                              <td><?php echo $movie->getLanguage() ?></td>
-                                             <td><?php echo $movie->getDuration() ?></td>
+                                             <td><?php echo $movie->getDuration() ?> min</td>
                                              <td><?php $genreArray= $movie->getGenre();
                                                   foreach($genreArray as $genres) {
                                                   echo $genres->getDescription();
