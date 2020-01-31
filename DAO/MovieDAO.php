@@ -186,7 +186,7 @@
                 CURLOPT_TIMEOUT => 10000,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => "GET",
-                CURLOPT_POSTFIELDS => "{}",
+                CURLOPT_POSTFIELDS => "",
             ));
 
             $response = curl_exec($curl);
