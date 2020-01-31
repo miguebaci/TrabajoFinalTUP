@@ -25,7 +25,7 @@
                                              <td><button type="submit" name="idMovie" value="<?php echo $movie->getIdMovie()?>" class="btn btn-dark ml-auto d-block">Choose</button></td>
                                              <td><?php echo $movie->getMovieName()  ?></td>
                                              <td><?php echo $movie->getLanguage() ?></td>
-                                             <td><?php echo $movie->getDuration() ?></td>
+                                             <td><?php echo $movie->getDuration() ?> min</td>
                                              <td><?php $genreArray= $movie->getGenre();
                                                   foreach($genreArray as $genres) {
                                                        echo $genres->getDescription();
