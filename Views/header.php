@@ -10,6 +10,7 @@
      <link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH ?>slide.css">
      <link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH ?>dropdown.css">
      <link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH ?>footer.css">
+     <link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH ?>login-form.css">
      
      <title>Trabajo Practico Final</title>
 </head>

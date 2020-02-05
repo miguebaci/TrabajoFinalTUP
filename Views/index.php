@@ -7,17 +7,15 @@ require_once('get-active.php');
      <div class="slideshow-container bg-secondary py-1">
           <form action="<?php echo FRONT_ROOT ?>Function/SelectSlider" method="post" class="bg-light-alpha p-5">
                <?php
-
                foreach ($movieList as $movie) {
                     ?>
-                    <article>
-                    
-                         
                               <div class="container">
                                    
                                    <div class="mySlides">
-                                        <div class="row" style="margin-bottom:50px">
+                                        <div class="row">
+                                             <div class="col text-center pb-4">
                                              <b class="display-4">Now Screening</b>
+                                             </div>
                                         </div>
                                         <div class="row">
                                              <div class="column">
@@ -40,8 +38,6 @@ require_once('get-active.php');
                                         </div>
                                    </div>
                               </div>
-                         
-                    </article>
                <?php } ?>
           </form>
 
