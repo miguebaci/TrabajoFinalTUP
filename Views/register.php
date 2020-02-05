@@ -11,6 +11,7 @@
                </header>
 
                <form action="<?php echo FRONT_ROOT ?>User/RegisterValidation" method="post" class="login-form bg-dark-alpha p-5">
+               <input type="hidden" name="role" value="User">
                     <div class="form-group">
                          <label for="">Email</label>
                          <input type="email" name="email" value="" class="form-control form-control-lg" placeholder="Email" required>
